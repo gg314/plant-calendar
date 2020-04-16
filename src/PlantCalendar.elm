@@ -180,6 +180,7 @@ view model =
             ]
           , div [ class "search" ]
             [ input [ type_ "search", id "filter", placeholder "Filter", onInput SetFilter, value model.filter ] []
+            , button [ class (if String.isEmpty model.filter then "inactive" else "reset"), onClick (SetFilter "")] [ text "Clear" ]
             ]
           ]
         , div [ class "sidebar__bottom" ]

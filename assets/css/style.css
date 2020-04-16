@@ -91,23 +91,26 @@ svg {
 
 .search {
     flex: 1 1 auto;
+    display: flex;
 }
 
 input[type="search"], input[type="text"] {
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 5px 0 0 5px;
+    border-right: 0;
     padding: 0.5rem 0.75rem;
     font-size: 1.0rem;
     width: 100%;
     padding-left: 2.125rem;
     color: #555;
     font-family: "Segoe UI";
+    flex: 0 0 60%;
 }
 
 button {
     border: 1px solid #457964;
     border-radius: 0 5px 5px 0;
-    padding: 0.5rem 1.55rem;
+    padding: 0.5rem 0.5rem;
     font-size: 1.0rem;
     margin-left: 0rem;
     text-align: center;
@@ -117,6 +120,22 @@ button {
     cursor: pointer;
     font-family: "Segoe UI";
     font-size: 1.0rem;
+    width: 100%;
+}
+
+button.inactive {
+    background: linear-gradient(to bottom, #bebebe 0, #a0a0a0 100%);
+    border: #777;
+    cursor: default;
+}
+
+button.inactive:hover {
+    color: #ddd;
+}
+
+button.reset {
+    background: linear-gradient(to bottom, #804444 0, #643131 100%);
+    border: 1px solid #794545;
 }
 
 button:hover {
@@ -126,8 +145,6 @@ button:hover {
 #location {
     background: #fafafa url("../img/location.svg") 0.5rem 0.375rem no-repeat;
     background-size: 1.5rem 1.5rem;
-    border-radius: 5px 0 0 5px;
-    border-right: 0;
 }
 
 #filter {

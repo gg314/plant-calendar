@@ -6002,7 +6002,20 @@ var $author$project$PlantCalendar$view = function (model) {
 														$elm$html$Html$Events$onInput($author$project$PlantCalendar$SetFilter),
 														$elm$html$Html$Attributes$value(model.filter)
 													]),
-												_List_Nil)
+												_List_Nil),
+												A2(
+												$elm$html$Html$button,
+												_List_fromArray(
+													[
+														$elm$html$Html$Attributes$class(
+														$elm$core$String$isEmpty(model.filter) ? 'inactive' : 'reset'),
+														$elm$html$Html$Events$onClick(
+														$author$project$PlantCalendar$SetFilter(''))
+													]),
+												_List_fromArray(
+													[
+														$elm$html$Html$text('Clear')
+													]))
 											]))
 									])),
 								A2(
