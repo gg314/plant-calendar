@@ -5220,12 +5220,17 @@ var $elm$core$List$append = F2(
 var $elm$core$List$concat = function (lists) {
 	return A3($elm$core$List$foldr, $elm$core$List$append, _List_Nil, lists);
 };
+var $elm$svg$Svg$Attributes$fill = _VirtualDom_attribute('fill');
+var $elm$svg$Svg$Attributes$height = _VirtualDom_attribute('height');
 var $elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
 var $elm$svg$Svg$line = $elm$svg$Svg$trustedNode('line');
+var $elm$svg$Svg$rect = $elm$svg$Svg$trustedNode('rect');
+var $elm$svg$Svg$Attributes$stroke = _VirtualDom_attribute('stroke');
 var $elm$svg$Svg$Attributes$style = _VirtualDom_attribute('style');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$svg$Svg$text = $elm$virtual_dom$VirtualDom$text;
 var $elm$svg$Svg$text_ = $elm$svg$Svg$trustedNode('text');
+var $elm$svg$Svg$Attributes$width = _VirtualDom_attribute('width');
 var $elm$svg$Svg$Attributes$x = _VirtualDom_attribute('x');
 var $elm$svg$Svg$Attributes$x1 = _VirtualDom_attribute('x1');
 var $elm$svg$Svg$Attributes$x2 = _VirtualDom_attribute('x2');
@@ -5234,7 +5239,7 @@ var $elm$svg$Svg$Attributes$y1 = _VirtualDom_attribute('y1');
 var $elm$svg$Svg$Attributes$y2 = _VirtualDom_attribute('y2');
 var $author$project$PlantCalendar$drawRow = F2(
 	function (index, plant) {
-		var y0 = (50 * (index + 1)) + 30;
+		var y0 = (60 * (index + 1)) + 30;
 		return _List_fromArray(
 			[
 				A2(
@@ -5417,11 +5422,36 @@ var $author$project$PlantCalendar$drawRow = F2(
 						$elm$svg$Svg$Attributes$x1('99.9%'),
 						$elm$svg$Svg$Attributes$x2('0%')
 					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$rect,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x('32%'),
+						$elm$svg$Svg$Attributes$y(
+						$elm$core$String$fromInt(y0 - 18)),
+						$elm$svg$Svg$Attributes$width('20%'),
+						$elm$svg$Svg$Attributes$height('14'),
+						$elm$svg$Svg$Attributes$stroke('#517f6c'),
+						$elm$svg$Svg$Attributes$fill('rgba(56, 165, 116, .7)')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$rect,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x('52%'),
+						$elm$svg$Svg$Attributes$y(
+						$elm$core$String$fromInt(y0 + 4)),
+						$elm$svg$Svg$Attributes$width('3%'),
+						$elm$svg$Svg$Attributes$height('14'),
+						$elm$svg$Svg$Attributes$stroke('#7c6650'),
+						$elm$svg$Svg$Attributes$fill('rgba(211, 122, 41, .7)')
+					]),
 				_List_Nil)
 			]);
 	});
 var $elm$svg$Svg$Attributes$shapeRendering = _VirtualDom_attribute('shape-rendering');
-var $elm$svg$Svg$Attributes$stroke = _VirtualDom_attribute('stroke');
 var $elm$svg$Svg$svg = $elm$svg$Svg$trustedNode('svg');
 var $author$project$PlantCalendar$drawSVG = function (plants) {
 	return A2(

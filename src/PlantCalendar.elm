@@ -7,7 +7,7 @@ import Html exposing (Html, div, span, text, h2, blockquote, ul, li, a, main_, t
 import Html.Attributes exposing (class, id, placeholder, value, href, target, type_, for, checked)
 import Html.Events exposing (onClick, onInput, onFocus, onBlur)
 import Svg exposing (svg)
-import Svg.Attributes exposing (style, x, y, x1, x2, y1, y2, stroke)
+import Svg.Attributes exposing (style, x, y, x1, x2, y1, y2, stroke, fill, width, height)
 import Array exposing (Array, fromList, get, slice)
 import Set exposing (fromList, toList)
 import Task
@@ -129,7 +129,7 @@ drawSVG plants =
 drawRow : Int -> Plant -> List (Svg.Svg Msg)
 drawRow index plant =
     let
-      y0 = 50 * (index+1) + 30
+      y0 = 60 * (index+1) + 30
     in
         [ Svg.line [ y1 (String.fromInt (y0-10)), y2 (String.fromInt (y0+10)), x1 "28%", x2 "28%" ] []
         , Svg.line [ y1 (String.fromInt (y0-10)), y2 (String.fromInt (y0+10)), x1 "34%", x2 "34%" ] []
@@ -146,10 +146,10 @@ drawRow index plant =
         , Svg.line [ y1 (String.fromInt (y0-10)), y2 (String.fromInt (y0+10)), x1 "99.9%", x2 "99.9%" ] []
         , Svg.text_ [ y (String.fromInt (y0-2)), x "23%", style "fill: #444; stroke: none; text-anchor: end; font-weight: 400; font-family: 'Gloria Hallelujah'; font-size: 1.3vw;" ] [ Svg.text plant.name]
         , Svg.line [ y1 (String.fromInt y0), y2 (String.fromInt y0), x1 "99.9%", x2 "0%" ] []
+        , Svg.rect [ x "32%", y (String.fromInt (y0-18)), width "20%", height "14", stroke "#517f6c", fill "rgba(56, 165, 116, .7)"] []
+        , Svg.rect [ x "52%", y (String.fromInt (y0+4)), width "3%", height "14", stroke "#7c6650", fill "rgba(211, 122, 41, .7)"] []
         ]
     {--
-            <text y="78" x="23%" style="fill: #444; stroke: none; text-anchor: end; font-weight: 400; font-family: 'Gloria Hallelujah'; font-size: 1.3vw;">Carrots</text>
-            <line y2="80" y1="80" x2="0%" x1="99.9%"></line>
             <rect x="32%" y="62" width="20%" height="14" stroke="#517f6c" fill="rgba(56, 165, 116, .7)" rx="0"></rect>
             <rect x="52%" y="84" width="3%" height="14" stroke="#7c6650" fill="rgba(211, 122, 41, .7)" rx="0"></rect>
        --}     
