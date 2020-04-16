@@ -64,6 +64,7 @@ body {
     display: block;
     overflow: hidden;
     margin: 0 -3rem 0 0rem;
+    padding-top: 0.25rem;
 }
 
 .crop__list {
@@ -139,10 +140,9 @@ input[type="checkbox"] {
 }
 
 label {
-    border-radius: 5px;
     display: block;
-    margin: 0.25rem 2rem 0.25rem 0;
-    padding: 0.3rem 0.5rem;
+    margin: 0 2rem 0 0;
+    padding: 0.5rem 0.5rem;
     cursor: pointer;
     transition: .1s linear all;
     color: #888;
@@ -155,6 +155,6 @@ label:hover {
 
 input:checked + label {
     /* background: rgba(50, 120, 70, .12); */
-    font-weight: 500;
+    font-weight: 600;
     color: rgb(89, 99, 92);
 }

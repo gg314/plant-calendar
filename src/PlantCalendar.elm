@@ -36,6 +36,7 @@ type alias Model =
     { zipcode : Int
     , phz : Int
     , plants : List ( Plant )
+    , filter : String
     }
 
 
@@ -49,6 +50,7 @@ init _ =
       , {name = "Potatos", selected = False}
       , {name = "Arugula", selected = True}
       , {name = "Spinach", selected = False}]
+      ""
     , Cmd.none)
 
 
@@ -57,6 +59,7 @@ init _ =
 type Msg
     = SetZipcode
     | TogglePlant Plant
+    | SetFilter String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg)
@@ -70,8 +73,10 @@ update msg model =
         let
           newPlants = List.map (togglePlant plant) model.plants
         in
-          ( { model | plants = newPlants }
-          , Cmd.none)
+          ( { model | plants = newPlants }, Cmd.none)
+          
+      SetFilter string ->
+        ( { model | filter = String.trim string }, Cmd.none)
 
 togglePlant : Plant -> Plant -> Plant
 togglePlant target test =
@@ -96,7 +101,7 @@ getPlants index plants =
 
 drawSVG : List (Plant) -> Html Msg
 drawSVG plants =
-    svg [ style "width:100%; height: 2220px; stroke: #888; fill; stroke-width: 1", Svg.Attributes.shapeRendering "crispEdges" ]
+    svg [ style ("width:100%; height: "++(String.fromInt ((List.length plants)*60+65))++"px; stroke: #888; fill; stroke-width: 1"), Svg.Attributes.shapeRendering "crispEdges" ]
     (List.append
         [ Svg.text_ [y "25", x "28%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "JAN" ]
         , Svg.text_ [y "25", x "34%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "FEB" ]
@@ -154,10 +159,14 @@ drawRow index plant =
             <rect x="52%" y="84" width="3%" height="14" stroke="#7c6650" fill="rgba(211, 122, 41, .7)" rx="0"></rect>
        --}     
 
+plantNameContains : String -> Plant -> Bool
+plantNameContains search plant =
+    String.contains search (String.toLower (.name plant))
+
 view : Model -> Html Msg
 view model =
   let
-    sidebarPlants = model.plants
+    sidebarPlants = List.filter (plantNameContains (String.toLower model.filter)) model.plants
     selectedPlants = List.filter .selected model.plants
   in
     form []
@@ -170,7 +179,7 @@ view model =
             , button [] [ text "Set" ]
             ]
           , div [ class "search" ]
-            [ input [ type_ "search", id "filter", placeholder "Filter" ] []
+            [ input [ type_ "search", id "filter", placeholder "Filter", onInput SetFilter, value model.filter ] []
             ]
           ]
         , div [ class "sidebar__bottom" ]

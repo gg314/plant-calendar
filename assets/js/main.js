@@ -5144,15 +5144,15 @@ var $elm$core$Task$perform = F2(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$element = _Browser_element;
-var $author$project$PlantCalendar$Model = F3(
-	function (zipcode, phz, plants) {
-		return {phz: phz, plants: plants, zipcode: zipcode};
+var $author$project$PlantCalendar$Model = F4(
+	function (zipcode, phz, plants, filter) {
+		return {filter: filter, phz: phz, plants: plants, zipcode: zipcode};
 	});
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$PlantCalendar$init = function (_v0) {
 	return _Utils_Tuple2(
-		A3(
+		A4(
 			$author$project$PlantCalendar$Model,
 			11234,
 			5,
@@ -5163,7 +5163,8 @@ var $author$project$PlantCalendar$init = function (_v0) {
 					{name: 'Potatos', selected: false},
 					{name: 'Arugula', selected: true},
 					{name: 'Spinach', selected: false}
-				])),
+				]),
+			''),
 		$elm$core$Platform$Cmd$none);
 };
 var $elm$core$Platform$Sub$batch = _Platform_batch;
@@ -5177,27 +5178,41 @@ var $author$project$PlantCalendar$togglePlant = F2(
 			test,
 			{selected: !test.selected}) : test;
 	});
+var $elm$core$String$trim = _String_trim;
 var $author$project$PlantCalendar$update = F2(
 	function (msg, model) {
-		if (msg.$ === 'SetZipcode') {
-			return _Utils_Tuple2(
-				_Utils_update(
-					model,
-					{zipcode: 12345}),
-				$elm$core$Platform$Cmd$none);
-		} else {
-			var plant = msg.a;
-			var newPlants = A2(
-				$elm$core$List$map,
-				$author$project$PlantCalendar$togglePlant(plant),
-				model.plants);
-			return _Utils_Tuple2(
-				_Utils_update(
-					model,
-					{plants: newPlants}),
-				$elm$core$Platform$Cmd$none);
+		switch (msg.$) {
+			case 'SetZipcode':
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{zipcode: 12345}),
+					$elm$core$Platform$Cmd$none);
+			case 'TogglePlant':
+				var plant = msg.a;
+				var newPlants = A2(
+					$elm$core$List$map,
+					$author$project$PlantCalendar$togglePlant(plant),
+					model.plants);
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{plants: newPlants}),
+					$elm$core$Platform$Cmd$none);
+			default:
+				var string = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							filter: $elm$core$String$trim(string)
+						}),
+					$elm$core$Platform$Cmd$none);
 		}
 	});
+var $author$project$PlantCalendar$SetFilter = function (a) {
+	return {$: 'SetFilter', a: a};
+};
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
@@ -5458,7 +5473,9 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 		$elm$svg$Svg$svg,
 		_List_fromArray(
 			[
-				$elm$svg$Svg$Attributes$style('width:100%; height: 2220px; stroke: #888; fill; stroke-width: 1'),
+				$elm$svg$Svg$Attributes$style(
+				'width:100%; height: ' + ($elm$core$String$fromInt(
+					($elm$core$List$length(plants) * 60) + 65) + 'px; stroke: #888; fill; stroke-width: 1')),
 				$elm$svg$Svg$Attributes$shapeRendering('crispEdges')
 			]),
 		A2(
@@ -5845,9 +5862,58 @@ var $author$project$PlantCalendar$getPlants = F2(
 		}
 	});
 var $elm$html$Html$main_ = _VirtualDom_node('main');
+var $elm$html$Html$Events$alwaysStop = function (x) {
+	return _Utils_Tuple2(x, true);
+};
+var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
+	return {$: 'MayStopPropagation', a: a};
+};
+var $elm$html$Html$Events$stopPropagationOn = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
+	});
+var $elm$json$Json$Decode$field = _Json_decodeField;
+var $elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
+	});
+var $elm$json$Json$Decode$string = _Json_decodeString;
+var $elm$html$Html$Events$targetValue = A2(
+	$elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'value']),
+	$elm$json$Json$Decode$string);
+var $elm$html$Html$Events$onInput = function (tagger) {
+	return A2(
+		$elm$html$Html$Events$stopPropagationOn,
+		'input',
+		A2(
+			$elm$json$Json$Decode$map,
+			$elm$html$Html$Events$alwaysStop,
+			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
+};
 var $elm$html$Html$Attributes$placeholder = $elm$html$Html$Attributes$stringProperty('placeholder');
+var $elm$core$String$toLower = _String_toLower;
+var $author$project$PlantCalendar$plantNameContains = F2(
+	function (search, plant) {
+		return A2(
+			$elm$core$String$contains,
+			search,
+			$elm$core$String$toLower(
+				function ($) {
+					return $.name;
+				}(plant)));
+	});
+var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
 var $author$project$PlantCalendar$view = function (model) {
-	var sidebarPlants = model.plants;
+	var sidebarPlants = A2(
+		$elm$core$List$filter,
+		$author$project$PlantCalendar$plantNameContains(
+			$elm$core$String$toLower(model.filter)),
+		model.plants);
 	var selectedPlants = A2(
 		$elm$core$List$filter,
 		function ($) {
@@ -5932,7 +5998,9 @@ var $author$project$PlantCalendar$view = function (model) {
 													[
 														$elm$html$Html$Attributes$type_('search'),
 														$elm$html$Html$Attributes$id('filter'),
-														$elm$html$Html$Attributes$placeholder('Filter')
+														$elm$html$Html$Attributes$placeholder('Filter'),
+														$elm$html$Html$Events$onInput($author$project$PlantCalendar$SetFilter),
+														$elm$html$Html$Attributes$value(model.filter)
 													]),
 												_List_Nil)
 											]))
