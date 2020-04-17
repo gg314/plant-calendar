@@ -62,7 +62,7 @@ body {
 .sidebar__bottom {
     height: 100%;
     display: block;
-    overflow: hidden;
+    /* overflow: hidden; */
     margin: 0 -3rem 0 0rem;
     padding-top: 0.25rem;
 }
@@ -159,19 +159,36 @@ input[type="checkbox"] {
 label {
     display: block;
     margin: 0 2rem 0 0;
-    padding: 0.5rem 0.5rem;
+    padding: 0.5rem 0.5rem 0.5rem 1.75rem;
     cursor: pointer;
     transition: .1s linear all;
     color: #888;
     font-weight: 200;
+    background: url('../img/vegetable.svg') no-repeat 0.5rem center;
+    background-size: 1.0rem 1.0rem;
+    color: rgb(89, 99, 92);
+    opacity: 0.5;
+}
+
+.Flowers {
+    background-image: url('../img/flower.svg');
+}
+
+.Herbs {
+    background-image: url('../img/herb.svg');
+}
+
+.Fruits {
+    background-image: url('../img/fruit.svg');
 }
 
 label:hover {
-    background: rgba(50, 120, 70, .08);
+    background-color: rgba(50, 120, 70, .08);
 }
 
 input:checked + label {
     /* background: rgba(50, 120, 70, .12); */
     font-weight: 600;
+    opacity: 1;
     color: rgb(89, 99, 92);
 }
