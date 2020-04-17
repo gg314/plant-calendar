@@ -4,8 +4,8 @@ import Browser
 import Browser.Dom
 import Browser.Events
 import Http
-import Html exposing (Html, div, span, text, h2, blockquote, ul, li, a, main_, textarea, button, strong, br, p, input, form, label)
-import Html.Attributes exposing (class, id, placeholder, value, href, target, type_, for, checked)
+import Html exposing (Html, div, span, text, h2, blockquote, ul, li, a, main_, textarea, button, strong, br, p, input, form, label, object)
+import Html.Attributes exposing (class, id, placeholder, value, href, target, type_, for, checked, attribute)
 import Html.Events exposing (onClick, onInput, onFocus, onBlur)
 import Svg exposing (svg)
 import Svg.Attributes exposing (style, x, y, x1, x2, y1, y2, stroke, fill, width, height)
@@ -13,6 +13,9 @@ import Array exposing (Array, fromList, get, slice)
 import Set exposing (fromList, toList)
 import Task
 import Json.Decode
+import Regex
+
+import USASVG exposing (usaSVG)
 
 -- MAIN
 main : Program () Model Msg
@@ -33,9 +36,10 @@ type HTTPStatus
 
 
 type alias Zipcode =
-  { zone : String
-  , lat : String
-  , lon : String
+  { zipcode : String
+  , zone : String
+  , coordinates : (Float, Float)
+  , temp_range: String
   }
 
 type alias Plant = 
@@ -57,7 +61,7 @@ type alias Model =
 init : () -> (Model, Cmd Msg)
 init _ =
     (Model
-      (Zipcode "-1" "-1" "-1")
+      (Zipcode "-1" "-1" (-1, -1) "")
       ""
       Failure
       plantData
@@ -75,13 +79,17 @@ type Msg
     | GotZipcode String (Result Http.Error Zipcode)
 
 
-jsonDecoder : Json.Decode.Decoder Zipcode
-jsonDecoder =
+jsonDecoder : String -> Json.Decode.Decoder Zipcode
+jsonDecoder s =
     Json.Decode.map3
-        Zipcode
+        (Zipcode s)
             (Json.Decode.field "zone" Json.Decode.string)
-            (Json.Decode.field "rangemin" Json.Decode.string)
-            (Json.Decode.field "rangemax" Json.Decode.string)
+            (Json.Decode.field "coordinates" (Json.Decode.map2
+                Tuple.pair
+                (Json.Decode.field "lat" Json.Decode.float)
+                (Json.Decode.field "lon" Json.Decode.float)
+            ))
+            (Json.Decode.field "temperature_range" Json.Decode.string)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg)
@@ -92,8 +100,8 @@ update msg model =
             searchZip = model.zipcodetext
         in
             ( { model | phz = Loading, zipcodetext = "" }
-            , Http.get { url = "https://c0bra.api.stdlib.com/zipcode-to-hardiness-zone/?zipcode="++ searchZip,
-                         expect = Http.expectJson (GotZipcode searchZip) jsonDecoder }
+            , Http.get { url = "https://phzmapi.org/"++ searchZip ++ ".json",
+                         expect = Http.expectJson (GotZipcode searchZip) (jsonDecoder searchZip) }
             )
 
       SetZipcodeText str ->
@@ -105,7 +113,7 @@ update msg model =
               ({ model | zipcode = z, phz = Success z.zone, zipcodetext = ""}, Cmd.none)
 
             Err _ ->
-              ({ model | zipcode = Zipcode "-1" "-1" "-1", phz = Failure}, Cmd.none)
+              ({ model | zipcode = Zipcode "-1" "-1" (-1, -1) "", phz = Failure}, Cmd.none)
         
 
       TogglePlant plant ->
@@ -140,40 +148,46 @@ getPlants index plants =
 
 drawSVG : List (Plant) -> Html Msg
 drawSVG plants =
-    svg [ style ("width:100%; height: "++(String.fromInt ((List.length plants)*60+65))++"px; stroke: #888; fill; stroke-width: 1"), Svg.Attributes.shapeRendering "crispEdges" ]
+    svg [ style ("width:100%; height: "++(String.fromInt ((List.length plants)*60+165))++"px; stroke: #888; fill; stroke-width: 1"), Svg.Attributes.shapeRendering "crispEdges" ]
     (List.append
-        [ Svg.text_ [y "25", x "28%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "JAN" ]
-        , Svg.text_ [y "25", x "34%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "FEB" ]
-        , Svg.text_ [y "25", x "40%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "MAR" ]
-        , Svg.text_ [y "25", x "46%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "APR" ]
-        , Svg.text_ [y "25", x "52%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "MAY" ]
-        , Svg.text_ [y "25", x "58%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "JUN" ]
-        , Svg.text_ [y "25", x "64%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "JUL" ]
-        , Svg.text_ [y "25", x "70%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "AUG" ]
-        , Svg.text_ [y "25", x "76%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "SEP" ]
-        , Svg.text_ [y "25", x "82%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "OCT" ]
-        , Svg.text_ [y "25", x "88%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "NOV" ]
-        , Svg.text_ [y "25", x "94%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "DEC" ]
-        , Svg.line [y2 "100%", y1 "35", x2 "99.9%", x1 "99.9%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "35", x2 "94%", x1 "94%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "35", x2 "88%", x1 "88%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "35", x2 "82%", x1 "82%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "35", x2 "76%", x1 "76%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "35", x2 "70%", x1 "70%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "35", x2 "64%", x1 "64%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "35", x2 "58%", x1 "58%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "35", x2 "52%", x1 "52%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "35", x2 "46%", x1 "46%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "35", x2 "40%", x1 "40%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "35", x2 "34%", x1 "34%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "35", x2 "28%", x1 "28%", stroke "#d8d8d8"] []
+        [ Svg.rect [ x "22.5%", y "0", width "5%", height "14", stroke "#77734f", fill "rgba(209, 193, 42, .7)"] []
+        , Svg.text_ [y "25", x "25%", style "fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0vw;"] [ Svg.text "Plant indoors" ]
+        , Svg.rect [ x "47.5%", y "0", width "5%", height "14", stroke "#517f6c", fill "rgba(56, 165, 116, .7)"] []
+        , Svg.text_ [y "25", x "50%", style "fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0vw;"] [ Svg.text "Transplant / plant outdoors" ]
+        , Svg.rect [ x "72.5%", y "0", width "5%", height "14", stroke "#7c6650", fill "rgba(211, 122, 41, .7)"] []
+        , Svg.text_ [y "25", x "75%", style "fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0vw;"] [ Svg.text "Harvest" ]
+        , Svg.text_ [y "125", x "28%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "JAN" ]
+        , Svg.text_ [y "125", x "34%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "FEB" ]
+        , Svg.text_ [y "125", x "40%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "MAR" ]
+        , Svg.text_ [y "125", x "46%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "APR" ]
+        , Svg.text_ [y "125", x "52%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "MAY" ]
+        , Svg.text_ [y "125", x "58%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "JUN" ]
+        , Svg.text_ [y "125", x "64%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "JUL" ]
+        , Svg.text_ [y "125", x "70%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "AUG" ]
+        , Svg.text_ [y "125", x "76%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "SEP" ]
+        , Svg.text_ [y "125", x "82%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "OCT" ]
+        , Svg.text_ [y "125", x "88%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "NOV" ]
+        , Svg.text_ [y "125", x "94%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "DEC" ]
+        , Svg.line [y2 "100%", y1 "135", x2 "99.9%", x1 "99.9%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "135", x2 "94%", x1 "94%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "135", x2 "88%", x1 "88%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "135", x2 "82%", x1 "82%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "135", x2 "76%", x1 "76%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "135", x2 "70%", x1 "70%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "135", x2 "64%", x1 "64%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "135", x2 "58%", x1 "58%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "135", x2 "52%", x1 "52%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "135", x2 "46%", x1 "46%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "135", x2 "40%", x1 "40%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "135", x2 "34%", x1 "34%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "135", x2 "28%", x1 "28%", stroke "#d8d8d8"] []
         ]
         (List.concat (List.indexedMap drawRow plants)))
 
 drawRow : Int -> Plant -> List (Svg.Svg Msg)
 drawRow index plant =
     let
-      y0 = 60 * (index+1) + 30
+      y0 = 60 * (index+1) + 130
     in
         [ Svg.line [ y1 (String.fromInt (y0-10)), y2 (String.fromInt (y0+10)), x1 "28%", x2 "28%" ] []
         , Svg.line [ y1 (String.fromInt (y0-10)), y2 (String.fromInt (y0+10)), x1 "34%", x2 "34%" ] []
@@ -198,15 +212,29 @@ plantNameContains : String -> Plant -> Bool
 plantNameContains search plant =
     String.contains search (String.toLower (.name plant))
 
+getCoordinates : (Float, Float) -> String
+getCoordinates (lat, lon) = 
+    if (lat, lon) == (-1, -1) then "" else (String.fromFloat lat) ++ "N, " ++ (String.fromFloat lon) ++ "W"
+
+getTempString : String -> String
+getTempString t = 
+    case (List.map .submatches (Regex.find (Maybe.withDefault Regex.never <| Regex.fromString "(.*) to (.*)") t)) of
+      [[Just a, Just b]] -> a ++ "° to " ++ b ++ "° F"
+      _ -> ""
+
 getPHZ : HTTPStatus -> String
 getPHZ status =
     case status of
         Success good ->
-          good
+          String.toUpper good
         Loading ->
           "Loading..."
         Failure ->
-          "Please set ZIP Code to find Plant Hardiness Zone. The default (Zone 5) will be used until you do."
+          "5A (default)"
+
+getZIP : Zipcode -> String
+getZIP zipcode =
+  if zipcode.zipcode == "-1" then "Unset" else zipcode.zipcode
 
 view : Model -> Html Msg
 view model =
@@ -232,89 +260,19 @@ view model =
             [ div [ class "crop__list" ] (getPlants 0 sidebarPlants) ]
         ]
       , main_ []
-        [ text (getPHZ model.phz)
+        [ div [ class "top_info" ]
+          [ div [ class "top_info__left" ]
+            [ div [] [ strong [] [ text "ZIP Code: " ], text (getZIP model.zipcode) ]
+            , div [] [ strong [] [ text "Coordinates: " ], text (getCoordinates model.zipcode.coordinates)]
+            , div [] [ strong [] [ text "Average low winter temperature: " ], text (getTempString model.zipcode.temp_range) ]
+            , div [] [ strong [] [ text "Plant hardiness zone: " ], text (getPHZ model.phz)]
+            ]
+          , div [ class "top_info__right" ] [ usaSVG (Maybe.withDefault 0 (String.toInt (String.slice 0 3 model.zipcode.zipcode))) ]
+          ]
         , drawSVG selectedPlants
         ]
       ]
     ]
-{--
-                  
-    <main>
-        <svg style="width:100%; height: 2220px;" stroke="#888" fill="white" stroke-width="1" shape-rendering="crispEdges">
-            
-            <text y="25" x="94%" style="fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;">DEC</text>
-            <text y="25" x="88%" style="fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;">NOV</text>
-            <text y="25" x="82%" style="fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;">OCT</text>
-            <text y="25" x="76%" style="fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;">SEP</text>
-            <text y="25" x="70%" style="fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;">AUG</text>
-            <text y="25" x="64%" style="fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;">JUL</text>
-            <text y="25" x="58%" style="fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;">JUN</text>
-            <text y="25" x="52%" style="fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;">MAY</text>
-            <text y="25" x="46%" style="fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;">APR</text>
-            <text y="25" x="40%" style="fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;">MAR</text>
-            <text y="25" x="34%" style="fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;">FEB</text>
-            <text y="25" x="28%" style="fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;">JAN</text>
-
-            <line y2="100%" y1="35" x2="99.9%" x1="99.9%" stroke="#d8d8d8"></line>
-            <line y2="100%" y1="35" x2="94%" x1="94%" stroke="#d8d8d8"></line>
-            <line y2="100%" y1="35" x2="88%" x1="88%" stroke="#d8d8d8"></line>
-            <line y2="100%" y1="35" x2="82%" x1="82%" stroke="#d8d8d8"></line>
-            <line y2="100%" y1="35" x2="76%" x1="76%" stroke="#d8d8d8"></line>
-            <line y2="100%" y1="35" x2="70%" x1="70%" stroke="#d8d8d8"></line>
-            <line y2="100%" y1="35" x2="64%" x1="64%" stroke="#d8d8d8"></line>
-            <line y2="100%" y1="35" x2="58%" x1="58%" stroke="#d8d8d8"></line>
-            <line y2="100%" y1="35" x2="52%" x1="52%" stroke="#d8d8d8"></line>
-            <line y2="100%" y1="35" x2="46%" x1="46%" stroke="#d8d8d8"></line>
-            <line y2="100%" y1="35" x2="40%" x1="40%" stroke="#d8d8d8"></line>
-            <line y2="100%" y1="35" x2="34%" x1="34%" stroke="#d8d8d8"></line>
-            <line y2="100%" y1="35" x2="28%" x1="28%" stroke="#d8d8d8"></line>
-            
-            <line y2="90" y1="70" x2="99.9%" x1="99.9%"></line><line y2="90" y1="70" x2="94%" x1="94%"></line>
-            <line y2="90" y1="70" x2="88%" x1="88%"></line><line y2="90" y1="70" x2="82%" x1="82%"></line>
-            <line y2="90" y1="70" x2="76%" x1="76%"></line><line y2="90" y1="70" x2="70%" x1="70%"></line>
-            <line y2="90" y1="70" x2="64%" x1="64%"></line><line y2="90" y1="70" x2="58%" x1="58%"></line>
-            <line y2="90" y1="70" x2="52%" x1="52%"></line><line y2="90" y1="70" x2="46%" x1="46%"></line>
-            <line y2="90" y1="70" x2="40%" x1="40%"></line><line y2="90" y1="70" x2="34%" x1="34%"></line>
-            <line y2="90" y1="70" x2="28%" x1="28%"></line>
-
-            <text y="78" x="23%" style="fill: #444; stroke: none; text-anchor: end; font-weight: 400; font-family: 'Gloria Hallelujah'; font-size: 1.3vw;">Carrots</text>
-            <line y2="80" y1="80" x2="0%" x1="99.9%"></line>
-            <rect x="32%" y="62" width="20%" height="14" stroke="#517f6c" fill="rgba(56, 165, 116, .7)" rx="0"></rect>
-            <rect x="52%" y="84" width="3%" height="14" stroke="#7c6650" fill="rgba(211, 122, 41, .7)" rx="0"></rect>
-            
-
-            <line y2="140" y1="120" x2="99.9%" x1="99.9%"></line><line y2="140" y1="120" x2="94%" x1="94%"></line>
-            <line y2="140" y1="120" x2="88%" x1="88%"></line><line y2="140" y1="120" x2="82%" x1="82%"></line>
-            <line y2="140" y1="120" x2="76%" x1="76%"></line><line y2="140" y1="120" x2="70%" x1="70%"></line>
-            <line y2="140" y1="120" x2="64%" x1="64%"></line><line y2="140" y1="120" x2="58%" x1="58%"></line>
-            <line y2="140" y1="120" x2="52%" x1="52%"></line><line y2="140" y1="120" x2="46%" x1="46%"></line>
-            <line y2="140" y1="120" x2="40%" x1="40%"></line><line y2="140" y1="120" x2="34%" x1="34%"></line>
-            <line y2="140" y1="120" x2="28%" x1="28%"></line>
-
-            <text y="128" x="23%" style="fill: #444; stroke: none; text-anchor: end; font-weight: 400; font-family: 'Gloria Hallelujah'; font-size: 1.3vw;">Black-eyed susans</text>
-            <line y2="130" y1="130" x2="0%" x1="99.9%"></line>
-            <rect x="42%" y="112" width="15%" height="14" stroke="#517f6c" fill="rgba(56, 165, 116, .7)" rx="0"></rect>
-            <rect x="57%" y="134" width="3%" height="14" stroke="#7c6650" fill="rgba(211, 122, 41, .7)" rx="0"></rect>
-            
-
-            <line y2="190" y1="170" x2="99.9%" x1="99.9%"></line><line y2="190" y1="170" x2="94%" x1="94%"></line>
-            <line y2="190" y1="170" x2="88%" x1="88%"></line><line y2="190" y1="170" x2="82%" x1="82%"></line>
-            <line y2="190" y1="170" x2="76%" x1="76%"></line><line y2="190" y1="170" x2="70%" x1="70%"></line>
-            <line y2="190" y1="170" x2="64%" x1="64%"></line><line y2="190" y1="170" x2="58%" x1="58%"></line>
-            <line y2="190" y1="170" x2="52%" x1="52%"></line><line y2="190" y1="170" x2="46%" x1="46%"></line>
-            <line y2="190" y1="170" x2="40%" x1="40%"></line><line y2="190" y1="170" x2="34%" x1="34%"></line>
-            <line y2="190" y1="170" x2="28%" x1="28%"></line>
-
-            <text y="178" x="23%" style="fill: #444; stroke: none; text-anchor: end; font-weight: 400; font-family: 'Gloria Hallelujah'; font-size: 1.3vw;">Lemongrass</text>
-            <line y2="180" y1="180" x2="0%" x1="99.9%"></line>
-            <rect x="46%" y="162" width="6%" height="14" stroke="#517f6c" fill="rgba(56, 165, 116, .7)" rx="0"></rect>
-            <rect x="52%" y="184" width="3%" height="14" stroke="#7c6650" fill="rgba(211, 122, 41, .7)" rx="0"></rect>
-
-        </svg>
-    </main>
-  </div>
-  </form>
-  --}
   
 plantData : List (Plant)
 plantData = 

@@ -1,3 +1,7 @@
+::selection, ::-moz-selection {
+    background: rgba(0, 0, 0, .2);
+}
+
 * {
     box-sizing: border-box;
 }
@@ -134,7 +138,7 @@ button.inactive:hover {
 }
 
 button.reset {
-    background: linear-gradient(to bottom, #804444 0, #643131 100%);
+    background: linear-gradient(to bottom, #904a4a 0, #643131 100%);
     border: 1px solid #794545;
 }
 
@@ -191,4 +195,20 @@ input:checked + label {
     font-weight: 600;
     opacity: 1;
     color: rgb(89, 99, 92);
+}
+
+.top_info {
+    display: flex;
+}
+
+.top_info__left {
+    order: 2;
+    flex: 1 1 auto;
+    padding: 2.0rem;
+}
+
+.top_info__right {
+    order: 1;
+    flex: 0 0 auto;
+    padding-left: 2.0rem;
 }
