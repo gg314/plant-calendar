@@ -199,6 +199,7 @@ input:checked + label {
 
 .top_info {
     display: flex;
+    min-height: 245px;
 }
 
 .top_info__left {

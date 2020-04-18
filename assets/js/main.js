@@ -5420,18 +5420,11 @@ var $elm$core$Task$perform = F2(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$element = _Browser_element;
-var $author$project$PlantCalendar$Failure = {$: 'Failure'};
-var $author$project$PlantCalendar$Model = F5(
-	function (zipcode, zipcodetext, phz, plants, filter) {
-		return {filter: filter, phz: phz, plants: plants, zipcode: zipcode, zipcodetext: zipcodetext};
+var $author$project$PlantCalendar$Model = F4(
+	function (zipcode, zipcodetext, plants, filter) {
+		return {filter: filter, plants: plants, zipcode: zipcode, zipcodetext: zipcodetext};
 	});
-var $author$project$PlantCalendar$Zipcode = F4(
-	function (zipcode, zone, coordinates, temp_range) {
-		return {coordinates: coordinates, temp_range: temp_range, zipcode: zipcode, zone: zone};
-	});
-var $elm$core$Basics$negate = function (n) {
-	return -n;
-};
+var $author$project$PlantCalendar$Unset = {$: 'Unset'};
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$PlantCalendar$plantData = _List_fromArray(
@@ -5579,28 +5572,17 @@ var $author$project$PlantCalendar$plantData = _List_fromArray(
 	]);
 var $author$project$PlantCalendar$init = function (_v0) {
 	return _Utils_Tuple2(
-		A5(
-			$author$project$PlantCalendar$Model,
-			A4(
-				$author$project$PlantCalendar$Zipcode,
-				'-1',
-				'-1',
-				_Utils_Tuple2(-1, -1),
-				''),
-			'',
-			$author$project$PlantCalendar$Failure,
-			$author$project$PlantCalendar$plantData,
-			''),
+		A4($author$project$PlantCalendar$Model, $author$project$PlantCalendar$Unset, '', $author$project$PlantCalendar$plantData, ''),
 		$elm$core$Platform$Cmd$none);
 };
 var $elm$core$Platform$Sub$batch = _Platform_batch;
 var $author$project$PlantCalendar$subscriptions = function (_v0) {
 	return $elm$core$Platform$Sub$batch(_List_Nil);
 };
-var $author$project$PlantCalendar$GotZipcode = F2(
-	function (a, b) {
-		return {$: 'GotZipcode', a: a, b: b};
-	});
+var $author$project$PlantCalendar$Failure = {$: 'Failure'};
+var $author$project$PlantCalendar$GotZipcode = function (a) {
+	return {$: 'GotZipcode', a: a};
+};
 var $author$project$PlantCalendar$Loading = {$: 'Loading'};
 var $author$project$PlantCalendar$Success = function (a) {
 	return {$: 'Success', a: a};
@@ -6392,6 +6374,10 @@ var $elm$http$Http$get = function (r) {
 	return $elm$http$Http$request(
 		{body: $elm$http$Http$emptyBody, expect: r.expect, headers: _List_Nil, method: 'GET', timeout: $elm$core$Maybe$Nothing, tracker: $elm$core$Maybe$Nothing, url: r.url});
 };
+var $author$project$PlantCalendar$Zipcode = F4(
+	function (zipcode, zone, coordinates, temp_range) {
+		return {coordinates: coordinates, temp_range: temp_range, zipcode: zipcode, zone: zone};
+	});
 var $elm$json$Json$Decode$field = _Json_decodeField;
 var $elm$json$Json$Decode$float = _Json_decodeFloat;
 var $elm$json$Json$Decode$map3 = _Json_map3;
@@ -6428,15 +6414,16 @@ var $author$project$PlantCalendar$update = F2(
 		switch (msg.$) {
 			case 'SetZipcode':
 				var searchZip = model.zipcodetext;
+				var newZipcode = $author$project$PlantCalendar$Loading;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{phz: $author$project$PlantCalendar$Loading, zipcodetext: ''}),
+						{zipcode: newZipcode, zipcodetext: ''}),
 					$elm$http$Http$get(
 						{
 							expect: A2(
 								$elm$http$Http$expectJson,
-								$author$project$PlantCalendar$GotZipcode(searchZip),
+								$author$project$PlantCalendar$GotZipcode,
 								$author$project$PlantCalendar$jsonDecoder(searchZip)),
 							url: 'https://phzmapi.org/' + (searchZip + '.json')
 						}));
@@ -6448,16 +6435,14 @@ var $author$project$PlantCalendar$update = F2(
 						{zipcodetext: str}),
 					$elm$core$Platform$Cmd$none);
 			case 'GotZipcode':
-				var searchZip = msg.a;
-				var result = msg.b;
+				var result = msg.a;
 				if (result.$ === 'Ok') {
 					var z = result.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								phz: $author$project$PlantCalendar$Success(z.zone),
-								zipcode: z,
+								zipcode: $author$project$PlantCalendar$Success(z),
 								zipcodetext: ''
 							}),
 						$elm$core$Platform$Cmd$none);
@@ -6465,15 +6450,7 @@ var $author$project$PlantCalendar$update = F2(
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{
-								phz: $author$project$PlantCalendar$Failure,
-								zipcode: A4(
-									$author$project$PlantCalendar$Zipcode,
-									'-1',
-									'-1',
-									_Utils_Tuple2(-1, -1),
-									'')
-							}),
+							{zipcode: $author$project$PlantCalendar$Failure}),
 						$elm$core$Platform$Cmd$none);
 				}
 			case 'TogglePlant':
@@ -6546,7 +6523,7 @@ var $elm$svg$Svg$Attributes$y1 = _VirtualDom_attribute('y1');
 var $elm$svg$Svg$Attributes$y2 = _VirtualDom_attribute('y2');
 var $author$project$PlantCalendar$drawRow = F2(
 	function (index, plant) {
-		var y0 = (60 * (index + 1)) + 130;
+		var y0 = (60 * (index + 1)) + 115;
 		return _List_fromArray(
 			[
 				A2(
@@ -6850,7 +6827,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					$elm$svg$Svg$text_,
 					_List_fromArray(
 						[
-							$elm$svg$Svg$Attributes$y('125'),
+							$elm$svg$Svg$Attributes$y('105'),
 							$elm$svg$Svg$Attributes$x('28%'),
 							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 						]),
@@ -6862,7 +6839,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					$elm$svg$Svg$text_,
 					_List_fromArray(
 						[
-							$elm$svg$Svg$Attributes$y('125'),
+							$elm$svg$Svg$Attributes$y('105'),
 							$elm$svg$Svg$Attributes$x('34%'),
 							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 						]),
@@ -6874,7 +6851,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					$elm$svg$Svg$text_,
 					_List_fromArray(
 						[
-							$elm$svg$Svg$Attributes$y('125'),
+							$elm$svg$Svg$Attributes$y('105'),
 							$elm$svg$Svg$Attributes$x('40%'),
 							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 						]),
@@ -6886,7 +6863,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					$elm$svg$Svg$text_,
 					_List_fromArray(
 						[
-							$elm$svg$Svg$Attributes$y('125'),
+							$elm$svg$Svg$Attributes$y('105'),
 							$elm$svg$Svg$Attributes$x('46%'),
 							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 						]),
@@ -6898,7 +6875,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					$elm$svg$Svg$text_,
 					_List_fromArray(
 						[
-							$elm$svg$Svg$Attributes$y('125'),
+							$elm$svg$Svg$Attributes$y('105'),
 							$elm$svg$Svg$Attributes$x('52%'),
 							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 						]),
@@ -6910,7 +6887,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					$elm$svg$Svg$text_,
 					_List_fromArray(
 						[
-							$elm$svg$Svg$Attributes$y('125'),
+							$elm$svg$Svg$Attributes$y('105'),
 							$elm$svg$Svg$Attributes$x('58%'),
 							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 						]),
@@ -6922,7 +6899,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					$elm$svg$Svg$text_,
 					_List_fromArray(
 						[
-							$elm$svg$Svg$Attributes$y('125'),
+							$elm$svg$Svg$Attributes$y('105'),
 							$elm$svg$Svg$Attributes$x('64%'),
 							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 						]),
@@ -6934,7 +6911,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					$elm$svg$Svg$text_,
 					_List_fromArray(
 						[
-							$elm$svg$Svg$Attributes$y('125'),
+							$elm$svg$Svg$Attributes$y('105'),
 							$elm$svg$Svg$Attributes$x('70%'),
 							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 						]),
@@ -6946,7 +6923,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					$elm$svg$Svg$text_,
 					_List_fromArray(
 						[
-							$elm$svg$Svg$Attributes$y('125'),
+							$elm$svg$Svg$Attributes$y('105'),
 							$elm$svg$Svg$Attributes$x('76%'),
 							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 						]),
@@ -6958,7 +6935,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					$elm$svg$Svg$text_,
 					_List_fromArray(
 						[
-							$elm$svg$Svg$Attributes$y('125'),
+							$elm$svg$Svg$Attributes$y('105'),
 							$elm$svg$Svg$Attributes$x('82%'),
 							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 						]),
@@ -6970,7 +6947,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					$elm$svg$Svg$text_,
 					_List_fromArray(
 						[
-							$elm$svg$Svg$Attributes$y('125'),
+							$elm$svg$Svg$Attributes$y('105'),
 							$elm$svg$Svg$Attributes$x('88%'),
 							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 						]),
@@ -6982,7 +6959,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					$elm$svg$Svg$text_,
 					_List_fromArray(
 						[
-							$elm$svg$Svg$Attributes$y('125'),
+							$elm$svg$Svg$Attributes$y('105'),
 							$elm$svg$Svg$Attributes$x('94%'),
 							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 						]),
@@ -6995,7 +6972,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					_List_fromArray(
 						[
 							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('135'),
+							$elm$svg$Svg$Attributes$y1('115'),
 							$elm$svg$Svg$Attributes$x2('99.9%'),
 							$elm$svg$Svg$Attributes$x1('99.9%'),
 							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
@@ -7006,7 +6983,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					_List_fromArray(
 						[
 							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('135'),
+							$elm$svg$Svg$Attributes$y1('115'),
 							$elm$svg$Svg$Attributes$x2('94%'),
 							$elm$svg$Svg$Attributes$x1('94%'),
 							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
@@ -7017,7 +6994,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					_List_fromArray(
 						[
 							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('135'),
+							$elm$svg$Svg$Attributes$y1('115'),
 							$elm$svg$Svg$Attributes$x2('88%'),
 							$elm$svg$Svg$Attributes$x1('88%'),
 							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
@@ -7028,7 +7005,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					_List_fromArray(
 						[
 							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('135'),
+							$elm$svg$Svg$Attributes$y1('115'),
 							$elm$svg$Svg$Attributes$x2('82%'),
 							$elm$svg$Svg$Attributes$x1('82%'),
 							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
@@ -7039,7 +7016,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					_List_fromArray(
 						[
 							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('135'),
+							$elm$svg$Svg$Attributes$y1('115'),
 							$elm$svg$Svg$Attributes$x2('76%'),
 							$elm$svg$Svg$Attributes$x1('76%'),
 							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
@@ -7050,7 +7027,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					_List_fromArray(
 						[
 							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('135'),
+							$elm$svg$Svg$Attributes$y1('115'),
 							$elm$svg$Svg$Attributes$x2('70%'),
 							$elm$svg$Svg$Attributes$x1('70%'),
 							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
@@ -7061,7 +7038,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					_List_fromArray(
 						[
 							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('135'),
+							$elm$svg$Svg$Attributes$y1('115'),
 							$elm$svg$Svg$Attributes$x2('64%'),
 							$elm$svg$Svg$Attributes$x1('64%'),
 							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
@@ -7072,7 +7049,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					_List_fromArray(
 						[
 							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('135'),
+							$elm$svg$Svg$Attributes$y1('115'),
 							$elm$svg$Svg$Attributes$x2('58%'),
 							$elm$svg$Svg$Attributes$x1('58%'),
 							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
@@ -7083,7 +7060,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					_List_fromArray(
 						[
 							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('135'),
+							$elm$svg$Svg$Attributes$y1('115'),
 							$elm$svg$Svg$Attributes$x2('52%'),
 							$elm$svg$Svg$Attributes$x1('52%'),
 							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
@@ -7094,7 +7071,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					_List_fromArray(
 						[
 							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('135'),
+							$elm$svg$Svg$Attributes$y1('115'),
 							$elm$svg$Svg$Attributes$x2('46%'),
 							$elm$svg$Svg$Attributes$x1('46%'),
 							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
@@ -7105,7 +7082,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					_List_fromArray(
 						[
 							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('135'),
+							$elm$svg$Svg$Attributes$y1('115'),
 							$elm$svg$Svg$Attributes$x2('40%'),
 							$elm$svg$Svg$Attributes$x1('40%'),
 							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
@@ -7116,7 +7093,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					_List_fromArray(
 						[
 							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('135'),
+							$elm$svg$Svg$Attributes$y1('115'),
 							$elm$svg$Svg$Attributes$x2('34%'),
 							$elm$svg$Svg$Attributes$x1('34%'),
 							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
@@ -7127,7 +7104,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 					_List_fromArray(
 						[
 							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('135'),
+							$elm$svg$Svg$Attributes$y1('115'),
 							$elm$svg$Svg$Attributes$x2('28%'),
 							$elm$svg$Svg$Attributes$x1('28%'),
 							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
@@ -7137,114 +7114,42 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 			$elm$core$List$concat(
 				A2($elm$core$List$indexedMap, $author$project$PlantCalendar$drawRow, plants))));
 };
-var $elm$core$List$filter = F2(
-	function (isGood, list) {
-		return A3(
-			$elm$core$List$foldr,
-			F2(
-				function (x, xs) {
-					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
-				}),
-			_List_Nil,
-			list);
+var $author$project$PlantCalendar$drawBottomContent = F2(
+	function (selectedPlants, status) {
+		return $author$project$PlantCalendar$drawSVG(selectedPlants);
 	});
+var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $author$project$PlantCalendar$drawBottomInstructions = A2(
+	$elm$html$Html$div,
+	_List_Nil,
+	_List_fromArray(
+		[
+			$elm$html$Html$text('Select some things')
+		]));
 var $elm$core$String$fromFloat = _String_fromNumber;
-var $author$project$PlantCalendar$getCoordinates = function (_v0) {
-	var lat = _v0.a;
-	var lon = _v0.b;
-	return _Utils_eq(
-		_Utils_Tuple2(lat, lon),
-		_Utils_Tuple2(-1, -1)) ? '' : ($elm$core$String$fromFloat(lat) + ('N, ' + ($elm$core$String$fromFloat(lon) + 'W')));
+var $author$project$PlantCalendar$getCoordinates = function (status) {
+	if (status.$ === 'Success') {
+		var zip = status.a;
+		var _v1 = zip.coordinates;
+		var lat = _v1.a;
+		var lon = _v1.b;
+		return $elm$core$String$fromFloat(lat) + ('N, ' + ($elm$core$String$fromFloat(lon) + 'W'));
+	} else {
+		return '';
+	}
 };
 var $elm$core$String$toUpper = _String_toUpper;
 var $author$project$PlantCalendar$getPHZ = function (status) {
 	switch (status.$) {
 		case 'Success':
 			var good = status.a;
-			return $elm$core$String$toUpper(good);
+			return $elm$core$String$toUpper(good.zone);
 		case 'Loading':
 			return 'Loading...';
 		default:
 			return '5A (default)';
 	}
 };
-var $author$project$PlantCalendar$TogglePlant = function (a) {
-	return {$: 'TogglePlant', a: a};
-};
-var $elm$json$Json$Encode$bool = _Json_wrap;
-var $elm$html$Html$Attributes$boolProperty = F2(
-	function (key, bool) {
-		return A2(
-			_VirtualDom_property,
-			key,
-			$elm$json$Json$Encode$bool(bool));
-	});
-var $elm$html$Html$Attributes$checked = $elm$html$Html$Attributes$boolProperty('checked');
-var $elm$html$Html$Attributes$for = $elm$html$Html$Attributes$stringProperty('htmlFor');
-var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
-var $elm$html$Html$input = _VirtualDom_node('input');
-var $elm$html$Html$label = _VirtualDom_node('label');
-var $elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 'Normal', a: a};
-};
-var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
-var $elm$html$Html$Events$on = F2(
-	function (event, decoder) {
-		return A2(
-			$elm$virtual_dom$VirtualDom$on,
-			event,
-			$elm$virtual_dom$VirtualDom$Normal(decoder));
-	});
-var $elm$html$Html$Events$onClick = function (msg) {
-	return A2(
-		$elm$html$Html$Events$on,
-		'click',
-		$elm$json$Json$Decode$succeed(msg));
-};
-var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
-var $author$project$PlantCalendar$getPlants = F2(
-	function (index, plants) {
-		if (plants.b) {
-			var p = plants.a;
-			var ps = plants.b;
-			return A2(
-				$elm$core$List$cons,
-				A2(
-					$elm$html$Html$div,
-					_List_Nil,
-					_List_fromArray(
-						[
-							A2(
-							$elm$html$Html$input,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$type_('checkbox'),
-									$elm$html$Html$Attributes$id(
-									'p' + $elm$core$String$fromInt(index)),
-									$elm$html$Html$Attributes$checked(p.selected),
-									$elm$html$Html$Events$onClick(
-									$author$project$PlantCalendar$TogglePlant(p))
-								]),
-							_List_Nil),
-							A2(
-							$elm$html$Html$label,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class(p.category),
-									$elm$html$Html$Attributes$for(
-									'p' + $elm$core$String$fromInt(index))
-								]),
-							_List_fromArray(
-								[
-									$elm$html$Html$text(p.name)
-								]))
-						])),
-				A2($author$project$PlantCalendar$getPlants, index + 1, ps));
-		} else {
-			return _List_Nil;
-		}
-	});
 var $elm$regex$Regex$Match = F4(
 	function (match, index, number, submatches) {
 		return {index: index, match: match, number: number, submatches: submatches};
@@ -7267,76 +7172,45 @@ var $elm$core$Maybe$withDefault = F2(
 			return _default;
 		}
 	});
-var $author$project$PlantCalendar$getTempString = function (t) {
-	var _v0 = A2(
-		$elm$core$List$map,
-		function ($) {
-			return $.submatches;
-		},
-		A2(
-			$elm$regex$Regex$find,
+var $author$project$PlantCalendar$getTempString = function (status) {
+	if (status.$ === 'Success') {
+		var temp_range = status.a.temp_range;
+		var _v1 = A2(
+			$elm$core$List$map,
+			function ($) {
+				return $.submatches;
+			},
 			A2(
-				$elm$core$Maybe$withDefault,
-				$elm$regex$Regex$never,
-				$elm$regex$Regex$fromString('(.*) to (.*)')),
-			t));
-	if ((((((_v0.b && _v0.a.b) && (_v0.a.a.$ === 'Just')) && _v0.a.b.b) && (_v0.a.b.a.$ === 'Just')) && (!_v0.a.b.b.b)) && (!_v0.b.b)) {
-		var _v1 = _v0.a;
-		var a = _v1.a.a;
-		var _v2 = _v1.b;
-		var b = _v2.a.a;
-		return a + ('° to ' + (b + '° F'));
+				$elm$regex$Regex$find,
+				A2(
+					$elm$core$Maybe$withDefault,
+					$elm$regex$Regex$never,
+					$elm$regex$Regex$fromString('(.*) to (.*)')),
+				temp_range));
+		if ((((((_v1.b && _v1.a.b) && (_v1.a.a.$ === 'Just')) && _v1.a.b.b) && (_v1.a.b.a.$ === 'Just')) && (!_v1.a.b.b.b)) && (!_v1.b.b)) {
+			var _v2 = _v1.a;
+			var a = _v2.a.a;
+			var _v3 = _v2.b;
+			var b = _v3.a.a;
+			return a + ('° to ' + (b + '° F'));
+		} else {
+			return '';
+		}
 	} else {
 		return '';
 	}
 };
-var $author$project$PlantCalendar$getZIP = function (zipcode) {
-	return (zipcode.zipcode === '-1') ? 'Unset' : zipcode.zipcode;
+var $author$project$PlantCalendar$getZIP = function (status) {
+	switch (status.$) {
+		case 'Success':
+			var zipcode = status.a;
+			return (zipcode.zipcode === '-1') ? 'Unset' : zipcode.zipcode;
+		case 'Loading':
+			return 'Loading';
+		default:
+			return 'Error';
+	}
 };
-var $elm$html$Html$main_ = _VirtualDom_node('main');
-var $elm$html$Html$Events$alwaysStop = function (x) {
-	return _Utils_Tuple2(x, true);
-};
-var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
-	return {$: 'MayStopPropagation', a: a};
-};
-var $elm$html$Html$Events$stopPropagationOn = F2(
-	function (event, decoder) {
-		return A2(
-			$elm$virtual_dom$VirtualDom$on,
-			event,
-			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
-	});
-var $elm$json$Json$Decode$at = F2(
-	function (fields, decoder) {
-		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
-	});
-var $elm$html$Html$Events$targetValue = A2(
-	$elm$json$Json$Decode$at,
-	_List_fromArray(
-		['target', 'value']),
-	$elm$json$Json$Decode$string);
-var $elm$html$Html$Events$onInput = function (tagger) {
-	return A2(
-		$elm$html$Html$Events$stopPropagationOn,
-		'input',
-		A2(
-			$elm$json$Json$Decode$map,
-			$elm$html$Html$Events$alwaysStop,
-			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
-};
-var $elm$html$Html$Attributes$placeholder = $elm$html$Html$Attributes$stringProperty('placeholder');
-var $elm$core$String$toLower = _String_toLower;
-var $author$project$PlantCalendar$plantNameContains = F2(
-	function (search, plant) {
-		return A2(
-			$elm$core$String$contains,
-			search,
-			$elm$core$String$toLower(
-				function ($) {
-					return $.name;
-				}(plant)));
-	});
 var $elm$html$Html$strong = _VirtualDom_node('strong');
 var $elm$svg$Svg$Attributes$class = _VirtualDom_attribute('class');
 var $elm$svg$Svg$Attributes$d = _VirtualDom_attribute('d');
@@ -15779,8 +15653,259 @@ var $author$project$USASVG$usaSVG = function (zipper) {
 					]))
 			]));
 };
+var $author$project$PlantCalendar$drawTopContent = function (status) {
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('top_info')
+			]),
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('top_info__left')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$div,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$strong,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('ZIP Code: ')
+									])),
+								$elm$html$Html$text(
+								$author$project$PlantCalendar$getZIP(status))
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$strong,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Coordinates: ')
+									])),
+								$elm$html$Html$text(
+								$author$project$PlantCalendar$getCoordinates(status))
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$strong,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Average low winter temperature: ')
+									])),
+								$elm$html$Html$text(
+								$author$project$PlantCalendar$getTempString(status))
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$strong,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Plant hardiness zone: ')
+									])),
+								$elm$html$Html$text(
+								$author$project$PlantCalendar$getPHZ(status))
+							]))
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('top_info__right')
+					]),
+				_List_fromArray(
+					[
+						$author$project$USASVG$usaSVG(
+						A2(
+							$elm$core$Maybe$withDefault,
+							0,
+							$elm$core$String$toInt(
+								A3(
+									$elm$core$String$slice,
+									0,
+									3,
+									$author$project$PlantCalendar$getZIP(status)))))
+					]))
+			]));
+};
+var $author$project$PlantCalendar$drawTopInstructions = A2(
+	$elm$html$Html$div,
+	_List_fromArray(
+		[
+			$elm$html$Html$Attributes$class('top_info')
+		]),
+	_List_fromArray(
+		[
+			A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('top_info__instructions')
+				]),
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Set your zip code')
+				]))
+		]));
+var $elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			$elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
+	});
+var $author$project$PlantCalendar$TogglePlant = function (a) {
+	return {$: 'TogglePlant', a: a};
+};
+var $elm$json$Json$Encode$bool = _Json_wrap;
+var $elm$html$Html$Attributes$boolProperty = F2(
+	function (key, bool) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$bool(bool));
+	});
+var $elm$html$Html$Attributes$checked = $elm$html$Html$Attributes$boolProperty('checked');
+var $elm$html$Html$Attributes$for = $elm$html$Html$Attributes$stringProperty('htmlFor');
+var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
+var $elm$html$Html$input = _VirtualDom_node('input');
+var $elm$html$Html$label = _VirtualDom_node('label');
+var $elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 'Normal', a: a};
+};
+var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var $elm$html$Html$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var $elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'click',
+		$elm$json$Json$Decode$succeed(msg));
+};
+var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
+var $author$project$PlantCalendar$getPlants = F2(
+	function (index, plants) {
+		if (plants.b) {
+			var p = plants.a;
+			var ps = plants.b;
+			return A2(
+				$elm$core$List$cons,
+				A2(
+					$elm$html$Html$div,
+					_List_Nil,
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$input,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$type_('checkbox'),
+									$elm$html$Html$Attributes$id(
+									'p' + $elm$core$String$fromInt(index)),
+									$elm$html$Html$Attributes$checked(p.selected),
+									$elm$html$Html$Events$onClick(
+									$author$project$PlantCalendar$TogglePlant(p))
+								]),
+							_List_Nil),
+							A2(
+							$elm$html$Html$label,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class(p.category),
+									$elm$html$Html$Attributes$for(
+									'p' + $elm$core$String$fromInt(index))
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text(p.name)
+								]))
+						])),
+				A2($author$project$PlantCalendar$getPlants, index + 1, ps));
+		} else {
+			return _List_Nil;
+		}
+	});
+var $elm$html$Html$main_ = _VirtualDom_node('main');
+var $elm$core$Basics$neq = _Utils_notEqual;
+var $elm$html$Html$Events$alwaysStop = function (x) {
+	return _Utils_Tuple2(x, true);
+};
+var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
+	return {$: 'MayStopPropagation', a: a};
+};
+var $elm$html$Html$Events$stopPropagationOn = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
+	});
+var $elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
+	});
+var $elm$html$Html$Events$targetValue = A2(
+	$elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'value']),
+	$elm$json$Json$Decode$string);
+var $elm$html$Html$Events$onInput = function (tagger) {
+	return A2(
+		$elm$html$Html$Events$stopPropagationOn,
+		'input',
+		A2(
+			$elm$json$Json$Decode$map,
+			$elm$html$Html$Events$alwaysStop,
+			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
+};
+var $elm$html$Html$Attributes$placeholder = $elm$html$Html$Attributes$stringProperty('placeholder');
+var $elm$core$String$toLower = _String_toLower;
+var $author$project$PlantCalendar$plantNameContains = F2(
+	function (search, plant) {
+		return A2(
+			$elm$core$String$contains,
+			search,
+			$elm$core$String$toLower(
+				function ($) {
+					return $.name;
+				}(plant)));
+	});
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
 var $author$project$PlantCalendar$view = function (model) {
+	var topContent = (!_Utils_eq(model.zipcode, $author$project$PlantCalendar$Unset)) ? $author$project$PlantCalendar$drawTopContent(model.zipcode) : $author$project$PlantCalendar$drawTopInstructions;
 	var sidebarPlants = A2(
 		$elm$core$List$filter,
 		$author$project$PlantCalendar$plantNameContains(
@@ -15792,6 +15917,7 @@ var $author$project$PlantCalendar$view = function (model) {
 			return $.selected;
 		},
 		model.plants);
+	var bottomContent = ($elm$core$List$length(selectedPlants) > 0) ? A2($author$project$PlantCalendar$drawBottomContent, selectedPlants, model.zipcode) : $author$project$PlantCalendar$drawBottomInstructions;
 	return A2(
 		$elm$html$Html$div,
 		_List_Nil,
@@ -15916,102 +16042,7 @@ var $author$project$PlantCalendar$view = function (model) {
 						$elm$html$Html$main_,
 						_List_Nil,
 						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$div,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$class('top_info')
-									]),
-								_List_fromArray(
-									[
-										A2(
-										$elm$html$Html$div,
-										_List_fromArray(
-											[
-												$elm$html$Html$Attributes$class('top_info__left')
-											]),
-										_List_fromArray(
-											[
-												A2(
-												$elm$html$Html$div,
-												_List_Nil,
-												_List_fromArray(
-													[
-														A2(
-														$elm$html$Html$strong,
-														_List_Nil,
-														_List_fromArray(
-															[
-																$elm$html$Html$text('ZIP Code: ')
-															])),
-														$elm$html$Html$text(
-														$author$project$PlantCalendar$getZIP(model.zipcode))
-													])),
-												A2(
-												$elm$html$Html$div,
-												_List_Nil,
-												_List_fromArray(
-													[
-														A2(
-														$elm$html$Html$strong,
-														_List_Nil,
-														_List_fromArray(
-															[
-																$elm$html$Html$text('Coordinates: ')
-															])),
-														$elm$html$Html$text(
-														$author$project$PlantCalendar$getCoordinates(model.zipcode.coordinates))
-													])),
-												A2(
-												$elm$html$Html$div,
-												_List_Nil,
-												_List_fromArray(
-													[
-														A2(
-														$elm$html$Html$strong,
-														_List_Nil,
-														_List_fromArray(
-															[
-																$elm$html$Html$text('Average low winter temperature: ')
-															])),
-														$elm$html$Html$text(
-														$author$project$PlantCalendar$getTempString(model.zipcode.temp_range))
-													])),
-												A2(
-												$elm$html$Html$div,
-												_List_Nil,
-												_List_fromArray(
-													[
-														A2(
-														$elm$html$Html$strong,
-														_List_Nil,
-														_List_fromArray(
-															[
-																$elm$html$Html$text('Plant hardiness zone: ')
-															])),
-														$elm$html$Html$text(
-														$author$project$PlantCalendar$getPHZ(model.phz))
-													]))
-											])),
-										A2(
-										$elm$html$Html$div,
-										_List_fromArray(
-											[
-												$elm$html$Html$Attributes$class('top_info__right')
-											]),
-										_List_fromArray(
-											[
-												$author$project$USASVG$usaSVG(
-												A2(
-													$elm$core$Maybe$withDefault,
-													0,
-													$elm$core$String$toInt(
-														A3($elm$core$String$slice, 0, 3, model.zipcode.zipcode))))
-											]))
-									])),
-								$author$project$PlantCalendar$drawSVG(selectedPlants)
-							]))
+							[topContent, bottomContent]))
 					]))
 			]));
 };

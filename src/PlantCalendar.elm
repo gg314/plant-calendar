@@ -30,9 +30,10 @@ main =
 
 -- MODEL
 type HTTPStatus
-  = Success String
+  = Success Zipcode
   | Failure
   | Loading
+  | Unset
 
 
 type alias Zipcode =
@@ -50,9 +51,8 @@ type alias Plant =
 
 
 type alias Model =
-    { zipcode : Zipcode
+    { zipcode : HTTPStatus
     , zipcodetext : String
-    , phz : HTTPStatus
     , plants : List ( Plant )
     , filter : String
     }
@@ -61,9 +61,8 @@ type alias Model =
 init : () -> (Model, Cmd Msg)
 init _ =
     (Model
-      (Zipcode "-1" "-1" (-1, -1) "")
+      Unset
       ""
-      Failure
       plantData
       ""
     , Cmd.none)
@@ -76,7 +75,7 @@ type Msg
     | SetZipcodeText String
     | TogglePlant Plant
     | SetFilter String
-    | GotZipcode String (Result Http.Error Zipcode)
+    | GotZipcode (Result Http.Error Zipcode)
 
 
 jsonDecoder : String -> Json.Decode.Decoder Zipcode
@@ -98,22 +97,23 @@ update msg model =
       SetZipcode ->
         let
             searchZip = model.zipcodetext
+            newZipcode = Loading
         in
-            ( { model | phz = Loading, zipcodetext = "" }
+            ( { model | zipcode = newZipcode, zipcodetext = "" }
             , Http.get { url = "https://phzmapi.org/"++ searchZip ++ ".json",
-                         expect = Http.expectJson (GotZipcode searchZip) (jsonDecoder searchZip) }
+                         expect = Http.expectJson GotZipcode (jsonDecoder searchZip) }
             )
 
       SetZipcodeText str ->
         ( { model | zipcodetext = str }, Cmd.none)
       
-      GotZipcode searchZip result ->
+      GotZipcode result ->
         case result of
             Ok z ->
-              ({ model | zipcode = z, phz = Success z.zone, zipcodetext = ""}, Cmd.none)
+              ({ model | zipcode = Success z, zipcodetext = ""}, Cmd.none)
 
             Err _ ->
-              ({ model | zipcode = Zipcode "-1" "-1" (-1, -1) "", phz = Failure}, Cmd.none)
+              ({ model | zipcode = Failure}, Cmd.none)
         
 
       TogglePlant plant ->
@@ -143,12 +143,12 @@ getPlants : Int -> List (Plant) -> List (Html Msg)
 getPlants index plants =
   case plants of
     p::ps ->
-      div [] [ input [ type_ "checkbox", id ("p"++ (String.fromInt index)), checked p.selected, onClick (TogglePlant p) ] [], label [ class p.category, for ("p"++ (String.fromInt index)) ] [ text p.name ] ] :: getPlants (index + 1) ps
+      div [] [ input [ type_ "checkbox", id ("p"++ String.fromInt index), checked p.selected, onClick (TogglePlant p) ] [], label [ class p.category, for ("p"++ (String.fromInt index)) ] [ text p.name ] ] :: getPlants (index + 1) ps
     _ -> []
 
 drawSVG : List (Plant) -> Html Msg
 drawSVG plants =
-    svg [ style ("width:100%; height: "++(String.fromInt ((List.length plants)*60+165))++"px; stroke: #888; fill; stroke-width: 1"), Svg.Attributes.shapeRendering "crispEdges" ]
+    svg [ style ("width:100%; height: "++ String.fromInt (List.length plants*60+165) ++"px; stroke: #888; fill; stroke-width: 1"), Svg.Attributes.shapeRendering "crispEdges" ]
     (List.append
         [ Svg.rect [ x "22.5%", y "0", width "5%", height "14", stroke "#77734f", fill "rgba(209, 193, 42, .7)"] []
         , Svg.text_ [y "25", x "25%", style "fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0vw;"] [ Svg.text "Plant indoors" ]
@@ -156,38 +156,38 @@ drawSVG plants =
         , Svg.text_ [y "25", x "50%", style "fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0vw;"] [ Svg.text "Transplant / plant outdoors" ]
         , Svg.rect [ x "72.5%", y "0", width "5%", height "14", stroke "#7c6650", fill "rgba(211, 122, 41, .7)"] []
         , Svg.text_ [y "25", x "75%", style "fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0vw;"] [ Svg.text "Harvest" ]
-        , Svg.text_ [y "125", x "28%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "JAN" ]
-        , Svg.text_ [y "125", x "34%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "FEB" ]
-        , Svg.text_ [y "125", x "40%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "MAR" ]
-        , Svg.text_ [y "125", x "46%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "APR" ]
-        , Svg.text_ [y "125", x "52%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "MAY" ]
-        , Svg.text_ [y "125", x "58%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "JUN" ]
-        , Svg.text_ [y "125", x "64%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "JUL" ]
-        , Svg.text_ [y "125", x "70%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "AUG" ]
-        , Svg.text_ [y "125", x "76%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "SEP" ]
-        , Svg.text_ [y "125", x "82%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "OCT" ]
-        , Svg.text_ [y "125", x "88%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "NOV" ]
-        , Svg.text_ [y "125", x "94%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "DEC" ]
-        , Svg.line [y2 "100%", y1 "135", x2 "99.9%", x1 "99.9%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "135", x2 "94%", x1 "94%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "135", x2 "88%", x1 "88%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "135", x2 "82%", x1 "82%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "135", x2 "76%", x1 "76%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "135", x2 "70%", x1 "70%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "135", x2 "64%", x1 "64%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "135", x2 "58%", x1 "58%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "135", x2 "52%", x1 "52%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "135", x2 "46%", x1 "46%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "135", x2 "40%", x1 "40%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "135", x2 "34%", x1 "34%", stroke "#d8d8d8"] []
-        , Svg.line [y2 "100%", y1 "135", x2 "28%", x1 "28%", stroke "#d8d8d8"] []
+        , Svg.text_ [y "105", x "28%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "JAN" ]
+        , Svg.text_ [y "105", x "34%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "FEB" ]
+        , Svg.text_ [y "105", x "40%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "MAR" ]
+        , Svg.text_ [y "105", x "46%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "APR" ]
+        , Svg.text_ [y "105", x "52%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "MAY" ]
+        , Svg.text_ [y "105", x "58%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "JUN" ]
+        , Svg.text_ [y "105", x "64%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "JUL" ]
+        , Svg.text_ [y "105", x "70%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "AUG" ]
+        , Svg.text_ [y "105", x "76%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "SEP" ]
+        , Svg.text_ [y "105", x "82%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "OCT" ]
+        , Svg.text_ [y "105", x "88%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "NOV" ]
+        , Svg.text_ [y "105", x "94%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "DEC" ]
+        , Svg.line [y2 "100%", y1 "115", x2 "99.9%", x1 "99.9%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "115", x2 "94%", x1 "94%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "115", x2 "88%", x1 "88%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "115", x2 "82%", x1 "82%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "115", x2 "76%", x1 "76%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "115", x2 "70%", x1 "70%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "115", x2 "64%", x1 "64%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "115", x2 "58%", x1 "58%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "115", x2 "52%", x1 "52%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "115", x2 "46%", x1 "46%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "115", x2 "40%", x1 "40%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "115", x2 "34%", x1 "34%", stroke "#d8d8d8"] []
+        , Svg.line [y2 "100%", y1 "115", x2 "28%", x1 "28%", stroke "#d8d8d8"] []
         ]
         (List.concat (List.indexedMap drawRow plants)))
 
 drawRow : Int -> Plant -> List (Svg.Svg Msg)
 drawRow index plant =
     let
-      y0 = 60 * (index+1) + 130
+      y0 = 60 * (index+1) + 115
     in
         [ Svg.line [ y1 (String.fromInt (y0-10)), y2 (String.fromInt (y0+10)), x1 "28%", x2 "28%" ] []
         , Svg.line [ y1 (String.fromInt (y0-10)), y2 (String.fromInt (y0+10)), x1 "34%", x2 "34%" ] []
@@ -212,35 +212,75 @@ plantNameContains : String -> Plant -> Bool
 plantNameContains search plant =
     String.contains search (String.toLower (.name plant))
 
-getCoordinates : (Float, Float) -> String
-getCoordinates (lat, lon) = 
-    if (lat, lon) == (-1, -1) then "" else (String.fromFloat lat) ++ "N, " ++ (String.fromFloat lon) ++ "W"
+getCoordinates : HTTPStatus -> String
+getCoordinates status = 
+    case status of
+        Success zip -> let
+                           (lat, lon) = zip.coordinates
+                       in
+                           (String.fromFloat lat) ++ "N, " ++ (String.fromFloat lon) ++ "W"
+        _ -> ""
 
-getTempString : String -> String
-getTempString t = 
-    case (List.map .submatches (Regex.find (Maybe.withDefault Regex.never <| Regex.fromString "(.*) to (.*)") t)) of
-      [[Just a, Just b]] -> a ++ "° to " ++ b ++ "° F"
-      _ -> ""
+getTempString : HTTPStatus -> String
+getTempString status =
+    case status of
+        Success {temp_range} -> case (List.map .submatches (Regex.find (Maybe.withDefault Regex.never <| Regex.fromString "(.*) to (.*)") temp_range)) of
+                                        [[Just a, Just b]] -> a ++ "° to " ++ b ++ "° F"
+                                        _ -> ""
+        _ -> ""
 
 getPHZ : HTTPStatus -> String
 getPHZ status =
     case status of
         Success good ->
-          String.toUpper good
+          String.toUpper good.zone
         Loading ->
           "Loading..."
-        Failure ->
+        _ ->
           "5A (default)"
 
-getZIP : Zipcode -> String
-getZIP zipcode =
-  if zipcode.zipcode == "-1" then "Unset" else zipcode.zipcode
+getZIP : HTTPStatus -> String
+getZIP status =
+  case status of
+    Success zipcode -> if zipcode.zipcode == "-1" then "Unset" else zipcode.zipcode
+    Loading -> "Loading"
+    _ -> "Error"
+
+
+
+drawBottomInstructions : Html Msg
+drawBottomInstructions =
+    div [] [ text "Select some things"]
+
+drawBottomContent : List (Plant) -> HTTPStatus -> Html Msg
+drawBottomContent selectedPlants status =
+    drawSVG selectedPlants
+
+
+drawTopInstructions : Html Msg
+drawTopInstructions =
+  div [ class "top_info" ] [ div [ class "top_info__instructions" ] [ text "Set your zip code" ] ]
+
+
+drawTopContent : HTTPStatus -> Html Msg
+drawTopContent status = 
+  div [ class "top_info" ]
+    [ div [ class "top_info__left" ]
+      [ div [] [ strong [] [ text "ZIP Code: " ], text (getZIP status) ]
+      , div [] [ strong [] [ text "Coordinates: " ], text (getCoordinates status)]
+      , div [] [ strong [] [ text "Average low winter temperature: " ], text (getTempString status) ]
+      , div [] [ strong [] [ text "Plant hardiness zone: " ], text (getPHZ status)]
+      ]
+    , div [ class "top_info__right" ] [ usaSVG (Maybe.withDefault 0 (String.toInt (String.slice 0 3 (getZIP status)))) ]
+    ]
 
 view : Model -> Html Msg
 view model =
   let
     sidebarPlants = List.filter (plantNameContains (String.toLower model.filter)) model.plants
     selectedPlants = List.filter .selected model.plants
+    topContent = if model.zipcode /= Unset then drawTopContent model.zipcode else drawTopInstructions
+    bottomContent = if List.length selectedPlants > 0 then drawBottomContent selectedPlants model.zipcode else drawBottomInstructions
   in
     div []
     [ div [ class "header" ] [ text "plant-calendar" ]
@@ -260,17 +300,9 @@ view model =
             [ div [ class "crop__list" ] (getPlants 0 sidebarPlants) ]
         ]
       , main_ []
-        [ div [ class "top_info" ]
-          [ div [ class "top_info__left" ]
-            [ div [] [ strong [] [ text "ZIP Code: " ], text (getZIP model.zipcode) ]
-            , div [] [ strong [] [ text "Coordinates: " ], text (getCoordinates model.zipcode.coordinates)]
-            , div [] [ strong [] [ text "Average low winter temperature: " ], text (getTempString model.zipcode.temp_range) ]
-            , div [] [ strong [] [ text "Plant hardiness zone: " ], text (getPHZ model.phz)]
+            [ topContent
+            , bottomContent
             ]
-          , div [ class "top_info__right" ] [ usaSVG (Maybe.withDefault 0 (String.toInt (String.slice 0 3 model.zipcode.zipcode))) ]
-          ]
-        , drawSVG selectedPlants
-        ]
       ]
     ]
   
