@@ -110,7 +110,7 @@ update msg model =
       GotZipcode result ->
         case result of
             Ok z ->
-              ({ model | zipcode = Success z, plants = List.map (enablePlants (getZoneFloat z.zone)) model.plants, zipcodetext = ""}, Cmd.none)
+              ({ model | zipcode = Success z, plants = List.map (enablePlants (getZoneFloat (Success z))) model.plants, zipcodetext = ""}, Cmd.none)
 
             Err _ ->
               ({ model | zipcode = Failure}, Cmd.none)
@@ -128,30 +128,33 @@ update msg model =
       ClearAll ->
         ( { model | zipcode = Unset, plants = List.map unselect model.plants }, Cmd.none)
 
-getZoneFloat : String -> Float
+getZoneFloat : HTTPStatus -> Float
 getZoneFloat z =
   case z of
-    "1a" -> 1.0
-    "1b" -> 1.5
-    "2a" -> 2.0
-    "2b" -> 2.5
-    "3a" -> 3.0
-    "3b" -> 3.5
-    "4a" -> 4.0
-    "4b" -> 4.5
-    "5a" -> 5.0
-    "5b" -> 5.5
-    "6a" -> 6.0
-    "6b" -> 6.5
-    "7a" -> 7.0
-    "7b" -> 7.5
-    "8a" -> 8.0
-    "8b" -> 8.5
-    "9a" -> 9.0
-    "9b" -> 9.5
-    "10a" -> 10.0
-    "10b" -> 10.5
-    _ -> 5.0
+    Success y ->
+      case y.zone of
+        "1a" -> 1.0
+        "1b" -> 1.5
+        "2a" -> 2.0
+        "2b" -> 2.5
+        "3a" -> 3.0
+        "3b" -> 3.5
+        "4a" -> 4.0
+        "4b" -> 4.5
+        "5a" -> 5.0
+        "5b" -> 5.5
+        "6a" -> 6.0
+        "6b" -> 6.5
+        "7a" -> 7.0
+        "7b" -> 7.5
+        "8a" -> 8.0
+        "8b" -> 8.5
+        "9a" -> 9.0
+        "9b" -> 9.5
+        "10a" -> 10.0
+        "10b" -> 10.5
+        _ -> 6.0
+    _ -> 6.0
 
 
 enablePlants : Float -> Plant -> Plant
@@ -188,9 +191,9 @@ getPlants index plants =
                      , disabled p.disabled ] [], label [ class p.category, for ("p"++ (String.fromInt index)) ] [ text p.name ] ] :: getPlants (index + 1) ps
     _ -> []
 
-drawSVG : List (Plant) -> Html Msg
-drawSVG plants =
-    svg [ style ("width:100%; height: "++ String.fromInt (List.length plants*60+145) ++"px; stroke: #888; fill; stroke-width: 1"), Svg.Attributes.shapeRendering "crispEdges" ]
+drawSVG : Int -> List (Plant) -> Html Msg
+drawSVG zone plants =
+    svg [ style ("width:100%; height: "++ String.fromInt (List.length plants*66+145) ++"px; stroke: #888; fill; stroke-width: 1"), Svg.Attributes.shapeRendering "crispEdges" ]
     (List.append
         [ Svg.rect [ x "22.5%", y "0", width "5%", height "14", stroke "#77734f", fill "rgba(209, 193, 42, .7)"] []
         , Svg.text_ [y "25", x "25%", style "fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0vw;"] [ Svg.text "Plant indoors" ]
@@ -224,31 +227,55 @@ drawSVG plants =
         , Svg.line [y2 "100%", y1 "115", x2 "34%", x1 "34%", stroke "#d8d8d8"] []
         , Svg.line [y2 "100%", y1 "115", x2 "28%", x1 "28%", stroke "#d8d8d8"] []
         ]
-        (List.concat (List.indexedMap drawRow plants)))
+        (List.concat (List.indexedMap (drawRow zone) plants)))
 
-drawRow : Int -> Plant -> List (Svg.Svg Msg)
-drawRow index plant =
+drawRow : Int -> Int -> Plant -> List (Svg.Svg Msg)
+drawRow zone index plant =
     let
-      y0 = 60 * (index+1) + 105
+      y0 = 66 * (index+1) + 105
     in
-        [ Svg.line [ y1 (String.fromInt (y0-10)), y2 (String.fromInt (y0+10)), x1 "28%", x2 "28%" ] []
-        , Svg.line [ y1 (String.fromInt (y0-10)), y2 (String.fromInt (y0+10)), x1 "34%", x2 "34%" ] []
-        , Svg.line [ y1 (String.fromInt (y0-10)), y2 (String.fromInt (y0+10)), x1 "40%", x2 "40%" ] []
-        , Svg.line [ y1 (String.fromInt (y0-10)), y2 (String.fromInt (y0+10)), x1 "46%", x2 "46%" ] []
-        , Svg.line [ y1 (String.fromInt (y0-10)), y2 (String.fromInt (y0+10)), x1 "52%", x2 "52%" ] []
-        , Svg.line [ y1 (String.fromInt (y0-10)), y2 (String.fromInt (y0+10)), x1 "58%", x2 "58%" ] []
-        , Svg.line [ y1 (String.fromInt (y0-10)), y2 (String.fromInt (y0+10)), x1 "64%", x2 "64%" ] []
-        , Svg.line [ y1 (String.fromInt (y0-10)), y2 (String.fromInt (y0+10)), x1 "70%", x2 "70%" ] []
-        , Svg.line [ y1 (String.fromInt (y0-10)), y2 (String.fromInt (y0+10)), x1 "76%", x2 "76%" ] []
-        , Svg.line [ y1 (String.fromInt (y0-10)), y2 (String.fromInt (y0+10)), x1 "82%", x2 "82%" ] []
-        , Svg.line [ y1 (String.fromInt (y0-10)), y2 (String.fromInt (y0+10)), x1 "88%", x2 "88%" ] []
-        , Svg.line [ y1 (String.fromInt (y0-10)), y2 (String.fromInt (y0+10)), x1 "94%", x2 "94%" ] []
-        , Svg.line [ y1 (String.fromInt (y0-10)), y2 (String.fromInt (y0+10)), x1 "99.9%", x2 "99.9%" ] []
+      List.append
+        [ Svg.line [ y1 (String.fromInt (y0-14)), y2 (String.fromInt (y0+14)), x1 "28%", x2 "28%" ] []
+        , Svg.line [ y1 (String.fromInt (y0-14)), y2 (String.fromInt (y0+14)), x1 "34%", x2 "34%" ] []
+        , Svg.line [ y1 (String.fromInt (y0-14)), y2 (String.fromInt (y0+14)), x1 "40%", x2 "40%" ] []
+        , Svg.line [ y1 (String.fromInt (y0-14)), y2 (String.fromInt (y0+14)), x1 "46%", x2 "46%" ] []
+        , Svg.line [ y1 (String.fromInt (y0-14)), y2 (String.fromInt (y0+14)), x1 "52%", x2 "52%" ] []
+        , Svg.line [ y1 (String.fromInt (y0-14)), y2 (String.fromInt (y0+14)), x1 "58%", x2 "58%" ] []
+        , Svg.line [ y1 (String.fromInt (y0-14)), y2 (String.fromInt (y0+14)), x1 "64%", x2 "64%" ] []
+        , Svg.line [ y1 (String.fromInt (y0-14)), y2 (String.fromInt (y0+14)), x1 "70%", x2 "70%" ] []
+        , Svg.line [ y1 (String.fromInt (y0-14)), y2 (String.fromInt (y0+14)), x1 "76%", x2 "76%" ] []
+        , Svg.line [ y1 (String.fromInt (y0-14)), y2 (String.fromInt (y0+14)), x1 "82%", x2 "82%" ] []
+        , Svg.line [ y1 (String.fromInt (y0-14)), y2 (String.fromInt (y0+14)), x1 "88%", x2 "88%" ] []
+        , Svg.line [ y1 (String.fromInt (y0-14)), y2 (String.fromInt (y0+14)), x1 "94%", x2 "94%" ] []
+        , Svg.line [ y1 (String.fromInt (y0-14)), y2 (String.fromInt (y0+14)), x1 "99.9%", x2 "99.9%" ] []
         , Svg.text_ [ y (String.fromInt (y0-2)), x "23%", style "fill: #444; stroke: none; text-anchor: end; font-weight: 400; font-family: 'Gloria Hallelujah'; font-size: 1.3vw;" ] [ Svg.text plant.name]
         , Svg.line [ y1 (String.fromInt y0), y2 (String.fromInt y0), x1 "99.9%", x2 "0%" ] []
-        , Svg.rect [ x "32%", y (String.fromInt (y0-18)), width "20%", height "14", stroke "#517f6c", fill "rgba(56, 165, 116, .7)"] []
-        , Svg.rect [ x "52%", y (String.fromInt (y0+4)), width "3%", height "14", stroke "#7c6650", fill "rgba(211, 122, 41, .7)"] []
         ] 
+        (List.concat (List.indexedMap (drawCycle y0 zone) plant.defaultPeriods))
+
+toPercent : Float -> String
+toPercent f =
+  String.fromFloat (f * 72) ++ "%"
+
+getZoneOffset : Int -> Int -> Float
+getZoneOffset zone cycle =
+  case zone of
+    7 -> if cycle == 1 then -3.5617 else 3.5617
+    6 -> 0
+    5 -> if cycle == 1 then 4.931 else -4.931
+    4 -> if cycle == 1 then 8.493 else -8.493
+    _ -> -1
+
+toPercentOffset : Float -> Float -> String
+toPercentOffset f offset =
+  String.fromFloat (f * 72 + 28 + offset) ++ "%"
+
+drawCycle : Int -> Int -> Int -> ((Float, Float), (Float, Float), (Float, Float)) -> List (Svg.Svg Msg)
+drawCycle y0 zone cycle ((ss, sf), (ps, pf), (hs, hf)) =
+  [ Svg.rect [ x (toPercentOffset ss (getZoneOffset zone cycle)), y (String.fromInt (y0-23)), width (toPercent (sf - ss)), height "13", stroke "#77734f", fill "rgba(209, 193, 42, .7)"] []
+  , Svg.rect [ x (toPercentOffset ps (getZoneOffset zone cycle)), y (String.fromInt (y0-7)), width (toPercent (pf - ps)), height "13", stroke "#517f6c", fill "rgba(56, 165, 116, .7)"] []
+  , Svg.rect [ x (toPercentOffset hs (getZoneOffset zone cycle)), y (String.fromInt (y0+9)), width (toPercent (hf - hs)), height "13", stroke "#7c6650", fill "rgba(211, 122, 41, .7)"] []
+  ]
 
 plantNameContains : String -> Plant -> Bool
 plantNameContains search plant =
@@ -279,7 +306,7 @@ getPHZ status =
         Loading ->
           "Loading..."
         _ ->
-          "5A (default)"
+          "6A (default)"
 
 getZIP : HTTPStatus -> String
 getZIP status =
@@ -295,7 +322,7 @@ drawBottomInstructions =
 
 drawBottomContent : List (Plant) -> HTTPStatus -> Html Msg
 drawBottomContent selectedPlants status =
-    drawSVG selectedPlants {- If status is unset, make it clear we're using Default zone -}
+    drawSVG (floor (getZoneFloat status)) selectedPlants {- If status is unset, make it clear we're using Default zone -}
 
 
 drawTopInstructions : Html Msg
@@ -360,144 +387,144 @@ view model =
   
 plantData : List (Plant)
 plantData = 
-    [ {name = "Anemone", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Anise Hyssop", category = "Flowers", selected = False, disabled = True, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Asters", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Astilbe", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Baby's Breath", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Bee Balm", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Black-Eyed Susans", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Butterfly Bush", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Borage (star flower)", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Calendula", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Cannas", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Carnations", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Celosia", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Chrysanthemum", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Clematis", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Columbine", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Coneflowers", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Coreopsis", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Cosmos", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Crocuses", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Daffodils", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Dahlias", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Daisies", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Daylilies", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Delphiniums", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Echinacea", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Gardenias", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Geraniums", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Gladiolus", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Hibiscus", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Hollyhock", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Honeysuckle", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Hyacinth", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Hydrangea", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Impatiens", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Irises", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Jasmine", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Lilies", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Marigolds", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Morning Glories", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Nasturtium", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Pansies", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Peonies", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Petunias", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Phlox", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Poppy", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Roses", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Salvia", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Sedum", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Shasta Daisies", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Strawflowers", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Sunflowers", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Sweet Peas", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Tuberose", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Tulips", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Verbenas", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Veronica (Speedwell)", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Viola", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Yarrow", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Zinnias", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Artichoke", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Arugula", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Asparagus", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Beans", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Beets", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Bell Peppers", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Broccoli", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Brussels Sprouts", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Cabbage", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Carrots", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Cauliflower", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Celery", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Collards", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Corn", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Cucumbers", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Edamame", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Eggplants", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Endive", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Fava Beans", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Garlic", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Gourds", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Green Beans", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Horseradish", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Kale", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Leeks", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Lettuce", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Okra", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Onions", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Parsnips", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Peas", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Potatoes", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Pumpkins", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Radishes", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Rhubarb", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Rutabagas", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Shallots", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Snap Peas", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Soybean", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Spinach", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Squash", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Sweet Potatoes", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Swiss Chard", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Tomatoes", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Turnips", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Zucchini", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Basil", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Catnip", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Chives", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Coriander/Cilantro", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Dill", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Fennel", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Lavender", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Lemon Grass", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Marjoram", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Mint", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Mustard", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Oregano", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Parsley", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Rosemary", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Sage", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Scallion", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Stevia", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Tarragon", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Thyme", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Apples", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Blackberries", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Blueberries", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Cantaloupes", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Currant", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Cherries", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Figs", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Grapes", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Honeydew", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Lemons & Oranges", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Peaches", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Pears", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Plums", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Raspberries", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Strawberries", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
-    , {name = "Watermelon", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    [ {name = "Anemone", category = "Flowers", selected = False, disabled = False, minzone = 2.0, maxzone = 13.5, defaultPeriods = [((0.1, 0.2), (0.18, 0.4), (0.38, 0.45)), ((0.6, 0.65), (0.65, 0.8), (0.75, 0.87))]}
+    , {name = "Anise Hyssop", category = "Flowers", selected = False, disabled = False, minzone = 2.0, maxzone = 13.5, defaultPeriods = [((0.1, 0.2), (0.18, 0.4), (0.38, 0.45))]}
+    , {name = "Asters", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Astilbe", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Baby's Breath", category = "Flowers", selected = False, disabled = False, minzone = 2.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Bee Balm", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Black-Eyed Susans", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Butterfly Bush", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Borage (star flower)", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Calendula", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Cannas", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Carnations", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Celosia", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Chrysanthemum", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Clematis", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Columbine", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Coneflowers", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Coreopsis", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Cosmos", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Crocuses", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Daffodils", category = "Flowers", selected = False, disabled = False, minzone = 2.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Dahlias", category = "Flowers", selected = False, disabled = False, minzone = 2.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Daisies", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Daylilies", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Delphiniums", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Echinacea", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Gardenias", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Geraniums", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Gladiolus", category = "Flowers", selected = False, disabled = False, minzone = 2.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Hibiscus", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Hollyhock", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Honeysuckle", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Hyacinth", category = "Flowers", selected = False, disabled = False, minzone = 2.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Hydrangea", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Impatiens", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Irises", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Jasmine", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Lilies", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Marigolds", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Morning Glories", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Nasturtium", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Pansies", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Peonies", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Petunias", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Phlox", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Poppies", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Roses", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Salvia", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Sedum", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Shasta Daisies", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Strawflowers", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Sunflowers", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Sweet Peas", category = "Flowers", selected = False, disabled = False, minzone = 2.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Tuberose", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Tulips", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Verbenas", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Veronica (Speedwell)", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Viola", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Yarrow", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Zinnias", category = "Flowers", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Artichoke", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 9.5, defaultPeriods = []}
+    , {name = "Arugula", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Asparagus", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 8.5, defaultPeriods = []}
+    , {name = "Beans", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Beets", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Bell Peppers", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Broccoli", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Brussels Sprouts", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Cabbage", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Carrots", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Cauliflower", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Celery", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Collards", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Corn", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Cucumbers", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Edamame", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Eggplants", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Endive", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Fava Beans", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Garlic", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Gourds", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Green Beans", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Horseradish", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 8.5, defaultPeriods = []}
+    , {name = "Kale", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Leeks", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Lettuce", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Okra", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Onions", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Parsnips", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Peas", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Potatoes", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Pumpkins", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Radishes", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Rhubarb", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 8.5, defaultPeriods = []}
+    , {name = "Rutabagas", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Shallots", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Snap Peas", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Soybean", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Spinach", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Squash", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Sweet Potatoes", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Swiss Chard", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Tomatoes", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Turnips", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Zucchini", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Basil", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Catnip", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Chives", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Coriander/Cilantro", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Dill", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Fennel", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Lavender", category = "Herbs", selected = False, disabled = False, minzone = 5.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Lemon Grass", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Marjoram", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Mint", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Mustard", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Oregano", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Parsley", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Rosemary", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Sage", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Scallion", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Stevia", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Tarragon", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Thyme", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Apples", category = "Fruits", selected = False, disabled = False, minzone = 5.0, maxzone = 8.5, defaultPeriods = []}
+    , {name = "Blackberries", category = "Fruits", selected = False, disabled = False, minzone = 5.0, maxzone = 8.5, defaultPeriods = []}
+    , {name = "Blueberries", category = "Fruits", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Cantaloupes", category = "Fruits", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Currant", category = "Fruits", selected = False, disabled = False, minzone = 1.0, maxzone = 8.5, defaultPeriods = []}
+    , {name = "Cherries", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 9.5, defaultPeriods = []}
+    , {name = "Figs", category = "Fruits", selected = False, disabled = False, minzone = 5.0, maxzone = 13.5, defaultPeriods = []}
+    , {name = "Grapes", category = "Fruits", selected = False, disabled = False, minzone = 5.0, maxzone = 8.5, defaultPeriods = []}
+    , {name = "Honeydew", category = "Fruits", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Lemons & Oranges", category = "Fruits", selected = False, disabled = False, minzone = 5.0, maxzone = 11.5, defaultPeriods = []}
+    , {name = "Peaches", category = "Fruits", selected = False, disabled = False, minzone = 5.0, maxzone = 8.5, defaultPeriods = []}
+    , {name = "Pears", category = "Fruits", selected = False, disabled = False, minzone = 5.0, maxzone = 8.5, defaultPeriods = []}
+    , {name = "Plums", category = "Fruits", selected = False, disabled = False, minzone = 5.0, maxzone = 8.5, defaultPeriods = []}
+    , {name = "Raspberries", category = "Fruits", selected = False, disabled = False, minzone = 5.0, maxzone = 8.5, defaultPeriods = []}
+    , {name = "Strawberries", category = "Fruits", selected = False, disabled = False, minzone = 5.0, maxzone = 8.5, defaultPeriods = []}
+    , {name = "Watermelon", category = "Fruits", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = []}
     ]

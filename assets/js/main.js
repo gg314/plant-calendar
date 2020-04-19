@@ -5429,146 +5429,178 @@ var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$PlantCalendar$plantData = _List_fromArray(
 	[
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Anemone', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: true, maxzone: 6.5, minzone: 3.0, name: 'Anise Hyssop', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Asters', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Astilbe', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Baby\'s Breath', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Bee Balm', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Black-Eyed Susans', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Butterfly Bush', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Borage (star flower)', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Calendula', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Cannas', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Carnations', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Celosia', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Chrysanthemum', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Clematis', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Columbine', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Coneflowers', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Coreopsis', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Cosmos', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Crocuses', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Daffodils', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Dahlias', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Daisies', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Daylilies', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Delphiniums', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Echinacea', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Gardenias', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Geraniums', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Gladiolus', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Hibiscus', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Hollyhock', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Honeysuckle', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Hyacinth', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Hydrangea', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Impatiens', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Irises', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Jasmine', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Lilies', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Marigolds', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Morning Glories', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Nasturtium', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Pansies', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Peonies', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Petunias', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Phlox', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Poppy', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Roses', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Salvia', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Sedum', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Shasta Daisies', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Strawflowers', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Sunflowers', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Sweet Peas', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Tuberose', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Tulips', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Verbenas', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Veronica (Speedwell)', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Viola', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Yarrow', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Zinnias', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Artichoke', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Arugula', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Asparagus', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Beans', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Beets', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Bell Peppers', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Broccoli', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Brussels Sprouts', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Cabbage', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Carrots', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Cauliflower', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Celery', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Collards', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Corn', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Cucumbers', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Edamame', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Eggplants', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Endive', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Fava Beans', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Garlic', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Gourds', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Green Beans', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Horseradish', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Kale', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Leeks', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Lettuce', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Okra', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Onions', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Parsnips', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Peas', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Potatoes', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Pumpkins', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Radishes', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Rhubarb', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Rutabagas', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Shallots', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Snap Peas', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Soybean', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Spinach', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Squash', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Sweet Potatoes', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Swiss Chard', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Tomatoes', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Turnips', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Zucchini', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Basil', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Catnip', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Chives', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Coriander/Cilantro', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Dill', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Fennel', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Lavender', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Lemon Grass', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Marjoram', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Mint', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Mustard', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Oregano', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Parsley', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Rosemary', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Sage', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Scallion', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Stevia', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Tarragon', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Thyme', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Apples', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Blackberries', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Blueberries', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Cantaloupes', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Currant', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Cherries', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Figs', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Grapes', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Honeydew', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Lemons & Oranges', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Peaches', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Pears', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Plums', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Raspberries', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Strawberries', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Watermelon', selected: false}
+		{
+		category: 'Flowers',
+		defaultPeriods: _List_fromArray(
+			[
+				_Utils_Tuple3(
+				_Utils_Tuple2(0.1, 0.2),
+				_Utils_Tuple2(0.18, 0.4),
+				_Utils_Tuple2(0.38, 0.45)),
+				_Utils_Tuple3(
+				_Utils_Tuple2(0.6, 0.65),
+				_Utils_Tuple2(0.65, 0.8),
+				_Utils_Tuple2(0.75, 0.87))
+			]),
+		disabled: false,
+		maxzone: 13.5,
+		minzone: 2.0,
+		name: 'Anemone',
+		selected: false
+	},
+		{
+		category: 'Flowers',
+		defaultPeriods: _List_fromArray(
+			[
+				_Utils_Tuple3(
+				_Utils_Tuple2(0.1, 0.2),
+				_Utils_Tuple2(0.18, 0.4),
+				_Utils_Tuple2(0.38, 0.45))
+			]),
+		disabled: false,
+		maxzone: 13.5,
+		minzone: 2.0,
+		name: 'Anise Hyssop',
+		selected: false
+	},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Asters', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Astilbe', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 2.0, name: 'Baby\'s Breath', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Bee Balm', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Black-Eyed Susans', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Butterfly Bush', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Borage (star flower)', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Calendula', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Cannas', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Carnations', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Celosia', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Chrysanthemum', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Clematis', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Columbine', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Coneflowers', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Coreopsis', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Cosmos', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Crocuses', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 2.0, name: 'Daffodils', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 2.0, name: 'Dahlias', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Daisies', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Daylilies', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Delphiniums', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Echinacea', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Gardenias', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Geraniums', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 2.0, name: 'Gladiolus', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Hibiscus', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Hollyhock', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Honeysuckle', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 2.0, name: 'Hyacinth', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Hydrangea', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Impatiens', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Irises', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Jasmine', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Lilies', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Marigolds', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Morning Glories', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Nasturtium', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Pansies', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Peonies', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Petunias', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Phlox', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Poppies', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Roses', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Salvia', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Sedum', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Shasta Daisies', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Strawflowers', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Sunflowers', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 2.0, name: 'Sweet Peas', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Tuberose', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Tulips', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Verbenas', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Veronica (Speedwell)', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Viola', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Yarrow', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Zinnias', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 9.5, minzone: 3.0, name: 'Artichoke', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 3.0, name: 'Arugula', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 3.0, name: 'Asparagus', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 3.0, name: 'Beans', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 3.0, name: 'Beets', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Bell Peppers', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Broccoli', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Brussels Sprouts', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Cabbage', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Carrots', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Cauliflower', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Celery', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Collards', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Corn', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Cucumbers', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Edamame', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 3.0, name: 'Eggplants', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Endive', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Fava Beans', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Garlic', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Gourds', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Green Beans', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 1.0, name: 'Horseradish', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Kale', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Leeks', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Lettuce', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 3.0, name: 'Okra', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Onions', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Parsnips', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 3.0, name: 'Peas', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Potatoes', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Pumpkins', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Radishes', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 1.0, name: 'Rhubarb', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Rutabagas', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Shallots', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Snap Peas', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Soybean', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Spinach', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Squash', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 3.0, name: 'Sweet Potatoes', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Swiss Chard', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Tomatoes', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Turnips', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Zucchini', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Basil', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Catnip', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Chives', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Coriander/Cilantro', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Dill', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Fennel', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 5.0, name: 'Lavender', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 3.0, name: 'Lemon Grass', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Marjoram', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Mint', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Mustard', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Oregano', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Parsley', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Rosemary', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Sage', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Scallion', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Stevia', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Tarragon', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Thyme', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 5.0, name: 'Apples', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 5.0, name: 'Blackberries', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Blueberries', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Cantaloupes', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 1.0, name: 'Currant', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 9.5, minzone: 3.0, name: 'Cherries', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 5.0, name: 'Figs', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 5.0, name: 'Grapes', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Honeydew', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 5.0, name: 'Lemons & Oranges', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 5.0, name: 'Peaches', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 5.0, name: 'Pears', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 5.0, name: 'Plums', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 5.0, name: 'Raspberries', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 5.0, name: 'Strawberries', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Watermelon', selected: false}
 	]);
 var $author$project$PlantCalendar$init = function (_v0) {
 	return _Utils_Tuple2(
@@ -6384,49 +6416,55 @@ var $elm$http$Http$get = function (r) {
 		{body: $elm$http$Http$emptyBody, expect: r.expect, headers: _List_Nil, method: 'GET', timeout: $elm$core$Maybe$Nothing, tracker: $elm$core$Maybe$Nothing, url: r.url});
 };
 var $author$project$PlantCalendar$getZoneFloat = function (z) {
-	switch (z) {
-		case '1a':
-			return 1.0;
-		case '1b':
-			return 1.5;
-		case '2a':
-			return 2.0;
-		case '2b':
-			return 2.5;
-		case '3a':
-			return 3.0;
-		case '3b':
-			return 3.5;
-		case '4a':
-			return 4.0;
-		case '4b':
-			return 4.5;
-		case '5a':
-			return 5.0;
-		case '5b':
-			return 5.5;
-		case '6a':
-			return 6.0;
-		case '6b':
-			return 6.5;
-		case '7a':
-			return 7.0;
-		case '7b':
-			return 7.5;
-		case '8a':
-			return 8.0;
-		case '8b':
-			return 8.5;
-		case '9a':
-			return 9.0;
-		case '9b':
-			return 9.5;
-		case '10a':
-			return 10.0;
-		case '10b':
-			return 10.5;
-		default:
-			return 5.0;
+	if (z.$ === 'Success') {
+		var y = z.a;
+		var _v1 = y.zone;
+		switch (_v1) {
+			case '1a':
+				return 1.0;
+			case '1b':
+				return 1.5;
+			case '2a':
+				return 2.0;
+			case '2b':
+				return 2.5;
+			case '3a':
+				return 3.0;
+			case '3b':
+				return 3.5;
+			case '4a':
+				return 4.0;
+			case '4b':
+				return 4.5;
+			case '5a':
+				return 5.0;
+			case '5b':
+				return 5.5;
+			case '6a':
+				return 6.0;
+			case '6b':
+				return 6.5;
+			case '7a':
+				return 7.0;
+			case '7b':
+				return 7.5;
+			case '8a':
+				return 8.0;
+			case '8b':
+				return 8.5;
+			case '9a':
+				return 9.0;
+			case '9b':
+				return 9.5;
+			case '10a':
+				return 10.0;
+			case '10b':
+				return 10.5;
+			default:
+				return 6.0;
+		}
+	} else {
+		return 6.0;
 	}
 };
 var $author$project$PlantCalendar$Zipcode = F4(
@@ -6505,7 +6543,8 @@ var $author$project$PlantCalendar$update = F2(
 								plants: A2(
 									$elm$core$List$map,
 									$author$project$PlantCalendar$enablePlants(
-										$author$project$PlantCalendar$getZoneFloat(z.zone)),
+										$author$project$PlantCalendar$getZoneFloat(
+											$author$project$PlantCalendar$Success(z))),
 									model.plants),
 								zipcode: $author$project$PlantCalendar$Success(z),
 								zipcodetext: ''
@@ -6581,217 +6620,84 @@ var $elm$core$List$concat = function (lists) {
 	return A3($elm$core$List$foldr, $elm$core$List$append, _List_Nil, lists);
 };
 var $elm$svg$Svg$Attributes$fill = _VirtualDom_attribute('fill');
+var $elm$core$Basics$negate = function (n) {
+	return -n;
+};
+var $author$project$PlantCalendar$getZoneOffset = F2(
+	function (zone, cycle) {
+		switch (zone) {
+			case 7:
+				return (cycle === 1) ? (-3.5617) : 3.5617;
+			case 6:
+				return 0;
+			case 5:
+				return (cycle === 1) ? 4.931 : (-4.931);
+			case 4:
+				return (cycle === 1) ? 8.493 : (-8.493);
+			default:
+				return -1;
+		}
+	});
 var $elm$svg$Svg$Attributes$height = _VirtualDom_attribute('height');
 var $elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
-var $elm$svg$Svg$line = $elm$svg$Svg$trustedNode('line');
 var $elm$svg$Svg$rect = $elm$svg$Svg$trustedNode('rect');
 var $elm$svg$Svg$Attributes$stroke = _VirtualDom_attribute('stroke');
-var $elm$svg$Svg$Attributes$style = _VirtualDom_attribute('style');
-var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
-var $elm$svg$Svg$text = $elm$virtual_dom$VirtualDom$text;
-var $elm$svg$Svg$text_ = $elm$svg$Svg$trustedNode('text');
+var $elm$core$String$fromFloat = _String_fromNumber;
+var $author$project$PlantCalendar$toPercent = function (f) {
+	return $elm$core$String$fromFloat(f * 72) + '%';
+};
+var $author$project$PlantCalendar$toPercentOffset = F2(
+	function (f, offset) {
+		return $elm$core$String$fromFloat(((f * 72) + 28) + offset) + '%';
+	});
 var $elm$svg$Svg$Attributes$width = _VirtualDom_attribute('width');
 var $elm$svg$Svg$Attributes$x = _VirtualDom_attribute('x');
-var $elm$svg$Svg$Attributes$x1 = _VirtualDom_attribute('x1');
-var $elm$svg$Svg$Attributes$x2 = _VirtualDom_attribute('x2');
 var $elm$svg$Svg$Attributes$y = _VirtualDom_attribute('y');
-var $elm$svg$Svg$Attributes$y1 = _VirtualDom_attribute('y1');
-var $elm$svg$Svg$Attributes$y2 = _VirtualDom_attribute('y2');
-var $author$project$PlantCalendar$drawRow = F2(
-	function (index, plant) {
-		var y0 = (60 * (index + 1)) + 105;
+var $author$project$PlantCalendar$drawCycle = F4(
+	function (y0, zone, cycle, _v0) {
+		var _v1 = _v0.a;
+		var ss = _v1.a;
+		var sf = _v1.b;
+		var _v2 = _v0.b;
+		var ps = _v2.a;
+		var pf = _v2.b;
+		var _v3 = _v0.c;
+		var hs = _v3.a;
+		var hf = _v3.b;
 		return _List_fromArray(
 			[
 				A2(
-				$elm$svg$Svg$line,
+				$elm$svg$Svg$rect,
 				_List_fromArray(
 					[
-						$elm$svg$Svg$Attributes$y1(
-						$elm$core$String$fromInt(y0 - 10)),
-						$elm$svg$Svg$Attributes$y2(
-						$elm$core$String$fromInt(y0 + 10)),
-						$elm$svg$Svg$Attributes$x1('28%'),
-						$elm$svg$Svg$Attributes$x2('28%')
-					]),
-				_List_Nil),
-				A2(
-				$elm$svg$Svg$line,
-				_List_fromArray(
-					[
-						$elm$svg$Svg$Attributes$y1(
-						$elm$core$String$fromInt(y0 - 10)),
-						$elm$svg$Svg$Attributes$y2(
-						$elm$core$String$fromInt(y0 + 10)),
-						$elm$svg$Svg$Attributes$x1('34%'),
-						$elm$svg$Svg$Attributes$x2('34%')
-					]),
-				_List_Nil),
-				A2(
-				$elm$svg$Svg$line,
-				_List_fromArray(
-					[
-						$elm$svg$Svg$Attributes$y1(
-						$elm$core$String$fromInt(y0 - 10)),
-						$elm$svg$Svg$Attributes$y2(
-						$elm$core$String$fromInt(y0 + 10)),
-						$elm$svg$Svg$Attributes$x1('40%'),
-						$elm$svg$Svg$Attributes$x2('40%')
-					]),
-				_List_Nil),
-				A2(
-				$elm$svg$Svg$line,
-				_List_fromArray(
-					[
-						$elm$svg$Svg$Attributes$y1(
-						$elm$core$String$fromInt(y0 - 10)),
-						$elm$svg$Svg$Attributes$y2(
-						$elm$core$String$fromInt(y0 + 10)),
-						$elm$svg$Svg$Attributes$x1('46%'),
-						$elm$svg$Svg$Attributes$x2('46%')
-					]),
-				_List_Nil),
-				A2(
-				$elm$svg$Svg$line,
-				_List_fromArray(
-					[
-						$elm$svg$Svg$Attributes$y1(
-						$elm$core$String$fromInt(y0 - 10)),
-						$elm$svg$Svg$Attributes$y2(
-						$elm$core$String$fromInt(y0 + 10)),
-						$elm$svg$Svg$Attributes$x1('52%'),
-						$elm$svg$Svg$Attributes$x2('52%')
-					]),
-				_List_Nil),
-				A2(
-				$elm$svg$Svg$line,
-				_List_fromArray(
-					[
-						$elm$svg$Svg$Attributes$y1(
-						$elm$core$String$fromInt(y0 - 10)),
-						$elm$svg$Svg$Attributes$y2(
-						$elm$core$String$fromInt(y0 + 10)),
-						$elm$svg$Svg$Attributes$x1('58%'),
-						$elm$svg$Svg$Attributes$x2('58%')
-					]),
-				_List_Nil),
-				A2(
-				$elm$svg$Svg$line,
-				_List_fromArray(
-					[
-						$elm$svg$Svg$Attributes$y1(
-						$elm$core$String$fromInt(y0 - 10)),
-						$elm$svg$Svg$Attributes$y2(
-						$elm$core$String$fromInt(y0 + 10)),
-						$elm$svg$Svg$Attributes$x1('64%'),
-						$elm$svg$Svg$Attributes$x2('64%')
-					]),
-				_List_Nil),
-				A2(
-				$elm$svg$Svg$line,
-				_List_fromArray(
-					[
-						$elm$svg$Svg$Attributes$y1(
-						$elm$core$String$fromInt(y0 - 10)),
-						$elm$svg$Svg$Attributes$y2(
-						$elm$core$String$fromInt(y0 + 10)),
-						$elm$svg$Svg$Attributes$x1('70%'),
-						$elm$svg$Svg$Attributes$x2('70%')
-					]),
-				_List_Nil),
-				A2(
-				$elm$svg$Svg$line,
-				_List_fromArray(
-					[
-						$elm$svg$Svg$Attributes$y1(
-						$elm$core$String$fromInt(y0 - 10)),
-						$elm$svg$Svg$Attributes$y2(
-						$elm$core$String$fromInt(y0 + 10)),
-						$elm$svg$Svg$Attributes$x1('76%'),
-						$elm$svg$Svg$Attributes$x2('76%')
-					]),
-				_List_Nil),
-				A2(
-				$elm$svg$Svg$line,
-				_List_fromArray(
-					[
-						$elm$svg$Svg$Attributes$y1(
-						$elm$core$String$fromInt(y0 - 10)),
-						$elm$svg$Svg$Attributes$y2(
-						$elm$core$String$fromInt(y0 + 10)),
-						$elm$svg$Svg$Attributes$x1('82%'),
-						$elm$svg$Svg$Attributes$x2('82%')
-					]),
-				_List_Nil),
-				A2(
-				$elm$svg$Svg$line,
-				_List_fromArray(
-					[
-						$elm$svg$Svg$Attributes$y1(
-						$elm$core$String$fromInt(y0 - 10)),
-						$elm$svg$Svg$Attributes$y2(
-						$elm$core$String$fromInt(y0 + 10)),
-						$elm$svg$Svg$Attributes$x1('88%'),
-						$elm$svg$Svg$Attributes$x2('88%')
-					]),
-				_List_Nil),
-				A2(
-				$elm$svg$Svg$line,
-				_List_fromArray(
-					[
-						$elm$svg$Svg$Attributes$y1(
-						$elm$core$String$fromInt(y0 - 10)),
-						$elm$svg$Svg$Attributes$y2(
-						$elm$core$String$fromInt(y0 + 10)),
-						$elm$svg$Svg$Attributes$x1('94%'),
-						$elm$svg$Svg$Attributes$x2('94%')
-					]),
-				_List_Nil),
-				A2(
-				$elm$svg$Svg$line,
-				_List_fromArray(
-					[
-						$elm$svg$Svg$Attributes$y1(
-						$elm$core$String$fromInt(y0 - 10)),
-						$elm$svg$Svg$Attributes$y2(
-						$elm$core$String$fromInt(y0 + 10)),
-						$elm$svg$Svg$Attributes$x1('99.9%'),
-						$elm$svg$Svg$Attributes$x2('99.9%')
-					]),
-				_List_Nil),
-				A2(
-				$elm$svg$Svg$text_,
-				_List_fromArray(
-					[
+						$elm$svg$Svg$Attributes$x(
+						A2(
+							$author$project$PlantCalendar$toPercentOffset,
+							ss,
+							A2($author$project$PlantCalendar$getZoneOffset, zone, cycle))),
 						$elm$svg$Svg$Attributes$y(
-						$elm$core$String$fromInt(y0 - 2)),
-						$elm$svg$Svg$Attributes$x('23%'),
-						$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: end; font-weight: 400; font-family: \'Gloria Hallelujah\'; font-size: 1.3vw;')
-					]),
-				_List_fromArray(
-					[
-						$elm$svg$Svg$text(plant.name)
-					])),
-				A2(
-				$elm$svg$Svg$line,
-				_List_fromArray(
-					[
-						$elm$svg$Svg$Attributes$y1(
-						$elm$core$String$fromInt(y0)),
-						$elm$svg$Svg$Attributes$y2(
-						$elm$core$String$fromInt(y0)),
-						$elm$svg$Svg$Attributes$x1('99.9%'),
-						$elm$svg$Svg$Attributes$x2('0%')
+						$elm$core$String$fromInt(y0 - 23)),
+						$elm$svg$Svg$Attributes$width(
+						$author$project$PlantCalendar$toPercent(sf - ss)),
+						$elm$svg$Svg$Attributes$height('13'),
+						$elm$svg$Svg$Attributes$stroke('#77734f'),
+						$elm$svg$Svg$Attributes$fill('rgba(209, 193, 42, .7)')
 					]),
 				_List_Nil),
 				A2(
 				$elm$svg$Svg$rect,
 				_List_fromArray(
 					[
-						$elm$svg$Svg$Attributes$x('32%'),
+						$elm$svg$Svg$Attributes$x(
+						A2(
+							$author$project$PlantCalendar$toPercentOffset,
+							ps,
+							A2($author$project$PlantCalendar$getZoneOffset, zone, cycle))),
 						$elm$svg$Svg$Attributes$y(
-						$elm$core$String$fromInt(y0 - 18)),
-						$elm$svg$Svg$Attributes$width('20%'),
-						$elm$svg$Svg$Attributes$height('14'),
+						$elm$core$String$fromInt(y0 - 7)),
+						$elm$svg$Svg$Attributes$width(
+						$author$project$PlantCalendar$toPercent(pf - ps)),
+						$elm$svg$Svg$Attributes$height('13'),
 						$elm$svg$Svg$Attributes$stroke('#517f6c'),
 						$elm$svg$Svg$Attributes$fill('rgba(56, 165, 116, .7)')
 					]),
@@ -6800,399 +6706,616 @@ var $author$project$PlantCalendar$drawRow = F2(
 				$elm$svg$Svg$rect,
 				_List_fromArray(
 					[
-						$elm$svg$Svg$Attributes$x('52%'),
+						$elm$svg$Svg$Attributes$x(
+						A2(
+							$author$project$PlantCalendar$toPercentOffset,
+							hs,
+							A2($author$project$PlantCalendar$getZoneOffset, zone, cycle))),
 						$elm$svg$Svg$Attributes$y(
-						$elm$core$String$fromInt(y0 + 4)),
-						$elm$svg$Svg$Attributes$width('3%'),
-						$elm$svg$Svg$Attributes$height('14'),
+						$elm$core$String$fromInt(y0 + 9)),
+						$elm$svg$Svg$Attributes$width(
+						$author$project$PlantCalendar$toPercent(hf - hs)),
+						$elm$svg$Svg$Attributes$height('13'),
 						$elm$svg$Svg$Attributes$stroke('#7c6650'),
 						$elm$svg$Svg$Attributes$fill('rgba(211, 122, 41, .7)')
 					]),
 				_List_Nil)
 			]);
 	});
-var $elm$svg$Svg$Attributes$shapeRendering = _VirtualDom_attribute('shape-rendering');
-var $elm$svg$Svg$svg = $elm$svg$Svg$trustedNode('svg');
-var $author$project$PlantCalendar$drawSVG = function (plants) {
-	return A2(
-		$elm$svg$Svg$svg,
-		_List_fromArray(
-			[
-				$elm$svg$Svg$Attributes$style(
-				'width:100%; height: ' + ($elm$core$String$fromInt(
-					($elm$core$List$length(plants) * 60) + 145) + 'px; stroke: #888; fill; stroke-width: 1')),
-				$elm$svg$Svg$Attributes$shapeRendering('crispEdges')
-			]),
-		A2(
+var $elm$svg$Svg$line = $elm$svg$Svg$trustedNode('line');
+var $elm$svg$Svg$Attributes$style = _VirtualDom_attribute('style');
+var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var $elm$svg$Svg$text = $elm$virtual_dom$VirtualDom$text;
+var $elm$svg$Svg$text_ = $elm$svg$Svg$trustedNode('text');
+var $elm$svg$Svg$Attributes$x1 = _VirtualDom_attribute('x1');
+var $elm$svg$Svg$Attributes$x2 = _VirtualDom_attribute('x2');
+var $elm$svg$Svg$Attributes$y1 = _VirtualDom_attribute('y1');
+var $elm$svg$Svg$Attributes$y2 = _VirtualDom_attribute('y2');
+var $author$project$PlantCalendar$drawRow = F3(
+	function (zone, index, plant) {
+		var y0 = (66 * (index + 1)) + 105;
+		return A2(
 			$elm$core$List$append,
 			_List_fromArray(
 				[
 					A2(
-					$elm$svg$Svg$rect,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$x('22.5%'),
-							$elm$svg$Svg$Attributes$y('0'),
-							$elm$svg$Svg$Attributes$width('5%'),
-							$elm$svg$Svg$Attributes$height('14'),
-							$elm$svg$Svg$Attributes$stroke('#77734f'),
-							$elm$svg$Svg$Attributes$fill('rgba(209, 193, 42, .7)')
-						]),
-					_List_Nil),
-					A2(
-					$elm$svg$Svg$text_,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y('25'),
-							$elm$svg$Svg$Attributes$x('25%'),
-							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0vw;')
-						]),
-					_List_fromArray(
-						[
-							$elm$svg$Svg$text('Plant indoors')
-						])),
-					A2(
-					$elm$svg$Svg$rect,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$x('47.5%'),
-							$elm$svg$Svg$Attributes$y('0'),
-							$elm$svg$Svg$Attributes$width('5%'),
-							$elm$svg$Svg$Attributes$height('14'),
-							$elm$svg$Svg$Attributes$stroke('#517f6c'),
-							$elm$svg$Svg$Attributes$fill('rgba(56, 165, 116, .7)')
-						]),
-					_List_Nil),
-					A2(
-					$elm$svg$Svg$text_,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y('25'),
-							$elm$svg$Svg$Attributes$x('50%'),
-							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0vw;')
-						]),
-					_List_fromArray(
-						[
-							$elm$svg$Svg$text('Transplant / plant outdoors')
-						])),
-					A2(
-					$elm$svg$Svg$rect,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$x('72.5%'),
-							$elm$svg$Svg$Attributes$y('0'),
-							$elm$svg$Svg$Attributes$width('5%'),
-							$elm$svg$Svg$Attributes$height('14'),
-							$elm$svg$Svg$Attributes$stroke('#7c6650'),
-							$elm$svg$Svg$Attributes$fill('rgba(211, 122, 41, .7)')
-						]),
-					_List_Nil),
-					A2(
-					$elm$svg$Svg$text_,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y('25'),
-							$elm$svg$Svg$Attributes$x('75%'),
-							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0vw;')
-						]),
-					_List_fromArray(
-						[
-							$elm$svg$Svg$text('Harvest')
-						])),
-					A2(
-					$elm$svg$Svg$text_,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y('105'),
-							$elm$svg$Svg$Attributes$x('28%'),
-							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
-						]),
-					_List_fromArray(
-						[
-							$elm$svg$Svg$text('JAN')
-						])),
-					A2(
-					$elm$svg$Svg$text_,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y('105'),
-							$elm$svg$Svg$Attributes$x('34%'),
-							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
-						]),
-					_List_fromArray(
-						[
-							$elm$svg$Svg$text('FEB')
-						])),
-					A2(
-					$elm$svg$Svg$text_,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y('105'),
-							$elm$svg$Svg$Attributes$x('40%'),
-							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
-						]),
-					_List_fromArray(
-						[
-							$elm$svg$Svg$text('MAR')
-						])),
-					A2(
-					$elm$svg$Svg$text_,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y('105'),
-							$elm$svg$Svg$Attributes$x('46%'),
-							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
-						]),
-					_List_fromArray(
-						[
-							$elm$svg$Svg$text('APR')
-						])),
-					A2(
-					$elm$svg$Svg$text_,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y('105'),
-							$elm$svg$Svg$Attributes$x('52%'),
-							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
-						]),
-					_List_fromArray(
-						[
-							$elm$svg$Svg$text('MAY')
-						])),
-					A2(
-					$elm$svg$Svg$text_,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y('105'),
-							$elm$svg$Svg$Attributes$x('58%'),
-							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
-						]),
-					_List_fromArray(
-						[
-							$elm$svg$Svg$text('JUN')
-						])),
-					A2(
-					$elm$svg$Svg$text_,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y('105'),
-							$elm$svg$Svg$Attributes$x('64%'),
-							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
-						]),
-					_List_fromArray(
-						[
-							$elm$svg$Svg$text('JUL')
-						])),
-					A2(
-					$elm$svg$Svg$text_,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y('105'),
-							$elm$svg$Svg$Attributes$x('70%'),
-							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
-						]),
-					_List_fromArray(
-						[
-							$elm$svg$Svg$text('AUG')
-						])),
-					A2(
-					$elm$svg$Svg$text_,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y('105'),
-							$elm$svg$Svg$Attributes$x('76%'),
-							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
-						]),
-					_List_fromArray(
-						[
-							$elm$svg$Svg$text('SEP')
-						])),
-					A2(
-					$elm$svg$Svg$text_,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y('105'),
-							$elm$svg$Svg$Attributes$x('82%'),
-							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
-						]),
-					_List_fromArray(
-						[
-							$elm$svg$Svg$text('OCT')
-						])),
-					A2(
-					$elm$svg$Svg$text_,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y('105'),
-							$elm$svg$Svg$Attributes$x('88%'),
-							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
-						]),
-					_List_fromArray(
-						[
-							$elm$svg$Svg$text('NOV')
-						])),
-					A2(
-					$elm$svg$Svg$text_,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y('105'),
-							$elm$svg$Svg$Attributes$x('94%'),
-							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
-						]),
-					_List_fromArray(
-						[
-							$elm$svg$Svg$text('DEC')
-						])),
-					A2(
 					$elm$svg$Svg$line,
 					_List_fromArray(
 						[
-							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('115'),
-							$elm$svg$Svg$Attributes$x2('99.9%'),
-							$elm$svg$Svg$Attributes$x1('99.9%'),
-							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-						]),
-					_List_Nil),
-					A2(
-					$elm$svg$Svg$line,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('115'),
-							$elm$svg$Svg$Attributes$x2('94%'),
-							$elm$svg$Svg$Attributes$x1('94%'),
-							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-						]),
-					_List_Nil),
-					A2(
-					$elm$svg$Svg$line,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('115'),
-							$elm$svg$Svg$Attributes$x2('88%'),
-							$elm$svg$Svg$Attributes$x1('88%'),
-							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-						]),
-					_List_Nil),
-					A2(
-					$elm$svg$Svg$line,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('115'),
-							$elm$svg$Svg$Attributes$x2('82%'),
-							$elm$svg$Svg$Attributes$x1('82%'),
-							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-						]),
-					_List_Nil),
-					A2(
-					$elm$svg$Svg$line,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('115'),
-							$elm$svg$Svg$Attributes$x2('76%'),
-							$elm$svg$Svg$Attributes$x1('76%'),
-							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-						]),
-					_List_Nil),
-					A2(
-					$elm$svg$Svg$line,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('115'),
-							$elm$svg$Svg$Attributes$x2('70%'),
-							$elm$svg$Svg$Attributes$x1('70%'),
-							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-						]),
-					_List_Nil),
-					A2(
-					$elm$svg$Svg$line,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('115'),
-							$elm$svg$Svg$Attributes$x2('64%'),
-							$elm$svg$Svg$Attributes$x1('64%'),
-							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-						]),
-					_List_Nil),
-					A2(
-					$elm$svg$Svg$line,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('115'),
-							$elm$svg$Svg$Attributes$x2('58%'),
-							$elm$svg$Svg$Attributes$x1('58%'),
-							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-						]),
-					_List_Nil),
-					A2(
-					$elm$svg$Svg$line,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('115'),
-							$elm$svg$Svg$Attributes$x2('52%'),
-							$elm$svg$Svg$Attributes$x1('52%'),
-							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-						]),
-					_List_Nil),
-					A2(
-					$elm$svg$Svg$line,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('115'),
-							$elm$svg$Svg$Attributes$x2('46%'),
-							$elm$svg$Svg$Attributes$x1('46%'),
-							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-						]),
-					_List_Nil),
-					A2(
-					$elm$svg$Svg$line,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('115'),
-							$elm$svg$Svg$Attributes$x2('40%'),
-							$elm$svg$Svg$Attributes$x1('40%'),
-							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-						]),
-					_List_Nil),
-					A2(
-					$elm$svg$Svg$line,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('115'),
-							$elm$svg$Svg$Attributes$x2('34%'),
-							$elm$svg$Svg$Attributes$x1('34%'),
-							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-						]),
-					_List_Nil),
-					A2(
-					$elm$svg$Svg$line,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$y2('100%'),
-							$elm$svg$Svg$Attributes$y1('115'),
-							$elm$svg$Svg$Attributes$x2('28%'),
+							$elm$svg$Svg$Attributes$y1(
+							$elm$core$String$fromInt(y0 - 14)),
+							$elm$svg$Svg$Attributes$y2(
+							$elm$core$String$fromInt(y0 + 14)),
 							$elm$svg$Svg$Attributes$x1('28%'),
-							$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							$elm$svg$Svg$Attributes$x2('28%')
+						]),
+					_List_Nil),
+					A2(
+					$elm$svg$Svg$line,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$y1(
+							$elm$core$String$fromInt(y0 - 14)),
+							$elm$svg$Svg$Attributes$y2(
+							$elm$core$String$fromInt(y0 + 14)),
+							$elm$svg$Svg$Attributes$x1('34%'),
+							$elm$svg$Svg$Attributes$x2('34%')
+						]),
+					_List_Nil),
+					A2(
+					$elm$svg$Svg$line,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$y1(
+							$elm$core$String$fromInt(y0 - 14)),
+							$elm$svg$Svg$Attributes$y2(
+							$elm$core$String$fromInt(y0 + 14)),
+							$elm$svg$Svg$Attributes$x1('40%'),
+							$elm$svg$Svg$Attributes$x2('40%')
+						]),
+					_List_Nil),
+					A2(
+					$elm$svg$Svg$line,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$y1(
+							$elm$core$String$fromInt(y0 - 14)),
+							$elm$svg$Svg$Attributes$y2(
+							$elm$core$String$fromInt(y0 + 14)),
+							$elm$svg$Svg$Attributes$x1('46%'),
+							$elm$svg$Svg$Attributes$x2('46%')
+						]),
+					_List_Nil),
+					A2(
+					$elm$svg$Svg$line,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$y1(
+							$elm$core$String$fromInt(y0 - 14)),
+							$elm$svg$Svg$Attributes$y2(
+							$elm$core$String$fromInt(y0 + 14)),
+							$elm$svg$Svg$Attributes$x1('52%'),
+							$elm$svg$Svg$Attributes$x2('52%')
+						]),
+					_List_Nil),
+					A2(
+					$elm$svg$Svg$line,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$y1(
+							$elm$core$String$fromInt(y0 - 14)),
+							$elm$svg$Svg$Attributes$y2(
+							$elm$core$String$fromInt(y0 + 14)),
+							$elm$svg$Svg$Attributes$x1('58%'),
+							$elm$svg$Svg$Attributes$x2('58%')
+						]),
+					_List_Nil),
+					A2(
+					$elm$svg$Svg$line,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$y1(
+							$elm$core$String$fromInt(y0 - 14)),
+							$elm$svg$Svg$Attributes$y2(
+							$elm$core$String$fromInt(y0 + 14)),
+							$elm$svg$Svg$Attributes$x1('64%'),
+							$elm$svg$Svg$Attributes$x2('64%')
+						]),
+					_List_Nil),
+					A2(
+					$elm$svg$Svg$line,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$y1(
+							$elm$core$String$fromInt(y0 - 14)),
+							$elm$svg$Svg$Attributes$y2(
+							$elm$core$String$fromInt(y0 + 14)),
+							$elm$svg$Svg$Attributes$x1('70%'),
+							$elm$svg$Svg$Attributes$x2('70%')
+						]),
+					_List_Nil),
+					A2(
+					$elm$svg$Svg$line,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$y1(
+							$elm$core$String$fromInt(y0 - 14)),
+							$elm$svg$Svg$Attributes$y2(
+							$elm$core$String$fromInt(y0 + 14)),
+							$elm$svg$Svg$Attributes$x1('76%'),
+							$elm$svg$Svg$Attributes$x2('76%')
+						]),
+					_List_Nil),
+					A2(
+					$elm$svg$Svg$line,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$y1(
+							$elm$core$String$fromInt(y0 - 14)),
+							$elm$svg$Svg$Attributes$y2(
+							$elm$core$String$fromInt(y0 + 14)),
+							$elm$svg$Svg$Attributes$x1('82%'),
+							$elm$svg$Svg$Attributes$x2('82%')
+						]),
+					_List_Nil),
+					A2(
+					$elm$svg$Svg$line,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$y1(
+							$elm$core$String$fromInt(y0 - 14)),
+							$elm$svg$Svg$Attributes$y2(
+							$elm$core$String$fromInt(y0 + 14)),
+							$elm$svg$Svg$Attributes$x1('88%'),
+							$elm$svg$Svg$Attributes$x2('88%')
+						]),
+					_List_Nil),
+					A2(
+					$elm$svg$Svg$line,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$y1(
+							$elm$core$String$fromInt(y0 - 14)),
+							$elm$svg$Svg$Attributes$y2(
+							$elm$core$String$fromInt(y0 + 14)),
+							$elm$svg$Svg$Attributes$x1('94%'),
+							$elm$svg$Svg$Attributes$x2('94%')
+						]),
+					_List_Nil),
+					A2(
+					$elm$svg$Svg$line,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$y1(
+							$elm$core$String$fromInt(y0 - 14)),
+							$elm$svg$Svg$Attributes$y2(
+							$elm$core$String$fromInt(y0 + 14)),
+							$elm$svg$Svg$Attributes$x1('99.9%'),
+							$elm$svg$Svg$Attributes$x2('99.9%')
+						]),
+					_List_Nil),
+					A2(
+					$elm$svg$Svg$text_,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$y(
+							$elm$core$String$fromInt(y0 - 2)),
+							$elm$svg$Svg$Attributes$x('23%'),
+							$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: end; font-weight: 400; font-family: \'Gloria Hallelujah\'; font-size: 1.3vw;')
+						]),
+					_List_fromArray(
+						[
+							$elm$svg$Svg$text(plant.name)
+						])),
+					A2(
+					$elm$svg$Svg$line,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$y1(
+							$elm$core$String$fromInt(y0)),
+							$elm$svg$Svg$Attributes$y2(
+							$elm$core$String$fromInt(y0)),
+							$elm$svg$Svg$Attributes$x1('99.9%'),
+							$elm$svg$Svg$Attributes$x2('0%')
 						]),
 					_List_Nil)
 				]),
 			$elm$core$List$concat(
-				A2($elm$core$List$indexedMap, $author$project$PlantCalendar$drawRow, plants))));
-};
+				A2(
+					$elm$core$List$indexedMap,
+					A2($author$project$PlantCalendar$drawCycle, y0, zone),
+					plant.defaultPeriods)));
+	});
+var $elm$svg$Svg$Attributes$shapeRendering = _VirtualDom_attribute('shape-rendering');
+var $elm$svg$Svg$svg = $elm$svg$Svg$trustedNode('svg');
+var $author$project$PlantCalendar$drawSVG = F2(
+	function (zone, plants) {
+		return A2(
+			$elm$svg$Svg$svg,
+			_List_fromArray(
+				[
+					$elm$svg$Svg$Attributes$style(
+					'width:100%; height: ' + ($elm$core$String$fromInt(
+						($elm$core$List$length(plants) * 66) + 145) + 'px; stroke: #888; fill; stroke-width: 1')),
+					$elm$svg$Svg$Attributes$shapeRendering('crispEdges')
+				]),
+			A2(
+				$elm$core$List$append,
+				_List_fromArray(
+					[
+						A2(
+						$elm$svg$Svg$rect,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$x('22.5%'),
+								$elm$svg$Svg$Attributes$y('0'),
+								$elm$svg$Svg$Attributes$width('5%'),
+								$elm$svg$Svg$Attributes$height('14'),
+								$elm$svg$Svg$Attributes$stroke('#77734f'),
+								$elm$svg$Svg$Attributes$fill('rgba(209, 193, 42, .7)')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$text_,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y('25'),
+								$elm$svg$Svg$Attributes$x('25%'),
+								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0vw;')
+							]),
+						_List_fromArray(
+							[
+								$elm$svg$Svg$text('Plant indoors')
+							])),
+						A2(
+						$elm$svg$Svg$rect,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$x('47.5%'),
+								$elm$svg$Svg$Attributes$y('0'),
+								$elm$svg$Svg$Attributes$width('5%'),
+								$elm$svg$Svg$Attributes$height('14'),
+								$elm$svg$Svg$Attributes$stroke('#517f6c'),
+								$elm$svg$Svg$Attributes$fill('rgba(56, 165, 116, .7)')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$text_,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y('25'),
+								$elm$svg$Svg$Attributes$x('50%'),
+								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0vw;')
+							]),
+						_List_fromArray(
+							[
+								$elm$svg$Svg$text('Transplant / plant outdoors')
+							])),
+						A2(
+						$elm$svg$Svg$rect,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$x('72.5%'),
+								$elm$svg$Svg$Attributes$y('0'),
+								$elm$svg$Svg$Attributes$width('5%'),
+								$elm$svg$Svg$Attributes$height('14'),
+								$elm$svg$Svg$Attributes$stroke('#7c6650'),
+								$elm$svg$Svg$Attributes$fill('rgba(211, 122, 41, .7)')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$text_,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y('25'),
+								$elm$svg$Svg$Attributes$x('75%'),
+								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0vw;')
+							]),
+						_List_fromArray(
+							[
+								$elm$svg$Svg$text('Harvest')
+							])),
+						A2(
+						$elm$svg$Svg$text_,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y('105'),
+								$elm$svg$Svg$Attributes$x('28%'),
+								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
+							]),
+						_List_fromArray(
+							[
+								$elm$svg$Svg$text('JAN')
+							])),
+						A2(
+						$elm$svg$Svg$text_,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y('105'),
+								$elm$svg$Svg$Attributes$x('34%'),
+								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
+							]),
+						_List_fromArray(
+							[
+								$elm$svg$Svg$text('FEB')
+							])),
+						A2(
+						$elm$svg$Svg$text_,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y('105'),
+								$elm$svg$Svg$Attributes$x('40%'),
+								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
+							]),
+						_List_fromArray(
+							[
+								$elm$svg$Svg$text('MAR')
+							])),
+						A2(
+						$elm$svg$Svg$text_,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y('105'),
+								$elm$svg$Svg$Attributes$x('46%'),
+								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
+							]),
+						_List_fromArray(
+							[
+								$elm$svg$Svg$text('APR')
+							])),
+						A2(
+						$elm$svg$Svg$text_,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y('105'),
+								$elm$svg$Svg$Attributes$x('52%'),
+								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
+							]),
+						_List_fromArray(
+							[
+								$elm$svg$Svg$text('MAY')
+							])),
+						A2(
+						$elm$svg$Svg$text_,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y('105'),
+								$elm$svg$Svg$Attributes$x('58%'),
+								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
+							]),
+						_List_fromArray(
+							[
+								$elm$svg$Svg$text('JUN')
+							])),
+						A2(
+						$elm$svg$Svg$text_,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y('105'),
+								$elm$svg$Svg$Attributes$x('64%'),
+								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
+							]),
+						_List_fromArray(
+							[
+								$elm$svg$Svg$text('JUL')
+							])),
+						A2(
+						$elm$svg$Svg$text_,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y('105'),
+								$elm$svg$Svg$Attributes$x('70%'),
+								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
+							]),
+						_List_fromArray(
+							[
+								$elm$svg$Svg$text('AUG')
+							])),
+						A2(
+						$elm$svg$Svg$text_,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y('105'),
+								$elm$svg$Svg$Attributes$x('76%'),
+								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
+							]),
+						_List_fromArray(
+							[
+								$elm$svg$Svg$text('SEP')
+							])),
+						A2(
+						$elm$svg$Svg$text_,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y('105'),
+								$elm$svg$Svg$Attributes$x('82%'),
+								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
+							]),
+						_List_fromArray(
+							[
+								$elm$svg$Svg$text('OCT')
+							])),
+						A2(
+						$elm$svg$Svg$text_,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y('105'),
+								$elm$svg$Svg$Attributes$x('88%'),
+								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
+							]),
+						_List_fromArray(
+							[
+								$elm$svg$Svg$text('NOV')
+							])),
+						A2(
+						$elm$svg$Svg$text_,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y('105'),
+								$elm$svg$Svg$Attributes$x('94%'),
+								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
+							]),
+						_List_fromArray(
+							[
+								$elm$svg$Svg$text('DEC')
+							])),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('99.9%'),
+								$elm$svg$Svg$Attributes$x1('99.9%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('94%'),
+								$elm$svg$Svg$Attributes$x1('94%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('88%'),
+								$elm$svg$Svg$Attributes$x1('88%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('82%'),
+								$elm$svg$Svg$Attributes$x1('82%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('76%'),
+								$elm$svg$Svg$Attributes$x1('76%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('70%'),
+								$elm$svg$Svg$Attributes$x1('70%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('64%'),
+								$elm$svg$Svg$Attributes$x1('64%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('58%'),
+								$elm$svg$Svg$Attributes$x1('58%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('52%'),
+								$elm$svg$Svg$Attributes$x1('52%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('46%'),
+								$elm$svg$Svg$Attributes$x1('46%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('40%'),
+								$elm$svg$Svg$Attributes$x1('40%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('34%'),
+								$elm$svg$Svg$Attributes$x1('34%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('28%'),
+								$elm$svg$Svg$Attributes$x1('28%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil)
+					]),
+				$elm$core$List$concat(
+					A2(
+						$elm$core$List$indexedMap,
+						$author$project$PlantCalendar$drawRow(zone),
+						plants))));
+	});
 var $author$project$PlantCalendar$drawBottomContent = F2(
 	function (selectedPlants, status) {
-		return $author$project$PlantCalendar$drawSVG(selectedPlants);
+		return A2(
+			$author$project$PlantCalendar$drawSVG,
+			$elm$core$Basics$floor(
+				$author$project$PlantCalendar$getZoneFloat(status)),
+			selectedPlants);
 	});
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $author$project$PlantCalendar$drawBottomInstructions = A2(
@@ -7205,7 +7328,6 @@ var $author$project$PlantCalendar$drawBottomInstructions = A2(
 		[
 			$elm$html$Html$text('2. Select plants to see recommended planting & harvesting dates!')
 		]));
-var $elm$core$String$fromFloat = _String_fromNumber;
 var $author$project$PlantCalendar$getCoordinates = function (status) {
 	if (status.$ === 'Success') {
 		var zip = status.a;
@@ -7226,7 +7348,7 @@ var $author$project$PlantCalendar$getPHZ = function (status) {
 		case 'Loading':
 			return 'Loading...';
 		default:
-			return '5A (default)';
+			return '6A (default)';
 	}
 };
 var $elm$regex$Regex$Match = F4(
