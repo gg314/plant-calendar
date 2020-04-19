@@ -5429,146 +5429,146 @@ var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$PlantCalendar$plantData = _List_fromArray(
 	[
-		{category: 'Flowers', name: 'Anemone', selected: false},
-		{category: 'Flowers', name: 'Anise Hyssop', selected: false},
-		{category: 'Flowers', name: 'Asters', selected: false},
-		{category: 'Flowers', name: 'Astilbe', selected: false},
-		{category: 'Flowers', name: 'Baby\'s Breath', selected: false},
-		{category: 'Flowers', name: 'Bee Balm', selected: false},
-		{category: 'Flowers', name: 'Black-Eyed Susans', selected: false},
-		{category: 'Flowers', name: 'Butterfly Bush', selected: false},
-		{category: 'Flowers', name: 'Borage (star flower)', selected: false},
-		{category: 'Flowers', name: 'Calendula', selected: false},
-		{category: 'Flowers', name: 'Cannas', selected: false},
-		{category: 'Flowers', name: 'Carnations', selected: false},
-		{category: 'Flowers', name: 'Celosia', selected: false},
-		{category: 'Flowers', name: 'Chrysanthemum', selected: false},
-		{category: 'Flowers', name: 'Clematis', selected: false},
-		{category: 'Flowers', name: 'Columbine', selected: false},
-		{category: 'Flowers', name: 'Coneflowers', selected: false},
-		{category: 'Flowers', name: 'Coreopsis', selected: false},
-		{category: 'Flowers', name: 'Cosmos', selected: false},
-		{category: 'Flowers', name: 'Crocuses', selected: false},
-		{category: 'Flowers', name: 'Daffodils', selected: false},
-		{category: 'Flowers', name: 'Dahlias', selected: false},
-		{category: 'Flowers', name: 'Daisies', selected: false},
-		{category: 'Flowers', name: 'Daylilies', selected: false},
-		{category: 'Flowers', name: 'Delphiniums', selected: false},
-		{category: 'Flowers', name: 'Echinacea', selected: false},
-		{category: 'Flowers', name: 'Gardenias', selected: false},
-		{category: 'Flowers', name: 'Geraniums', selected: false},
-		{category: 'Flowers', name: 'Gladiolus', selected: false},
-		{category: 'Flowers', name: 'Hibiscus', selected: false},
-		{category: 'Flowers', name: 'Hollyhock', selected: false},
-		{category: 'Flowers', name: 'Honeysuckle', selected: false},
-		{category: 'Flowers', name: 'Hyacinth', selected: false},
-		{category: 'Flowers', name: 'Hydrangea', selected: false},
-		{category: 'Flowers', name: 'Impatiens', selected: false},
-		{category: 'Flowers', name: 'Irises', selected: false},
-		{category: 'Flowers', name: 'Jasmine', selected: false},
-		{category: 'Flowers', name: 'Lilies', selected: false},
-		{category: 'Flowers', name: 'Marigolds', selected: false},
-		{category: 'Flowers', name: 'Morning Glories', selected: false},
-		{category: 'Flowers', name: 'Nasturtium', selected: false},
-		{category: 'Flowers', name: 'Pansies', selected: false},
-		{category: 'Flowers', name: 'Peonies', selected: false},
-		{category: 'Flowers', name: 'Petunias', selected: false},
-		{category: 'Flowers', name: 'Phlox', selected: false},
-		{category: 'Flowers', name: 'Poppy', selected: false},
-		{category: 'Flowers', name: 'Roses', selected: false},
-		{category: 'Flowers', name: 'Salvia', selected: false},
-		{category: 'Flowers', name: 'Sedum', selected: false},
-		{category: 'Flowers', name: 'Shasta Daisies', selected: false},
-		{category: 'Flowers', name: 'Strawflowers', selected: false},
-		{category: 'Flowers', name: 'Sunflowers', selected: false},
-		{category: 'Flowers', name: 'Sweet Peas', selected: false},
-		{category: 'Flowers', name: 'Tuberose', selected: false},
-		{category: 'Flowers', name: 'Tulips', selected: false},
-		{category: 'Flowers', name: 'Verbenas', selected: false},
-		{category: 'Flowers', name: 'Veronica (Speedwell)', selected: false},
-		{category: 'Flowers', name: 'Viola', selected: false},
-		{category: 'Flowers', name: 'Yarrow', selected: false},
-		{category: 'Flowers', name: 'Zinnias', selected: false},
-		{category: 'Vegetables', name: 'Artichoke', selected: false},
-		{category: 'Vegetables', name: 'Arugula', selected: false},
-		{category: 'Vegetables', name: 'Asparagus', selected: false},
-		{category: 'Vegetables', name: 'Beans', selected: false},
-		{category: 'Vegetables', name: 'Beets', selected: false},
-		{category: 'Vegetables', name: 'Bell Peppers', selected: false},
-		{category: 'Vegetables', name: 'Broccoli', selected: false},
-		{category: 'Vegetables', name: 'Brussels Sprouts', selected: false},
-		{category: 'Vegetables', name: 'Cabbage', selected: false},
-		{category: 'Vegetables', name: 'Carrots', selected: false},
-		{category: 'Vegetables', name: 'Cauliflower', selected: false},
-		{category: 'Vegetables', name: 'Celery', selected: false},
-		{category: 'Vegetables', name: 'Collards', selected: false},
-		{category: 'Vegetables', name: 'Corn', selected: false},
-		{category: 'Vegetables', name: 'Cucumbers', selected: false},
-		{category: 'Vegetables', name: 'Edamame', selected: false},
-		{category: 'Vegetables', name: 'Eggplants', selected: false},
-		{category: 'Vegetables', name: 'Endive', selected: false},
-		{category: 'Vegetables', name: 'Fava Beans', selected: false},
-		{category: 'Vegetables', name: 'Garlic', selected: false},
-		{category: 'Vegetables', name: 'Gourds', selected: false},
-		{category: 'Vegetables', name: 'Green Beans', selected: false},
-		{category: 'Vegetables', name: 'Horseradish', selected: false},
-		{category: 'Vegetables', name: 'Kale', selected: false},
-		{category: 'Vegetables', name: 'Leeks', selected: false},
-		{category: 'Vegetables', name: 'Lettuce', selected: false},
-		{category: 'Vegetables', name: 'Okra', selected: false},
-		{category: 'Vegetables', name: 'Onions', selected: false},
-		{category: 'Vegetables', name: 'Parsnips', selected: false},
-		{category: 'Vegetables', name: 'Peas', selected: false},
-		{category: 'Vegetables', name: 'Potatoes', selected: false},
-		{category: 'Vegetables', name: 'Pumpkins', selected: false},
-		{category: 'Vegetables', name: 'Radishes', selected: false},
-		{category: 'Vegetables', name: 'Rhubarb', selected: false},
-		{category: 'Vegetables', name: 'Rutabagas', selected: false},
-		{category: 'Vegetables', name: 'Shallots', selected: false},
-		{category: 'Vegetables', name: 'Snap Peas', selected: false},
-		{category: 'Vegetables', name: 'Soybean', selected: false},
-		{category: 'Vegetables', name: 'Spinach', selected: false},
-		{category: 'Vegetables', name: 'Squash', selected: false},
-		{category: 'Vegetables', name: 'Sweet Potatoes', selected: false},
-		{category: 'Vegetables', name: 'Swiss Chard', selected: false},
-		{category: 'Vegetables', name: 'Tomatoes', selected: false},
-		{category: 'Vegetables', name: 'Turnips', selected: false},
-		{category: 'Vegetables', name: 'Zucchini', selected: false},
-		{category: 'Herbs', name: 'Basil', selected: false},
-		{category: 'Herbs', name: 'Catnip', selected: false},
-		{category: 'Herbs', name: 'Chives', selected: false},
-		{category: 'Herbs', name: 'Coriander/Cilantro', selected: false},
-		{category: 'Herbs', name: 'Dill', selected: false},
-		{category: 'Herbs', name: 'Fennel', selected: false},
-		{category: 'Herbs', name: 'Lavender', selected: false},
-		{category: 'Herbs', name: 'Lemon Grass', selected: false},
-		{category: 'Herbs', name: 'Marjoram', selected: false},
-		{category: 'Herbs', name: 'Mint', selected: false},
-		{category: 'Herbs', name: 'Mustard', selected: false},
-		{category: 'Herbs', name: 'Oregano', selected: false},
-		{category: 'Herbs', name: 'Parsley', selected: false},
-		{category: 'Herbs', name: 'Rosemary', selected: false},
-		{category: 'Herbs', name: 'Sage', selected: false},
-		{category: 'Herbs', name: 'Scallion', selected: false},
-		{category: 'Herbs', name: 'Stevia', selected: false},
-		{category: 'Herbs', name: 'Tarragon', selected: false},
-		{category: 'Herbs', name: 'Thyme', selected: false},
-		{category: 'Fruits', name: 'Apples', selected: false},
-		{category: 'Fruits', name: 'Blackberries', selected: false},
-		{category: 'Fruits', name: 'Blueberries', selected: false},
-		{category: 'Fruits', name: 'Cantaloupes', selected: false},
-		{category: 'Fruits', name: 'Currant', selected: false},
-		{category: 'Fruits', name: 'Cherries', selected: false},
-		{category: 'Fruits', name: 'Figs', selected: false},
-		{category: 'Fruits', name: 'Grapes', selected: false},
-		{category: 'Fruits', name: 'Honeydew', selected: false},
-		{category: 'Fruits', name: 'Lemons & Oranges', selected: false},
-		{category: 'Fruits', name: 'Peaches', selected: false},
-		{category: 'Fruits', name: 'Pears', selected: false},
-		{category: 'Fruits', name: 'Plums', selected: false},
-		{category: 'Fruits', name: 'Raspberries', selected: false},
-		{category: 'Fruits', name: 'Strawberries', selected: false},
-		{category: 'Fruits', name: 'Watermelon', selected: false}
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Anemone', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: true, maxzone: 6.5, minzone: 3.0, name: 'Anise Hyssop', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Asters', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Astilbe', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Baby\'s Breath', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Bee Balm', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Black-Eyed Susans', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Butterfly Bush', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Borage (star flower)', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Calendula', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Cannas', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Carnations', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Celosia', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Chrysanthemum', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Clematis', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Columbine', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Coneflowers', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Coreopsis', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Cosmos', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Crocuses', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Daffodils', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Dahlias', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Daisies', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Daylilies', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Delphiniums', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Echinacea', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Gardenias', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Geraniums', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Gladiolus', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Hibiscus', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Hollyhock', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Honeysuckle', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Hyacinth', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Hydrangea', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Impatiens', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Irises', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Jasmine', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Lilies', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Marigolds', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Morning Glories', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Nasturtium', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Pansies', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Peonies', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Petunias', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Phlox', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Poppy', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Roses', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Salvia', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Sedum', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Shasta Daisies', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Strawflowers', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Sunflowers', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Sweet Peas', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Tuberose', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Tulips', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Verbenas', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Veronica (Speedwell)', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Viola', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Yarrow', selected: false},
+		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Zinnias', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Artichoke', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Arugula', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Asparagus', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Beans', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Beets', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Bell Peppers', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Broccoli', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Brussels Sprouts', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Cabbage', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Carrots', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Cauliflower', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Celery', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Collards', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Corn', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Cucumbers', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Edamame', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Eggplants', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Endive', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Fava Beans', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Garlic', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Gourds', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Green Beans', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Horseradish', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Kale', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Leeks', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Lettuce', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Okra', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Onions', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Parsnips', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Peas', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Potatoes', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Pumpkins', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Radishes', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Rhubarb', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Rutabagas', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Shallots', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Snap Peas', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Soybean', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Spinach', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Squash', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Sweet Potatoes', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Swiss Chard', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Tomatoes', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Turnips', selected: false},
+		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Zucchini', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Basil', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Catnip', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Chives', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Coriander/Cilantro', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Dill', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Fennel', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Lavender', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Lemon Grass', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Marjoram', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Mint', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Mustard', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Oregano', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Parsley', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Rosemary', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Sage', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Scallion', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Stevia', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Tarragon', selected: false},
+		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Thyme', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Apples', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Blackberries', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Blueberries', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Cantaloupes', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Currant', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Cherries', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Figs', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Grapes', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Honeydew', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Lemons & Oranges', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Peaches', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Pears', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Plums', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Raspberries', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Strawberries', selected: false},
+		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 6.5, minzone: 3.0, name: 'Watermelon', selected: false}
 	]);
 var $author$project$PlantCalendar$init = function (_v0) {
 	return _Utils_Tuple2(
@@ -5587,6 +5587,15 @@ var $author$project$PlantCalendar$Loading = {$: 'Loading'};
 var $author$project$PlantCalendar$Success = function (a) {
 	return {$: 'Success', a: a};
 };
+var $elm$core$Basics$ge = _Utils_ge;
+var $author$project$PlantCalendar$enablePlants = F2(
+	function (zone, plant) {
+		return ((_Utils_cmp(plant.minzone, zone) < 1) && (_Utils_cmp(plant.maxzone, zone) > -1)) ? _Utils_update(
+			plant,
+			{disabled: false}) : _Utils_update(
+			plant,
+			{disabled: true});
+	});
 var $elm$json$Json$Decode$decodeString = _Json_runOnString;
 var $elm$http$Http$BadStatus_ = F2(
 	function (a, b) {
@@ -6374,6 +6383,52 @@ var $elm$http$Http$get = function (r) {
 	return $elm$http$Http$request(
 		{body: $elm$http$Http$emptyBody, expect: r.expect, headers: _List_Nil, method: 'GET', timeout: $elm$core$Maybe$Nothing, tracker: $elm$core$Maybe$Nothing, url: r.url});
 };
+var $author$project$PlantCalendar$getZoneFloat = function (z) {
+	switch (z) {
+		case '1a':
+			return 1.0;
+		case '1b':
+			return 1.5;
+		case '2a':
+			return 2.0;
+		case '2b':
+			return 2.5;
+		case '3a':
+			return 3.0;
+		case '3b':
+			return 3.5;
+		case '4a':
+			return 4.0;
+		case '4b':
+			return 4.5;
+		case '5a':
+			return 5.0;
+		case '5b':
+			return 5.5;
+		case '6a':
+			return 6.0;
+		case '6b':
+			return 6.5;
+		case '7a':
+			return 7.0;
+		case '7b':
+			return 7.5;
+		case '8a':
+			return 8.0;
+		case '8b':
+			return 8.5;
+		case '9a':
+			return 9.0;
+		case '9b':
+			return 9.5;
+		case '10a':
+			return 10.0;
+		case '10b':
+			return 10.5;
+		default:
+			return 5.0;
+	}
+};
 var $author$project$PlantCalendar$Zipcode = F4(
 	function (zipcode, zone, coordinates, temp_range) {
 		return {coordinates: coordinates, temp_range: temp_range, zipcode: zipcode, zone: zone};
@@ -6409,6 +6464,11 @@ var $author$project$PlantCalendar$togglePlant = F2(
 			{selected: !test.selected}) : test;
 	});
 var $elm$core$String$trim = _String_trim;
+var $author$project$PlantCalendar$unselect = function (plant) {
+	return _Utils_update(
+		plant,
+		{selected: false});
+};
 var $author$project$PlantCalendar$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -6442,6 +6502,11 @@ var $author$project$PlantCalendar$update = F2(
 						_Utils_update(
 							model,
 							{
+								plants: A2(
+									$elm$core$List$map,
+									$author$project$PlantCalendar$enablePlants(
+										$author$project$PlantCalendar$getZoneFloat(z.zone)),
+									model.plants),
 								zipcode: $author$project$PlantCalendar$Success(z),
 								zipcodetext: ''
 							}),
@@ -6464,7 +6529,7 @@ var $author$project$PlantCalendar$update = F2(
 						model,
 						{plants: newPlants}),
 					$elm$core$Platform$Cmd$none);
-			default:
+			case 'SetFilter':
 				var string = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
@@ -6473,8 +6538,18 @@ var $author$project$PlantCalendar$update = F2(
 							filter: $elm$core$String$trim(string)
 						}),
 					$elm$core$Platform$Cmd$none);
+			default:
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							plants: A2($elm$core$List$map, $author$project$PlantCalendar$unselect, model.plants),
+							zipcode: $author$project$PlantCalendar$Unset
+						}),
+					$elm$core$Platform$Cmd$none);
 		}
 	});
+var $author$project$PlantCalendar$ClearAll = {$: 'ClearAll'};
 var $author$project$PlantCalendar$SetFilter = function (a) {
 	return {$: 'SetFilter', a: a};
 };
@@ -6482,6 +6557,7 @@ var $author$project$PlantCalendar$SetZipcode = {$: 'SetZipcode'};
 var $author$project$PlantCalendar$SetZipcodeText = function (a) {
 	return {$: 'SetZipcodeText', a: a};
 };
+var $elm$html$Html$a = _VirtualDom_node('a');
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
@@ -6523,7 +6599,7 @@ var $elm$svg$Svg$Attributes$y1 = _VirtualDom_attribute('y1');
 var $elm$svg$Svg$Attributes$y2 = _VirtualDom_attribute('y2');
 var $author$project$PlantCalendar$drawRow = F2(
 	function (index, plant) {
-		var y0 = (60 * (index + 1)) + 115;
+		var y0 = (60 * (index + 1)) + 105;
 		return _List_fromArray(
 			[
 				A2(
@@ -6744,7 +6820,7 @@ var $author$project$PlantCalendar$drawSVG = function (plants) {
 			[
 				$elm$svg$Svg$Attributes$style(
 				'width:100%; height: ' + ($elm$core$String$fromInt(
-					($elm$core$List$length(plants) * 60) + 165) + 'px; stroke: #888; fill; stroke-width: 1')),
+					($elm$core$List$length(plants) * 60) + 145) + 'px; stroke: #888; fill; stroke-width: 1')),
 				$elm$svg$Svg$Attributes$shapeRendering('crispEdges')
 			]),
 		A2(
@@ -7121,10 +7197,13 @@ var $author$project$PlantCalendar$drawBottomContent = F2(
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $author$project$PlantCalendar$drawBottomInstructions = A2(
 	$elm$html$Html$div,
-	_List_Nil,
 	_List_fromArray(
 		[
-			$elm$html$Html$text('Select some things')
+			$elm$html$Html$Attributes$class('bottom_info__instructions')
+		]),
+	_List_fromArray(
+		[
+			$elm$html$Html$text('2. Select plants to see recommended planting & harvesting dates!')
 		]));
 var $elm$core$String$fromFloat = _String_fromNumber;
 var $author$project$PlantCalendar$getCoordinates = function (status) {
@@ -15768,7 +15847,7 @@ var $author$project$PlantCalendar$drawTopInstructions = A2(
 				]),
 			_List_fromArray(
 				[
-					$elm$html$Html$text('Set your zip code')
+					$elm$html$Html$text('1. Set your zip code')
 				]))
 		]));
 var $elm$core$List$filter = F2(
@@ -15794,6 +15873,7 @@ var $elm$html$Html$Attributes$boolProperty = F2(
 			$elm$json$Json$Encode$bool(bool));
 	});
 var $elm$html$Html$Attributes$checked = $elm$html$Html$Attributes$boolProperty('checked');
+var $elm$html$Html$Attributes$disabled = $elm$html$Html$Attributes$boolProperty('disabled');
 var $elm$html$Html$Attributes$for = $elm$html$Html$Attributes$stringProperty('htmlFor');
 var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
 var $elm$html$Html$input = _VirtualDom_node('input');
@@ -15837,7 +15917,8 @@ var $author$project$PlantCalendar$getPlants = F2(
 									'p' + $elm$core$String$fromInt(index)),
 									$elm$html$Html$Attributes$checked(p.selected),
 									$elm$html$Html$Events$onClick(
-									$author$project$PlantCalendar$TogglePlant(p))
+									$author$project$PlantCalendar$TogglePlant(p)),
+									$elm$html$Html$Attributes$disabled(p.disabled)
 								]),
 							_List_Nil),
 							A2(
@@ -15858,6 +15939,13 @@ var $author$project$PlantCalendar$getPlants = F2(
 			return _List_Nil;
 		}
 	});
+var $elm$html$Html$Attributes$href = function (url) {
+	return A2(
+		$elm$html$Html$Attributes$stringProperty,
+		'href',
+		_VirtualDom_noJavaScriptUri(url));
+};
+var $elm$html$Html$li = _VirtualDom_node('li');
 var $elm$html$Html$main_ = _VirtualDom_node('main');
 var $elm$core$Basics$neq = _Utils_notEqual;
 var $elm$html$Html$Events$alwaysStop = function (x) {
@@ -15903,6 +15991,9 @@ var $author$project$PlantCalendar$plantNameContains = F2(
 					return $.name;
 				}(plant)));
 	});
+var $elm$html$Html$span = _VirtualDom_node('span');
+var $elm$html$Html$Attributes$target = $elm$html$Html$Attributes$stringProperty('target');
+var $elm$html$Html$ul = _VirtualDom_node('ul');
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
 var $author$project$PlantCalendar$view = function (model) {
 	var topContent = (!_Utils_eq(model.zipcode, $author$project$PlantCalendar$Unset)) ? $author$project$PlantCalendar$drawTopContent(model.zipcode) : $author$project$PlantCalendar$drawTopInstructions;
@@ -15917,7 +16008,8 @@ var $author$project$PlantCalendar$view = function (model) {
 			return $.selected;
 		},
 		model.plants);
-	var bottomContent = ($elm$core$List$length(selectedPlants) > 0) ? A2($author$project$PlantCalendar$drawBottomContent, selectedPlants, model.zipcode) : $author$project$PlantCalendar$drawBottomInstructions;
+	var plantsAreSelected = $elm$core$List$length(selectedPlants) > 0;
+	var bottomContent = plantsAreSelected ? A2($author$project$PlantCalendar$drawBottomContent, selectedPlants, model.zipcode) : $author$project$PlantCalendar$drawBottomInstructions;
 	return A2(
 		$elm$html$Html$div,
 		_List_Nil,
@@ -15931,7 +16023,136 @@ var $author$project$PlantCalendar$view = function (model) {
 					]),
 				_List_fromArray(
 					[
-						$elm$html$Html$text('plant-calendar')
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('header_left')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('plant-calendar')
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('header_right')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$ul,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$li,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class(
+												plantsAreSelected ? 'clear show' : 'hide')
+											]),
+										_List_fromArray(
+											[
+												A2(
+												$elm$html$Html$a,
+												_List_fromArray(
+													[
+														$elm$html$Html$Events$onClick($author$project$PlantCalendar$ClearAll)
+													]),
+												_List_fromArray(
+													[
+														A2(
+														$elm$html$Html$span,
+														_List_fromArray(
+															[
+																$elm$html$Html$Attributes$class('icon')
+															]),
+														_List_Nil),
+														$elm$html$Html$text('Clear All')
+													]))
+											])),
+										A2(
+										$elm$html$Html$li,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class(
+												plantsAreSelected ? 'pdf show' : 'hide')
+											]),
+										_List_fromArray(
+											[
+												A2(
+												$elm$html$Html$a,
+												_List_Nil,
+												_List_fromArray(
+													[
+														A2(
+														$elm$html$Html$span,
+														_List_fromArray(
+															[
+																$elm$html$Html$Attributes$class('icon')
+															]),
+														_List_Nil),
+														$elm$html$Html$text('Save PDF')
+													]))
+											])),
+										A2(
+										$elm$html$Html$li,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('donate')
+											]),
+										_List_fromArray(
+											[
+												A2(
+												$elm$html$Html$a,
+												_List_fromArray(
+													[
+														$elm$html$Html$Attributes$href('#'),
+														$elm$html$Html$Attributes$target('_blank')
+													]),
+												_List_fromArray(
+													[
+														A2(
+														$elm$html$Html$span,
+														_List_fromArray(
+															[
+																$elm$html$Html$Attributes$class('icon')
+															]),
+														_List_Nil),
+														$elm$html$Html$text('Donate')
+													]))
+											])),
+										A2(
+										$elm$html$Html$li,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('github')
+											]),
+										_List_fromArray(
+											[
+												A2(
+												$elm$html$Html$a,
+												_List_fromArray(
+													[
+														$elm$html$Html$Attributes$href('#'),
+														$elm$html$Html$Attributes$target('_blank')
+													]),
+												_List_fromArray(
+													[
+														A2(
+														$elm$html$Html$span,
+														_List_fromArray(
+															[
+																$elm$html$Html$Attributes$class('icon')
+															]),
+														_List_Nil),
+														$elm$html$Html$text('Github')
+													]))
+											]))
+									]))
+							]))
 					])),
 				A2(
 				$elm$html$Html$div,

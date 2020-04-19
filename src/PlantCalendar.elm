@@ -1,17 +1,12 @@
 module PlantCalendar exposing (Model, Msg(..), init, main, update, subscriptions, view)
 
 import Browser
-import Browser.Dom
-import Browser.Events
 import Http
 import Html exposing (Html, div, span, text, h2, blockquote, ul, li, a, main_, textarea, button, strong, br, p, input, form, label, object)
-import Html.Attributes exposing (class, id, placeholder, value, href, target, type_, for, checked, attribute)
-import Html.Events exposing (onClick, onInput, onFocus, onBlur)
+import Html.Attributes exposing (class, id, placeholder, value, href, target, type_, for, checked, disabled, attribute)
+import Html.Events exposing (onClick, onInput)
 import Svg exposing (svg)
 import Svg.Attributes exposing (style, x, y, x1, x2, y1, y2, stroke, fill, width, height)
-import Array exposing (Array, fromList, get, slice)
-import Set exposing (fromList, toList)
-import Task
 import Json.Decode
 import Regex
 
@@ -47,6 +42,10 @@ type alias Plant =
   { name : String 
   , category : String
   , selected : Bool
+  , disabled : Bool
+  , minzone : Float
+  , maxzone : Float
+  , defaultPeriods : List ((Float, Float), (Float, Float), (Float, Float))
   }
 
 
@@ -76,6 +75,7 @@ type Msg
     | TogglePlant Plant
     | SetFilter String
     | GotZipcode (Result Http.Error Zipcode)
+    | ClearAll
 
 
 jsonDecoder : String -> Json.Decode.Decoder Zipcode
@@ -110,7 +110,7 @@ update msg model =
       GotZipcode result ->
         case result of
             Ok z ->
-              ({ model | zipcode = Success z, zipcodetext = ""}, Cmd.none)
+              ({ model | zipcode = Success z, plants = List.map (enablePlants (getZoneFloat z.zone)) model.plants, zipcodetext = ""}, Cmd.none)
 
             Err _ ->
               ({ model | zipcode = Failure}, Cmd.none)
@@ -124,10 +124,48 @@ update msg model =
           
       SetFilter string ->
         ( { model | filter = String.trim string }, Cmd.none)
+          
+      ClearAll ->
+        ( { model | zipcode = Unset, plants = List.map unselect model.plants }, Cmd.none)
+
+getZoneFloat : String -> Float
+getZoneFloat z =
+  case z of
+    "1a" -> 1.0
+    "1b" -> 1.5
+    "2a" -> 2.0
+    "2b" -> 2.5
+    "3a" -> 3.0
+    "3b" -> 3.5
+    "4a" -> 4.0
+    "4b" -> 4.5
+    "5a" -> 5.0
+    "5b" -> 5.5
+    "6a" -> 6.0
+    "6b" -> 6.5
+    "7a" -> 7.0
+    "7b" -> 7.5
+    "8a" -> 8.0
+    "8b" -> 8.5
+    "9a" -> 9.0
+    "9b" -> 9.5
+    "10a" -> 10.0
+    "10b" -> 10.5
+    _ -> 5.0
+
+
+enablePlants : Float -> Plant -> Plant
+enablePlants zone plant =
+  if plant.minzone <= zone && plant.maxzone >= zone then { plant | disabled = False } else { plant | disabled = True }
+
+
+unselect : Plant -> Plant
+unselect plant =
+    { plant | selected = False }
 
 togglePlant : Plant -> Plant -> Plant
 togglePlant target test =
-    if test == target then { test | selected = (not test.selected) } else test
+    if test == target then { test | selected = not test.selected } else test
 
 -- SUBSCRIPTIONS
 
@@ -143,12 +181,16 @@ getPlants : Int -> List (Plant) -> List (Html Msg)
 getPlants index plants =
   case plants of
     p::ps ->
-      div [] [ input [ type_ "checkbox", id ("p"++ String.fromInt index), checked p.selected, onClick (TogglePlant p) ] [], label [ class p.category, for ("p"++ (String.fromInt index)) ] [ text p.name ] ] :: getPlants (index + 1) ps
+      div [] [ input [ type_ "checkbox"
+                     , id ("p"++ String.fromInt index)
+                     , checked p.selected
+                     , onClick (TogglePlant p)
+                     , disabled p.disabled ] [], label [ class p.category, for ("p"++ (String.fromInt index)) ] [ text p.name ] ] :: getPlants (index + 1) ps
     _ -> []
 
 drawSVG : List (Plant) -> Html Msg
 drawSVG plants =
-    svg [ style ("width:100%; height: "++ String.fromInt (List.length plants*60+165) ++"px; stroke: #888; fill; stroke-width: 1"), Svg.Attributes.shapeRendering "crispEdges" ]
+    svg [ style ("width:100%; height: "++ String.fromInt (List.length plants*60+145) ++"px; stroke: #888; fill; stroke-width: 1"), Svg.Attributes.shapeRendering "crispEdges" ]
     (List.append
         [ Svg.rect [ x "22.5%", y "0", width "5%", height "14", stroke "#77734f", fill "rgba(209, 193, 42, .7)"] []
         , Svg.text_ [y "25", x "25%", style "fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0vw;"] [ Svg.text "Plant indoors" ]
@@ -187,7 +229,7 @@ drawSVG plants =
 drawRow : Int -> Plant -> List (Svg.Svg Msg)
 drawRow index plant =
     let
-      y0 = 60 * (index+1) + 115
+      y0 = 60 * (index+1) + 105
     in
         [ Svg.line [ y1 (String.fromInt (y0-10)), y2 (String.fromInt (y0+10)), x1 "28%", x2 "28%" ] []
         , Svg.line [ y1 (String.fromInt (y0-10)), y2 (String.fromInt (y0+10)), x1 "34%", x2 "34%" ] []
@@ -247,19 +289,18 @@ getZIP status =
     _ -> "Error"
 
 
-
 drawBottomInstructions : Html Msg
 drawBottomInstructions =
-    div [] [ text "Select some things"]
+    div [ class "bottom_info__instructions" ] [ text "2. Select plants to see recommended planting & harvesting dates!"]
 
 drawBottomContent : List (Plant) -> HTTPStatus -> Html Msg
 drawBottomContent selectedPlants status =
-    drawSVG selectedPlants
+    drawSVG selectedPlants {- If status is unset, make it clear we're using Default zone -}
 
 
 drawTopInstructions : Html Msg
 drawTopInstructions =
-  div [ class "top_info" ] [ div [ class "top_info__instructions" ] [ text "Set your zip code" ] ]
+  div [ class "top_info" ] [ div [ class "top_info__instructions" ] [ text "1. Set your zip code" ] ]
 
 
 drawTopContent : HTTPStatus -> Html Msg
@@ -280,16 +321,27 @@ view model =
     sidebarPlants = List.filter (plantNameContains (String.toLower model.filter)) model.plants
     selectedPlants = List.filter .selected model.plants
     topContent = if model.zipcode /= Unset then drawTopContent model.zipcode else drawTopInstructions
-    bottomContent = if List.length selectedPlants > 0 then drawBottomContent selectedPlants model.zipcode else drawBottomInstructions
+    plantsAreSelected = List.length selectedPlants > 0
+    bottomContent = if plantsAreSelected then drawBottomContent selectedPlants model.zipcode else drawBottomInstructions
   in
     div []
-    [ div [ class "header" ] [ text "plant-calendar" ]
+    [ div [ class "header" ]
+      [ div [ class "header_left" ] [ text "plant-calendar" ]
+      , div [ class "header_right" ] [
+        ul []
+        [ li [ class (if plantsAreSelected then "clear show" else "hide") ] [ a [ onClick ClearAll ] [ span [ class "icon" ] [], text "Clear All" ] ]
+        , li [ class (if plantsAreSelected then "pdf show" else "hide") ] [ a [ ] [ span [ class "icon" ] [], text "Save PDF" ] ]
+        , li [ class "donate" ] [ a [ href "#", target "_blank" ] [ span [ class "icon" ] [], text "Donate" ] ]
+        , li [ class "github" ] [ a [ href "#", target "_blank" ] [ span [ class "icon" ] [], text "Github" ] ]
+        ]
+      ]
+    ]
     , div [ class "container" ]
       [ div [ class "sidebar" ]
         [ div [ class "sidebar__top" ]
           [ div [ class "location" ]
             [ input [ type_ "text", id "location", placeholder "ZIP Code", onInput SetZipcodeText, value model.zipcodetext ] []
-            , button [ onClick SetZipcode ] [ text ("Set") ]
+            , button [ onClick SetZipcode ] [ text "Set" ]
             ]
           , div [ class "search" ]
             [ input [ type_ "search", id "filter", placeholder "Filter", onInput SetFilter, value model.filter ] []
@@ -308,144 +360,144 @@ view model =
   
 plantData : List (Plant)
 plantData = 
-    [ {name = "Anemone", category = "Flowers", selected = False}
-    , {name = "Anise Hyssop", category = "Flowers", selected = False}
-    , {name = "Asters", category = "Flowers", selected = False}
-    , {name = "Astilbe", category = "Flowers", selected = False}
-    , {name = "Baby's Breath", category = "Flowers", selected = False}
-    , {name = "Bee Balm", category = "Flowers", selected = False}
-    , {name = "Black-Eyed Susans", category = "Flowers", selected = False}
-    , {name = "Butterfly Bush", category = "Flowers", selected = False}
-    , {name = "Borage (star flower)", category = "Flowers", selected = False}
-    , {name = "Calendula", category = "Flowers", selected = False}
-    , {name = "Cannas", category = "Flowers", selected = False}
-    , {name = "Carnations", category = "Flowers", selected = False}
-    , {name = "Celosia", category = "Flowers", selected = False}
-    , {name = "Chrysanthemum", category = "Flowers", selected = False}
-    , {name = "Clematis", category = "Flowers", selected = False}
-    , {name = "Columbine", category = "Flowers", selected = False}
-    , {name = "Coneflowers", category = "Flowers", selected = False}
-    , {name = "Coreopsis", category = "Flowers", selected = False}
-    , {name = "Cosmos", category = "Flowers", selected = False}
-    , {name = "Crocuses", category = "Flowers", selected = False}
-    , {name = "Daffodils", category = "Flowers", selected = False}
-    , {name = "Dahlias", category = "Flowers", selected = False}
-    , {name = "Daisies", category = "Flowers", selected = False}
-    , {name = "Daylilies", category = "Flowers", selected = False}
-    , {name = "Delphiniums", category = "Flowers", selected = False}
-    , {name = "Echinacea", category = "Flowers", selected = False}
-    , {name = "Gardenias", category = "Flowers", selected = False}
-    , {name = "Geraniums", category = "Flowers", selected = False}
-    , {name = "Gladiolus", category = "Flowers", selected = False}
-    , {name = "Hibiscus", category = "Flowers", selected = False}
-    , {name = "Hollyhock", category = "Flowers", selected = False}
-    , {name = "Honeysuckle", category = "Flowers", selected = False}
-    , {name = "Hyacinth", category = "Flowers", selected = False}
-    , {name = "Hydrangea", category = "Flowers", selected = False}
-    , {name = "Impatiens", category = "Flowers", selected = False}
-    , {name = "Irises", category = "Flowers", selected = False}
-    , {name = "Jasmine", category = "Flowers", selected = False}
-    , {name = "Lilies", category = "Flowers", selected = False}
-    , {name = "Marigolds", category = "Flowers", selected = False}
-    , {name = "Morning Glories", category = "Flowers", selected = False}
-    , {name = "Nasturtium", category = "Flowers", selected = False}
-    , {name = "Pansies", category = "Flowers", selected = False}
-    , {name = "Peonies", category = "Flowers", selected = False}
-    , {name = "Petunias", category = "Flowers", selected = False}
-    , {name = "Phlox", category = "Flowers", selected = False}
-    , {name = "Poppy", category = "Flowers", selected = False}
-    , {name = "Roses", category = "Flowers", selected = False}
-    , {name = "Salvia", category = "Flowers", selected = False}
-    , {name = "Sedum", category = "Flowers", selected = False}
-    , {name = "Shasta Daisies", category = "Flowers", selected = False}
-    , {name = "Strawflowers", category = "Flowers", selected = False}
-    , {name = "Sunflowers", category = "Flowers", selected = False}
-    , {name = "Sweet Peas", category = "Flowers", selected = False}
-    , {name = "Tuberose", category = "Flowers", selected = False}
-    , {name = "Tulips", category = "Flowers", selected = False}
-    , {name = "Verbenas", category = "Flowers", selected = False}
-    , {name = "Veronica (Speedwell)", category = "Flowers", selected = False}
-    , {name = "Viola", category = "Flowers", selected = False}
-    , {name = "Yarrow", category = "Flowers", selected = False}
-    , {name = "Zinnias", category = "Flowers", selected = False}
-    , {name = "Artichoke", category = "Vegetables", selected = False}
-    , {name = "Arugula", category = "Vegetables", selected = False}
-    , {name = "Asparagus", category = "Vegetables", selected = False}
-    , {name = "Beans", category = "Vegetables", selected = False}
-    , {name = "Beets", category = "Vegetables", selected = False}
-    , {name = "Bell Peppers", category = "Vegetables", selected = False}
-    , {name = "Broccoli", category = "Vegetables", selected = False}
-    , {name = "Brussels Sprouts", category = "Vegetables", selected = False}
-    , {name = "Cabbage", category = "Vegetables", selected = False}
-    , {name = "Carrots", category = "Vegetables", selected = False}
-    , {name = "Cauliflower", category = "Vegetables", selected = False}
-    , {name = "Celery", category = "Vegetables", selected = False}
-    , {name = "Collards", category = "Vegetables", selected = False}
-    , {name = "Corn", category = "Vegetables", selected = False}
-    , {name = "Cucumbers", category = "Vegetables", selected = False}
-    , {name = "Edamame", category = "Vegetables", selected = False}
-    , {name = "Eggplants", category = "Vegetables", selected = False}
-    , {name = "Endive", category = "Vegetables", selected = False}
-    , {name = "Fava Beans", category = "Vegetables", selected = False}
-    , {name = "Garlic", category = "Vegetables", selected = False}
-    , {name = "Gourds", category = "Vegetables", selected = False}
-    , {name = "Green Beans", category = "Vegetables", selected = False}
-    , {name = "Horseradish", category = "Vegetables", selected = False}
-    , {name = "Kale", category = "Vegetables", selected = False}
-    , {name = "Leeks", category = "Vegetables", selected = False}
-    , {name = "Lettuce", category = "Vegetables", selected = False}
-    , {name = "Okra", category = "Vegetables", selected = False}
-    , {name = "Onions", category = "Vegetables", selected = False}
-    , {name = "Parsnips", category = "Vegetables", selected = False}
-    , {name = "Peas", category = "Vegetables", selected = False}
-    , {name = "Potatoes", category = "Vegetables", selected = False}
-    , {name = "Pumpkins", category = "Vegetables", selected = False}
-    , {name = "Radishes", category = "Vegetables", selected = False}
-    , {name = "Rhubarb", category = "Vegetables", selected = False}
-    , {name = "Rutabagas", category = "Vegetables", selected = False}
-    , {name = "Shallots", category = "Vegetables", selected = False}
-    , {name = "Snap Peas", category = "Vegetables", selected = False}
-    , {name = "Soybean", category = "Vegetables", selected = False}
-    , {name = "Spinach", category = "Vegetables", selected = False}
-    , {name = "Squash", category = "Vegetables", selected = False}
-    , {name = "Sweet Potatoes", category = "Vegetables", selected = False}
-    , {name = "Swiss Chard", category = "Vegetables", selected = False}
-    , {name = "Tomatoes", category = "Vegetables", selected = False}
-    , {name = "Turnips", category = "Vegetables", selected = False}
-    , {name = "Zucchini", category = "Vegetables", selected = False}
-    , {name = "Basil", category = "Herbs", selected = False}
-    , {name = "Catnip", category = "Herbs", selected = False}
-    , {name = "Chives", category = "Herbs", selected = False}
-    , {name = "Coriander/Cilantro", category = "Herbs", selected = False}
-    , {name = "Dill", category = "Herbs", selected = False}
-    , {name = "Fennel", category = "Herbs", selected = False}
-    , {name = "Lavender", category = "Herbs", selected = False}
-    , {name = "Lemon Grass", category = "Herbs", selected = False}
-    , {name = "Marjoram", category = "Herbs", selected = False}
-    , {name = "Mint", category = "Herbs", selected = False}
-    , {name = "Mustard", category = "Herbs", selected = False}
-    , {name = "Oregano", category = "Herbs", selected = False}
-    , {name = "Parsley", category = "Herbs", selected = False}
-    , {name = "Rosemary", category = "Herbs", selected = False}
-    , {name = "Sage", category = "Herbs", selected = False}
-    , {name = "Scallion", category = "Herbs", selected = False}
-    , {name = "Stevia", category = "Herbs", selected = False}
-    , {name = "Tarragon", category = "Herbs", selected = False}
-    , {name = "Thyme", category = "Herbs", selected = False}
-    , {name = "Apples", category = "Fruits", selected = False}
-    , {name = "Blackberries", category = "Fruits", selected = False}
-    , {name = "Blueberries", category = "Fruits", selected = False}
-    , {name = "Cantaloupes", category = "Fruits", selected = False}
-    , {name = "Currant", category = "Fruits", selected = False}
-    , {name = "Cherries", category = "Fruits", selected = False}
-    , {name = "Figs", category = "Fruits", selected = False}
-    , {name = "Grapes", category = "Fruits", selected = False}
-    , {name = "Honeydew", category = "Fruits", selected = False}
-    , {name = "Lemons & Oranges", category = "Fruits", selected = False}
-    , {name = "Peaches", category = "Fruits", selected = False}
-    , {name = "Pears", category = "Fruits", selected = False}
-    , {name = "Plums", category = "Fruits", selected = False}
-    , {name = "Raspberries", category = "Fruits", selected = False}
-    , {name = "Strawberries", category = "Fruits", selected = False}
-    , {name = "Watermelon", category = "Fruits", selected = False}
+    [ {name = "Anemone", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Anise Hyssop", category = "Flowers", selected = False, disabled = True, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Asters", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Astilbe", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Baby's Breath", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Bee Balm", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Black-Eyed Susans", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Butterfly Bush", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Borage (star flower)", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Calendula", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Cannas", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Carnations", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Celosia", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Chrysanthemum", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Clematis", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Columbine", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Coneflowers", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Coreopsis", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Cosmos", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Crocuses", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Daffodils", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Dahlias", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Daisies", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Daylilies", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Delphiniums", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Echinacea", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Gardenias", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Geraniums", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Gladiolus", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Hibiscus", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Hollyhock", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Honeysuckle", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Hyacinth", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Hydrangea", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Impatiens", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Irises", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Jasmine", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Lilies", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Marigolds", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Morning Glories", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Nasturtium", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Pansies", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Peonies", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Petunias", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Phlox", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Poppy", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Roses", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Salvia", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Sedum", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Shasta Daisies", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Strawflowers", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Sunflowers", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Sweet Peas", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Tuberose", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Tulips", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Verbenas", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Veronica (Speedwell)", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Viola", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Yarrow", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Zinnias", category = "Flowers", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Artichoke", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Arugula", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Asparagus", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Beans", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Beets", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Bell Peppers", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Broccoli", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Brussels Sprouts", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Cabbage", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Carrots", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Cauliflower", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Celery", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Collards", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Corn", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Cucumbers", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Edamame", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Eggplants", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Endive", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Fava Beans", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Garlic", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Gourds", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Green Beans", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Horseradish", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Kale", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Leeks", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Lettuce", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Okra", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Onions", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Parsnips", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Peas", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Potatoes", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Pumpkins", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Radishes", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Rhubarb", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Rutabagas", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Shallots", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Snap Peas", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Soybean", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Spinach", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Squash", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Sweet Potatoes", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Swiss Chard", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Tomatoes", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Turnips", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Zucchini", category = "Vegetables", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Basil", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Catnip", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Chives", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Coriander/Cilantro", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Dill", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Fennel", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Lavender", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Lemon Grass", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Marjoram", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Mint", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Mustard", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Oregano", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Parsley", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Rosemary", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Sage", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Scallion", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Stevia", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Tarragon", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Thyme", category = "Herbs", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Apples", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Blackberries", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Blueberries", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Cantaloupes", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Currant", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Cherries", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Figs", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Grapes", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Honeydew", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Lemons & Oranges", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Peaches", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Pears", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Plums", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Raspberries", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Strawberries", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
+    , {name = "Watermelon", category = "Fruits", selected = False, disabled = False, minzone = 3.0, maxzone = 6.5, defaultPeriods = []}
     ]

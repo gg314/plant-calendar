@@ -37,7 +37,113 @@ body {
     font-weight: 200;
     font-size: 2.0rem;
     text-shadow: -1px -1px 2px rgba(0, 0, 0, .4);
+    display: flex;
 }
+
+.header_left {
+    flex: 1 1 auto;
+}
+
+.header_right {
+    flex: 0 0 auto;
+	align-items: center;
+	padding: 0.5rem 0;
+}
+
+.header_right ul {
+	margin: 0;
+	padding: 0;
+	display: flex;
+	justify-content: space-evenly;
+}
+
+.header_right ul li {
+	flex: 1 1 auto;
+	display: inline-block;
+	margin-right: .5rem;
+}
+
+.header_right ul li a {
+	display: block;
+	transition: .1s linear all;
+	color: #fbffff;
+	padding: 0.4rem 1.0rem 0.4rem 0.8rem;
+	border-radius: 3px;
+	font-size: 1.1rem;
+	line-height: 1.6rem;
+	opacity: .8;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
+	font-weight: 100;
+    border: 1px solid transparent;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.header_right ul li a:hover {
+	background: rgba(255, 255, 255, .08);
+	opacity: 1;
+    border: 1px solid rgba(0, 0, 0, .3);
+    box-shadow: 0 0 3px rgba(0, 0, 0, .15);
+}
+
+.hide {
+    opacity: 0;
+    transition: .15s linear all;
+    visibility: hidden;
+}
+
+.show {
+    opacity: 1;
+    transition: .15s linear all;
+    visibility: visible;
+}
+
+.icon {
+    display: inline-block;
+    background: #fff;
+    mask: url('../img/reset.svg') no-repeat center center;
+    mask-size: 1.25rem 1.25rem;
+    height: 1.25rem;
+    width: 1.25rem;
+    margin-right: 0.5rem;
+    transition: .1s linear all;
+}
+
+.donate .icon {
+    mask-image: url('../img/donate.svg');
+}
+
+.donate:hover .icon {
+    background: #ffc6c6
+}
+
+.clear .icon {
+    mask-image: url('../img/reset.svg');
+}
+
+.clear:hover .icon {
+    background: #ecffdc
+}
+
+.pdf .icon {
+    mask-image: url('../img/pdf.svg');
+}
+
+.pdf:hover .icon {
+    background: #ffb8fb
+}
+
+.github .icon {
+    mask-image: url('../img/github.svg');
+}
+
+.github:hover .icon {
+    background: #ffe6be
+}
+
+
 
 .sidebar {
     position: sticky;
@@ -197,15 +303,55 @@ input:checked + label {
     color: rgb(89, 99, 92);
 }
 
+input:disabled + label {
+    /* background: rgba(50, 120, 70, .12); */
+    font-weight: 200;
+    text-decoration: line-through;
+    background: transparent;
+    cursor: default;
+}
+
+.top_info__instructions, .bottom_info__instructions {
+    font-family: "Gloria Hallelujah";
+    font-size: 2.0rem;
+    padding: 3.0rem;
+    color: #aaa;
+}
+
 .top_info {
     display: flex;
     min-height: 245px;
+}
+
+.top_info__instructions {
+    background: url('../img/arrow-1.png') no-repeat left 15px;
+    background-size: 319px 88px;
+    padding-top: 88px;
+}
+
+.bottom_info__instructions {
+    background: url('../img/arrow-2.png') no-repeat left bottom;
+    padding-bottom: 300px;
+    background-size: 300px 300px;
 }
 
 .top_info__left {
     order: 2;
     flex: 1 1 auto;
     padding: 2.0rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    font-size: 1.2rem;
+}
+
+.top_info__left strong {
+    color: #888;
+    font-weight: 300;
+}
+
+.top_info__left > div {
+    flex: 0 0 auto;
 }
 
 .top_info__right {
