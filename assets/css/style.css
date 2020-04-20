@@ -111,36 +111,28 @@ body {
     transition: .1s linear all;
 }
 
-.donate .icon {
-    mask-image: url('../img/donate.svg');
+.sort .icon {
+    mask-image: url('../img/sort.svg');
 }
 
-.donate:hover .icon {
-    background: #ffc6c6
+.donate .icon {
+    mask-image: url('../img/donate.svg');
 }
 
 .clear .icon {
     mask-image: url('../img/reset.svg');
 }
 
-.clear:hover .icon {
-    background: #ecffdc
-}
-
 .pdf .icon {
     mask-image: url('../img/pdf.svg');
-}
-
-.pdf:hover .icon {
-    background: #ffb8fb
 }
 
 .github .icon {
     mask-image: url('../img/github.svg');
 }
 
-.github:hover .icon {
-    background: #ffe6be
+ul li a:hover .icon {
+    background: #fff
 }
 
 
@@ -185,7 +177,7 @@ body {
 main {
     flex: 0 0 80%;
     width: 100%;
-    padding: 0 1rem;
+    padding: 1rem 1rem .5rem 1rem;
     background: #eaeaea;
 }
 
@@ -343,6 +335,12 @@ input:disabled + label {
     flex-direction: column;
     justify-content: space-around;
     font-size: 1.2rem;
+    border-bottom: 1px dashed #c0c0c0;
+    flex-wrap: wrap;
+}
+
+.top_info__right {
+    border-bottom: 1px dashed #c0c0c0;
 }
 
 .top_info__left strong {

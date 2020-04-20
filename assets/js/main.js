@@ -4530,108 +4530,7 @@ function _Http_track(router, xhr, tracker)
 			size: event.lengthComputable ? $elm$core$Maybe$Just(event.total) : $elm$core$Maybe$Nothing
 		}))));
 	});
-}
-
-// CREATE
-
-var _Regex_never = /.^/;
-
-var _Regex_fromStringWith = F2(function(options, string)
-{
-	var flags = 'g';
-	if (options.multiline) { flags += 'm'; }
-	if (options.caseInsensitive) { flags += 'i'; }
-
-	try
-	{
-		return $elm$core$Maybe$Just(new RegExp(string, flags));
-	}
-	catch(error)
-	{
-		return $elm$core$Maybe$Nothing;
-	}
-});
-
-
-// USE
-
-var _Regex_contains = F2(function(re, string)
-{
-	return string.match(re) !== null;
-});
-
-
-var _Regex_findAtMost = F3(function(n, re, str)
-{
-	var out = [];
-	var number = 0;
-	var string = str;
-	var lastIndex = re.lastIndex;
-	var prevLastIndex = -1;
-	var result;
-	while (number++ < n && (result = re.exec(string)))
-	{
-		if (prevLastIndex == re.lastIndex) break;
-		var i = result.length - 1;
-		var subs = new Array(i);
-		while (i > 0)
-		{
-			var submatch = result[i];
-			subs[--i] = submatch
-				? $elm$core$Maybe$Just(submatch)
-				: $elm$core$Maybe$Nothing;
-		}
-		out.push(A4($elm$regex$Regex$Match, result[0], result.index, number, _List_fromArray(subs)));
-		prevLastIndex = re.lastIndex;
-	}
-	re.lastIndex = lastIndex;
-	return _List_fromArray(out);
-});
-
-
-var _Regex_replaceAtMost = F4(function(n, re, replacer, string)
-{
-	var count = 0;
-	function jsReplacer(match)
-	{
-		if (count++ >= n)
-		{
-			return match;
-		}
-		var i = arguments.length - 3;
-		var submatches = new Array(i);
-		while (i > 0)
-		{
-			var submatch = arguments[i];
-			submatches[--i] = submatch
-				? $elm$core$Maybe$Just(submatch)
-				: $elm$core$Maybe$Nothing;
-		}
-		return replacer(A4($elm$regex$Regex$Match, match, arguments[arguments.length - 2], count, _List_fromArray(submatches)));
-	}
-	return string.replace(re, jsReplacer);
-});
-
-var _Regex_splitAtMost = F3(function(n, re, str)
-{
-	var string = str;
-	var out = [];
-	var start = re.lastIndex;
-	var restoreLastIndex = re.lastIndex;
-	while (n--)
-	{
-		var result = re.exec(string);
-		if (!result) break;
-		out.push(string.slice(start, result.index));
-		start = re.lastIndex;
-	}
-	out.push(string.slice(start));
-	re.lastIndex = restoreLastIndex;
-	return _List_fromArray(out);
-});
-
-var _Regex_infinity = Infinity;
-var $elm$core$Basics$EQ = {$: 'EQ'};
+}var $elm$core$Basics$EQ = {$: 'EQ'};
 var $elm$core$Basics$GT = {$: 'GT'};
 var $elm$core$Basics$LT = {$: 'LT'};
 var $elm$core$List$cons = _List_cons;
@@ -5420,191 +5319,599 @@ var $elm$core$Task$perform = F2(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$element = _Browser_element;
-var $author$project$PlantCalendar$Model = F4(
-	function (zipcode, zipcodetext, plants, filter) {
-		return {filter: filter, plants: plants, zipcode: zipcode, zipcodetext: zipcodetext};
+var $author$project$PlantCalendar$Model = F5(
+	function (zipcode, zipcodetext, plants, filter, sortMode) {
+		return {filter: filter, plants: plants, sortMode: sortMode, zipcode: zipcode, zipcodetext: zipcodetext};
 	});
 var $author$project$PlantCalendar$Unset = {$: 'Unset'};
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
-var $author$project$PlantCalendar$plantData = _List_fromArray(
-	[
-		{
-		category: 'Flowers',
-		defaultPeriods: _List_fromArray(
-			[
-				_Utils_Tuple3(
-				_Utils_Tuple2(0.1, 0.2),
-				_Utils_Tuple2(0.18, 0.4),
-				_Utils_Tuple2(0.38, 0.45)),
-				_Utils_Tuple3(
-				_Utils_Tuple2(0.6, 0.65),
-				_Utils_Tuple2(0.65, 0.8),
-				_Utils_Tuple2(0.75, 0.87))
-			]),
-		disabled: false,
-		maxzone: 13.5,
-		minzone: 2.0,
-		name: 'Anemone',
-		selected: false
-	},
-		{
-		category: 'Flowers',
-		defaultPeriods: _List_fromArray(
-			[
-				_Utils_Tuple3(
-				_Utils_Tuple2(0.1, 0.2),
-				_Utils_Tuple2(0.18, 0.4),
-				_Utils_Tuple2(0.38, 0.45))
-			]),
-		disabled: false,
-		maxzone: 13.5,
-		minzone: 2.0,
-		name: 'Anise Hyssop',
-		selected: false
-	},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Asters', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Astilbe', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 2.0, name: 'Baby\'s Breath', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Bee Balm', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Black-Eyed Susans', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Butterfly Bush', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Borage (star flower)', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Calendula', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Cannas', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Carnations', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Celosia', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Chrysanthemum', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Clematis', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Columbine', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Coneflowers', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Coreopsis', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Cosmos', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Crocuses', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 2.0, name: 'Daffodils', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 2.0, name: 'Dahlias', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Daisies', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Daylilies', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Delphiniums', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Echinacea', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Gardenias', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Geraniums', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 2.0, name: 'Gladiolus', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Hibiscus', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Hollyhock', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Honeysuckle', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 2.0, name: 'Hyacinth', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Hydrangea', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Impatiens', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Irises', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Jasmine', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Lilies', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Marigolds', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Morning Glories', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Nasturtium', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Pansies', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Peonies', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Petunias', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Phlox', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Poppies', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Roses', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Salvia', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Sedum', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Shasta Daisies', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Strawflowers', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Sunflowers', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 2.0, name: 'Sweet Peas', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Tuberose', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Tulips', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Verbenas', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Veronica (Speedwell)', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Viola', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Yarrow', selected: false},
-		{category: 'Flowers', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Zinnias', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 9.5, minzone: 3.0, name: 'Artichoke', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 3.0, name: 'Arugula', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 3.0, name: 'Asparagus', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 3.0, name: 'Beans', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 3.0, name: 'Beets', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Bell Peppers', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Broccoli', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Brussels Sprouts', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Cabbage', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Carrots', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Cauliflower', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Celery', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Collards', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Corn', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Cucumbers', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Edamame', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 3.0, name: 'Eggplants', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Endive', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Fava Beans', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Garlic', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Gourds', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Green Beans', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 1.0, name: 'Horseradish', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Kale', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Leeks', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Lettuce', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 3.0, name: 'Okra', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Onions', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Parsnips', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 3.0, name: 'Peas', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Potatoes', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Pumpkins', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Radishes', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 1.0, name: 'Rhubarb', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Rutabagas', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Shallots', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Snap Peas', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Soybean', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Spinach', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Squash', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 3.0, name: 'Sweet Potatoes', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Swiss Chard', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Tomatoes', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Turnips', selected: false},
-		{category: 'Vegetables', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Zucchini', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Basil', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Catnip', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Chives', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Coriander/Cilantro', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Dill', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Fennel', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 5.0, name: 'Lavender', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 3.0, name: 'Lemon Grass', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Marjoram', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Mint', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Mustard', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Oregano', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Parsley', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Rosemary', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Sage', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Scallion', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Stevia', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Tarragon', selected: false},
-		{category: 'Herbs', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 1.0, name: 'Thyme', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 5.0, name: 'Apples', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 5.0, name: 'Blackberries', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Blueberries', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Cantaloupes', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 1.0, name: 'Currant', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 9.5, minzone: 3.0, name: 'Cherries', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 13.5, minzone: 5.0, name: 'Figs', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 5.0, name: 'Grapes', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Honeydew', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 5.0, name: 'Lemons & Oranges', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 5.0, name: 'Peaches', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 5.0, name: 'Pears', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 5.0, name: 'Plums', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 5.0, name: 'Raspberries', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 8.5, minzone: 5.0, name: 'Strawberries', selected: false},
-		{category: 'Fruits', defaultPeriods: _List_Nil, disabled: false, maxzone: 11.5, minzone: 1.0, name: 'Watermelon', selected: false}
-	]);
+var $author$project$PlantCalendar$d = 1 / 365.0;
+var $author$project$PlantCalendar$plantData = function (sfday) {
+	var t0 = 120.0 / 365.0;
+	return _List_fromArray(
+		[
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(t0 - (57 * $author$project$PlantCalendar$d), 15 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(t0, 22 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(0, 0))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Basil',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(t0 - (14 * $author$project$PlantCalendar$d), 8 * $author$project$PlantCalendar$d))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Beets',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(t0 - (71 * $author$project$PlantCalendar$d), 14 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(t0 + (14 * $author$project$PlantCalendar$d), 21 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(0, 0))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Bell Peppers',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(t0 - (42 * $author$project$PlantCalendar$d), 14 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(t0 - (21 * $author$project$PlantCalendar$d), 21 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(0, 0))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Broccoli',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(t0 - (42 * $author$project$PlantCalendar$d), 14 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(t0 - (28 * $author$project$PlantCalendar$d), 21 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(0, 0))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Brussels Sprouts',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(t0 - (57 * $author$project$PlantCalendar$d), 14 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(t0 - (37 * $author$project$PlantCalendar$d), 14 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(0, 0))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Cabbage',
+			selected: true
+		},
+			{
+			category: 'Fruits',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(t0 - (28 * $author$project$PlantCalendar$d), 7 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(t0 + (14 * $author$project$PlantCalendar$d), 21 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(0, 0))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Cantaloupes',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(t0 - (35 * $author$project$PlantCalendar$d), 14 * $author$project$PlantCalendar$d))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Carrots',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(t0 - (42 * $author$project$PlantCalendar$d), 14 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(t0 - (28 * $author$project$PlantCalendar$d), 14 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(0, 0))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Cauliflower',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(t0 - (71 * $author$project$PlantCalendar$d), 14 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(t0 + (7 * $author$project$PlantCalendar$d), 14 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(0, 0))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Celery',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(t0 - (28 * $author$project$PlantCalendar$d), 7 * $author$project$PlantCalendar$d))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Chives',
+			selected: true
+		},
+			{
+			category: 'Herbs',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(t0, 14 * $author$project$PlantCalendar$d))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Cilantro (Coriander)',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(t0, 14 * $author$project$PlantCalendar$d))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Corn',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(t0 - (28 * $author$project$PlantCalendar$d), 7 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(t0 + (14 * $author$project$PlantCalendar$d), 21 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(0, 0))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Cucumber',
+			selected: true
+		},
+			{
+			category: 'Herbs',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(t0 - (35 * $author$project$PlantCalendar$d), 14 * $author$project$PlantCalendar$d))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Dill',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(t0 - (70 * $author$project$PlantCalendar$d), 14 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(t0 + (14 * $author$project$PlantCalendar$d), 21 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(0, 0))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Eggplants',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(t0 + (7 * $author$project$PlantCalendar$d), 21 * $author$project$PlantCalendar$d))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Green Beans',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(t0 - (42 * $author$project$PlantCalendar$d), 14 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(t0 - (28 * $author$project$PlantCalendar$d), 14 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(0, 0))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Kale',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(t0 - (42 * $author$project$PlantCalendar$d), 14 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(t0 - (14 * $author$project$PlantCalendar$d), 28 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(0, 0))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Lettuce',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(t0 + (14 * $author$project$PlantCalendar$d), 14 * $author$project$PlantCalendar$d))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Okra',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(t0 - (28 * $author$project$PlantCalendar$d), 21 * $author$project$PlantCalendar$d))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Onions',
+			selected: true
+		},
+			{
+			category: 'Herbs',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(t0 - (70 * $author$project$PlantCalendar$d), 28 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(t0, 21 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(0, 0))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Oregano',
+			selected: true
+		},
+			{
+			category: 'Herbs',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(t0 - (28 * $author$project$PlantCalendar$d), 14 * $author$project$PlantCalendar$d))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Parsley',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(t0 - (21 * $author$project$PlantCalendar$d), 21 * $author$project$PlantCalendar$d))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Parsnips',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(t0 - (42 * $author$project$PlantCalendar$d), 21 * $author$project$PlantCalendar$d))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Peas',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(t0 - (7 * $author$project$PlantCalendar$d), 21 * $author$project$PlantCalendar$d))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Potatoes',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(t0 - (28 * $author$project$PlantCalendar$d), 14 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(t0 + (14 * $author$project$PlantCalendar$d), 21 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(0, 0))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Pumpkins',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(t0 - (56 * $author$project$PlantCalendar$d), 22 * $author$project$PlantCalendar$d))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Radishes',
+			selected: true
+		},
+			{
+			category: 'Herbs',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(t0 - (70 * $author$project$PlantCalendar$d), 14 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(t0 + (7 * $author$project$PlantCalendar$d), 21 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(0, 0))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Rosemary',
+			selected: true
+		},
+			{
+			category: 'Herbs',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(t0 - (56 * $author$project$PlantCalendar$d), 15 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(t0, 14 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(0, 0))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Sage',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(t0 - (42 * $author$project$PlantCalendar$d), 21 * $author$project$PlantCalendar$d))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Spinach',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(t0 - (28 * $author$project$PlantCalendar$d), 14 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(t0 + (14 * $author$project$PlantCalendar$d), 21 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(0, 0))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Squash & Zucchini',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(t0 - (28 * $author$project$PlantCalendar$d), 7 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(t0 + (14 * $author$project$PlantCalendar$d), 21 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(0, 0))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Sweet Potatoes',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(t0 - (42 * $author$project$PlantCalendar$d), 14 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(t0 - (21 * $author$project$PlantCalendar$d), 14 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(0, 0))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Swiss Chard',
+			selected: true
+		},
+			{
+			category: 'Herbs',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(t0 - (70 * $author$project$PlantCalendar$d), 28 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(t0, 21 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(0, 0))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Thyme',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(t0 - (57 * $author$project$PlantCalendar$d), 15 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(t0 + (7 * $author$project$PlantCalendar$d), 21 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(0, 0))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Tomatoes',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(99, 99),
+					_Utils_Tuple2(t0 - (28 * $author$project$PlantCalendar$d), 21 * $author$project$PlantCalendar$d))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Turnips',
+			selected: true
+		},
+			{
+			category: 'Vegetables',
+			defaultPeriods: _List_fromArray(
+				[
+					_Utils_Tuple3(
+					_Utils_Tuple2(t0 - (28 * $author$project$PlantCalendar$d), 7 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(t0 + (14 * $author$project$PlantCalendar$d), 21 * $author$project$PlantCalendar$d),
+					_Utils_Tuple2(0, 0))
+				]),
+			disabled: false,
+			maxzone: 11.5,
+			minzone: 1.0,
+			name: 'Watermelon',
+			selected: true
+		}
+		]);
+};
 var $author$project$PlantCalendar$init = function (_v0) {
 	return _Utils_Tuple2(
-		A4($author$project$PlantCalendar$Model, $author$project$PlantCalendar$Unset, '', $author$project$PlantCalendar$plantData, ''),
+		A5(
+			$author$project$PlantCalendar$Model,
+			$author$project$PlantCalendar$Unset,
+			'',
+			$author$project$PlantCalendar$plantData(120),
+			'',
+			'ABC'),
 		$elm$core$Platform$Cmd$none);
 };
 var $elm$core$Platform$Sub$batch = _Platform_batch;
@@ -5612,23 +5919,18 @@ var $author$project$PlantCalendar$subscriptions = function (_v0) {
 	return $elm$core$Platform$Sub$batch(_List_Nil);
 };
 var $author$project$PlantCalendar$Failure = {$: 'Failure'};
-var $author$project$PlantCalendar$GotZipcode = function (a) {
-	return {$: 'GotZipcode', a: a};
-};
+var $author$project$PlantCalendar$GotResults = F2(
+	function (a, b) {
+		return {$: 'GotResults', a: a, b: b};
+	});
 var $author$project$PlantCalendar$Loading = {$: 'Loading'};
 var $author$project$PlantCalendar$Success = function (a) {
 	return {$: 'Success', a: a};
 };
-var $elm$core$Basics$ge = _Utils_ge;
-var $author$project$PlantCalendar$enablePlants = F2(
-	function (zone, plant) {
-		return ((_Utils_cmp(plant.minzone, zone) < 1) && (_Utils_cmp(plant.maxzone, zone) > -1)) ? _Utils_update(
-			plant,
-			{disabled: false}) : _Utils_update(
-			plant,
-			{disabled: true});
+var $author$project$PlantCalendar$Zipcode = F8(
+	function (zipcode, zone, coordinates, temp_range, avg_winter_temp, min_winter_temp, springFrost, winterFrost) {
+		return {avg_winter_temp: avg_winter_temp, coordinates: coordinates, min_winter_temp: min_winter_temp, springFrost: springFrost, temp_range: temp_range, winterFrost: winterFrost, zipcode: zipcode, zone: zone};
 	});
-var $elm$json$Json$Decode$decodeString = _Json_runOnString;
 var $elm$http$Http$BadStatus_ = F2(
 	function (a, b) {
 		return {$: 'BadStatus_', a: a, b: b};
@@ -6171,6 +6473,17 @@ var $elm$core$Dict$update = F3(
 			return A2($elm$core$Dict$remove, targetKey, dictionary);
 		}
 	});
+var $elm$http$Http$emptyBody = _Http_emptyBody;
+var $elm$core$Basics$ge = _Utils_ge;
+var $author$project$PlantCalendar$enablePlants = F2(
+	function (zone, plant) {
+		return ((_Utils_cmp(plant.minzone, zone) < 1) && (_Utils_cmp(plant.maxzone, zone) > -1)) ? _Utils_update(
+			plant,
+			{disabled: false}) : _Utils_update(
+			plant,
+			{disabled: true});
+	});
+var $elm$json$Json$Decode$decodeString = _Json_runOnString;
 var $elm$core$Basics$composeR = F3(
 	function (f, g, x) {
 		return g(
@@ -6242,7 +6555,121 @@ var $elm$http$Http$expectJson = F2(
 						A2($elm$json$Json$Decode$decodeString, decoder, string));
 				}));
 	});
-var $elm$http$Http$emptyBody = _Http_emptyBody;
+var $elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			$elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
+	});
+var $elm$core$List$sum = function (numbers) {
+	return A3($elm$core$List$foldl, $elm$core$Basics$add, 0, numbers);
+};
+var $author$project$PlantCalendar$getAvg = F2(
+	function (key, list) {
+		var flist = A2(
+			$elm$core$List$filter,
+			A2(
+				$elm$core$Basics$composeR,
+				function ($) {
+					return $.datatype;
+				},
+				$elm$core$Basics$eq(key)),
+			list);
+		return $elm$core$List$sum(
+			A2(
+				$elm$core$List$map,
+				function ($) {
+					return $.value;
+				},
+				flist)) / $elm$core$List$length(flist);
+	});
+var $author$project$PlantCalendar$getZoneFloat = function (z) {
+	if (z.$ === 'Success') {
+		var y = z.a;
+		var _v1 = y.zone;
+		switch (_v1) {
+			case '1a':
+				return 1.0;
+			case '1b':
+				return 1.5;
+			case '2a':
+				return 2.0;
+			case '2b':
+				return 2.5;
+			case '3a':
+				return 3.0;
+			case '3b':
+				return 3.5;
+			case '4a':
+				return 4.0;
+			case '4b':
+				return 4.5;
+			case '5a':
+				return 5.0;
+			case '5b':
+				return 5.5;
+			case '6a':
+				return 6.0;
+			case '6b':
+				return 6.5;
+			case '7a':
+				return 7.0;
+			case '7b':
+				return 7.5;
+			case '8a':
+				return 8.0;
+			case '8b':
+				return 8.5;
+			case '9a':
+				return 9.0;
+			case '9b':
+				return 9.5;
+			case '10a':
+				return 10.0;
+			case '10b':
+				return 10.5;
+			default:
+				return 6.0;
+		}
+	} else {
+		return 6.0;
+	}
+};
+var $elm$http$Http$Header = F2(
+	function (a, b) {
+		return {$: 'Header', a: a, b: b};
+	});
+var $elm$http$Http$header = $elm$http$Http$Header;
+var $author$project$PlantCalendar$JsonResult = F5(
+	function (date, datatype, station, attributes, value) {
+		return {attributes: attributes, datatype: datatype, date: date, station: station, value: value};
+	});
+var $elm$json$Json$Decode$field = _Json_decodeField;
+var $elm$json$Json$Decode$int = _Json_decodeInt;
+var $elm$json$Json$Decode$map5 = _Json_map5;
+var $elm$json$Json$Decode$string = _Json_decodeString;
+var $author$project$PlantCalendar$decodeJsonResult = A6(
+	$elm$json$Json$Decode$map5,
+	$author$project$PlantCalendar$JsonResult,
+	A2($elm$json$Json$Decode$field, 'date', $elm$json$Json$Decode$string),
+	A2($elm$json$Json$Decode$field, 'datatype', $elm$json$Json$Decode$string),
+	A2($elm$json$Json$Decode$field, 'station', $elm$json$Json$Decode$string),
+	A2($elm$json$Json$Decode$field, 'attributes', $elm$json$Json$Decode$string),
+	A2($elm$json$Json$Decode$field, 'value', $elm$json$Json$Decode$int));
+var $elm$json$Json$Decode$list = _Json_decodeList;
+var $author$project$PlantCalendar$jsonDecoder = A2(
+	$elm$json$Json$Decode$field,
+	'results',
+	$elm$json$Json$Decode$list($author$project$PlantCalendar$decodeJsonResult));
+var $elm$core$Debug$log = _Debug_log;
+var $elm$core$Basics$negate = function (n) {
+	return -n;
+};
 var $elm$http$Http$Request = function (a) {
 	return {$: 'Request', a: a};
 };
@@ -6411,88 +6838,21 @@ var $elm$http$Http$request = function (r) {
 		$elm$http$Http$Request(
 			{allowCookiesFromOtherDomains: false, body: r.body, expect: r.expect, headers: r.headers, method: r.method, timeout: r.timeout, tracker: r.tracker, url: r.url}));
 };
-var $elm$http$Http$get = function (r) {
-	return $elm$http$Http$request(
-		{body: $elm$http$Http$emptyBody, expect: r.expect, headers: _List_Nil, method: 'GET', timeout: $elm$core$Maybe$Nothing, tracker: $elm$core$Maybe$Nothing, url: r.url});
-};
-var $author$project$PlantCalendar$getZoneFloat = function (z) {
-	if (z.$ === 'Success') {
-		var y = z.a;
-		var _v1 = y.zone;
-		switch (_v1) {
-			case '1a':
-				return 1.0;
-			case '1b':
-				return 1.5;
-			case '2a':
-				return 2.0;
-			case '2b':
-				return 2.5;
-			case '3a':
-				return 3.0;
-			case '3b':
-				return 3.5;
-			case '4a':
-				return 4.0;
-			case '4b':
-				return 4.5;
-			case '5a':
-				return 5.0;
-			case '5b':
-				return 5.5;
-			case '6a':
-				return 6.0;
-			case '6b':
-				return 6.5;
-			case '7a':
-				return 7.0;
-			case '7b':
-				return 7.5;
-			case '8a':
-				return 8.0;
-			case '8b':
-				return 8.5;
-			case '9a':
-				return 9.0;
-			case '9b':
-				return 9.5;
-			case '10a':
-				return 10.0;
-			case '10b':
-				return 10.5;
-			default:
-				return 6.0;
-		}
+var $elm$core$Basics$round = _Basics_round;
+var $author$project$PlantCalendar$tempToZone = function (t) {
+	if (_Utils_cmp(t, -60) < 1) {
+		return '1a';
 	} else {
-		return 6.0;
+		if (t > 70) {
+			return '13b';
+		} else {
+			var t1 = t + 70;
+			var t2 = $elm$core$Basics$floor(t1 / 10.0);
+			return _Utils_ap(
+				$elm$core$String$fromInt(t2),
+				((t1 - (t2 * 10)) > 5.0) ? 'b' : 'a');
+		}
 	}
-};
-var $author$project$PlantCalendar$Zipcode = F4(
-	function (zipcode, zone, coordinates, temp_range) {
-		return {coordinates: coordinates, temp_range: temp_range, zipcode: zipcode, zone: zone};
-	});
-var $elm$json$Json$Decode$field = _Json_decodeField;
-var $elm$json$Json$Decode$float = _Json_decodeFloat;
-var $elm$json$Json$Decode$map3 = _Json_map3;
-var $elm$core$Tuple$pair = F2(
-	function (a, b) {
-		return _Utils_Tuple2(a, b);
-	});
-var $elm$json$Json$Decode$string = _Json_decodeString;
-var $author$project$PlantCalendar$jsonDecoder = function (s) {
-	return A4(
-		$elm$json$Json$Decode$map3,
-		$author$project$PlantCalendar$Zipcode(s),
-		A2($elm$json$Json$Decode$field, 'zone', $elm$json$Json$Decode$string),
-		A2(
-			$elm$json$Json$Decode$field,
-			'coordinates',
-			A3(
-				$elm$json$Json$Decode$map2,
-				$elm$core$Tuple$pair,
-				A2($elm$json$Json$Decode$field, 'lat', $elm$json$Json$Decode$float),
-				A2($elm$json$Json$Decode$field, 'lon', $elm$json$Json$Decode$float))),
-		A2($elm$json$Json$Decode$field, 'temperature_range', $elm$json$Json$Decode$string));
 };
 var $elm$core$Basics$not = _Basics_not;
 var $author$project$PlantCalendar$togglePlant = F2(
@@ -6517,13 +6877,21 @@ var $author$project$PlantCalendar$update = F2(
 					_Utils_update(
 						model,
 						{zipcode: newZipcode, zipcodetext: ''}),
-					$elm$http$Http$get(
+					$elm$http$Http$request(
 						{
+							body: $elm$http$Http$emptyBody,
 							expect: A2(
 								$elm$http$Http$expectJson,
-								$author$project$PlantCalendar$GotZipcode,
-								$author$project$PlantCalendar$jsonDecoder(searchZip)),
-							url: 'https://phzmapi.org/' + (searchZip + '.json')
+								$author$project$PlantCalendar$GotResults(searchZip),
+								$author$project$PlantCalendar$jsonDecoder),
+							headers: _List_fromArray(
+								[
+									A2($elm$http$Http$header, 'token', 'QfybOgccYhGagMFVZkpHaeIzeYIhyPvu')
+								]),
+							method: 'GET',
+							timeout: $elm$core$Maybe$Just(5000),
+							tracker: $elm$core$Maybe$Nothing,
+							url: 'https://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=NORMAL_ANN&datatypeid=ANN-TMIN-PRBLST-T28FP30&datatypeid=DJF-TMIN-NORMAL&datatypeid=ANN-TMIN-PRBFST-T28FP30&startdate=2010-01-01&enddate=2010-01-01&locationid=ZIP:' + searchZip
 						}));
 			case 'SetZipcodeText':
 				var str = msg.a;
@@ -6557,6 +6925,49 @@ var $author$project$PlantCalendar$update = F2(
 							{zipcode: $author$project$PlantCalendar$Failure}),
 						$elm$core$Platform$Cmd$none);
 				}
+			case 'GotResults':
+				var searchZip = msg.a;
+				var results = msg.b;
+				if (results.$ === 'Ok') {
+					var rs = results.a;
+					var winterFrostDay = $elm$core$Basics$round(
+						A2($author$project$PlantCalendar$getAvg, 'ANN-TMIN-PRBFST-T28FP30', rs));
+					var springFrostDay = $elm$core$Basics$round(
+						A2($author$project$PlantCalendar$getAvg, 'ANN-TMIN-PRBLST-T28FP30', rs));
+					var minWinterTemp = 0;
+					var avgWinterTemp = A2($author$project$PlantCalendar$getAvg, 'DJF-TMIN-NORMAL', rs) / 10.0;
+					var z = A8(
+						$author$project$PlantCalendar$Zipcode,
+						searchZip,
+						$author$project$PlantCalendar$tempToZone(minWinterTemp),
+						_Utils_Tuple2(-4, 4),
+						'',
+						minWinterTemp,
+						avgWinterTemp,
+						springFrostDay,
+						winterFrostDay);
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								plants: A2(
+									$elm$core$List$map,
+									$author$project$PlantCalendar$enablePlants(
+										$author$project$PlantCalendar$getZoneFloat(
+											$author$project$PlantCalendar$Success(z))),
+									model.plants),
+								zipcode: $author$project$PlantCalendar$Success(z),
+								zipcodetext: ''
+							}),
+						$elm$core$Platform$Cmd$none);
+				} else {
+					var dummy = A2($elm$core$Debug$log, 'JSON:', results);
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{zipcode: $author$project$PlantCalendar$Failure}),
+						$elm$core$Platform$Cmd$none);
+				}
 			case 'TogglePlant':
 				var plant = msg.a;
 				var newPlants = A2(
@@ -6577,13 +6988,21 @@ var $author$project$PlantCalendar$update = F2(
 							filter: $elm$core$String$trim(string)
 						}),
 					$elm$core$Platform$Cmd$none);
-			default:
+			case 'ClearAll':
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
 							plants: A2($elm$core$List$map, $author$project$PlantCalendar$unselect, model.plants),
 							zipcode: $author$project$PlantCalendar$Unset
+						}),
+					$elm$core$Platform$Cmd$none);
+			default:
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							sortMode: (model.sortMode === 'ABC') ? 'Date' : 'ABC'
 						}),
 					$elm$core$Platform$Cmd$none);
 		}
@@ -6596,6 +7015,7 @@ var $author$project$PlantCalendar$SetZipcode = {$: 'SetZipcode'};
 var $author$project$PlantCalendar$SetZipcodeText = function (a) {
 	return {$: 'SetZipcodeText', a: a};
 };
+var $author$project$PlantCalendar$ToggleSort = {$: 'ToggleSort'};
 var $elm$html$Html$a = _VirtualDom_node('a');
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$json$Json$Encode$string = _Json_wrap;
@@ -6620,23 +7040,9 @@ var $elm$core$List$concat = function (lists) {
 	return A3($elm$core$List$foldr, $elm$core$List$append, _List_Nil, lists);
 };
 var $elm$svg$Svg$Attributes$fill = _VirtualDom_attribute('fill');
-var $elm$core$Basics$negate = function (n) {
-	return -n;
-};
-var $author$project$PlantCalendar$getZoneOffset = F2(
-	function (zone, cycle) {
-		switch (zone) {
-			case 7:
-				return (cycle === 1) ? (-3.5617) : 3.5617;
-			case 6:
-				return 0;
-			case 5:
-				return (cycle === 1) ? 4.931 : (-4.931);
-			case 4:
-				return (cycle === 1) ? 8.493 : (-8.493);
-			default:
-				return -1;
-		}
+var $author$project$PlantCalendar$getFrostOffset = F3(
+	function (sfday, wfday, cycle) {
+		return (sfday < 0) ? 0 : ((sfday - 120.0) / 3.65);
 	});
 var $elm$svg$Svg$Attributes$height = _VirtualDom_attribute('height');
 var $elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
@@ -6654,16 +7060,18 @@ var $elm$svg$Svg$Attributes$width = _VirtualDom_attribute('width');
 var $elm$svg$Svg$Attributes$x = _VirtualDom_attribute('x');
 var $elm$svg$Svg$Attributes$y = _VirtualDom_attribute('y');
 var $author$project$PlantCalendar$drawCycle = F4(
-	function (y0, zone, cycle, _v0) {
-		var _v1 = _v0.a;
-		var ss = _v1.a;
-		var sf = _v1.b;
-		var _v2 = _v0.b;
-		var ps = _v2.a;
-		var pf = _v2.b;
-		var _v3 = _v0.c;
-		var hs = _v3.a;
-		var hf = _v3.b;
+	function (y0, _v0, cycle, _v1) {
+		var sf = _v0.a;
+		var wf = _v0.b;
+		var _v2 = _v1.a;
+		var ss = _v2.a;
+		var sw = _v2.b;
+		var _v3 = _v1.b;
+		var ps = _v3.a;
+		var pw = _v3.b;
+		var _v4 = _v1.c;
+		var hs = _v4.a;
+		var hw = _v4.b;
 		return _List_fromArray(
 			[
 				A2(
@@ -6674,11 +7082,11 @@ var $author$project$PlantCalendar$drawCycle = F4(
 						A2(
 							$author$project$PlantCalendar$toPercentOffset,
 							ss,
-							A2($author$project$PlantCalendar$getZoneOffset, zone, cycle))),
+							A3($author$project$PlantCalendar$getFrostOffset, sf, wf, cycle))),
 						$elm$svg$Svg$Attributes$y(
-						$elm$core$String$fromInt(y0 - 23)),
+						$elm$core$String$fromInt(y0 - 7)),
 						$elm$svg$Svg$Attributes$width(
-						$author$project$PlantCalendar$toPercent(sf - ss)),
+						$author$project$PlantCalendar$toPercent(sw)),
 						$elm$svg$Svg$Attributes$height('13'),
 						$elm$svg$Svg$Attributes$stroke('#77734f'),
 						$elm$svg$Svg$Attributes$fill('rgba(209, 193, 42, .7)')
@@ -6692,11 +7100,11 @@ var $author$project$PlantCalendar$drawCycle = F4(
 						A2(
 							$author$project$PlantCalendar$toPercentOffset,
 							ps,
-							A2($author$project$PlantCalendar$getZoneOffset, zone, cycle))),
+							A3($author$project$PlantCalendar$getFrostOffset, sf, wf, cycle))),
 						$elm$svg$Svg$Attributes$y(
 						$elm$core$String$fromInt(y0 - 7)),
 						$elm$svg$Svg$Attributes$width(
-						$author$project$PlantCalendar$toPercent(pf - ps)),
+						$author$project$PlantCalendar$toPercent(pw)),
 						$elm$svg$Svg$Attributes$height('13'),
 						$elm$svg$Svg$Attributes$stroke('#517f6c'),
 						$elm$svg$Svg$Attributes$fill('rgba(56, 165, 116, .7)')
@@ -6710,11 +7118,11 @@ var $author$project$PlantCalendar$drawCycle = F4(
 						A2(
 							$author$project$PlantCalendar$toPercentOffset,
 							hs,
-							A2($author$project$PlantCalendar$getZoneOffset, zone, cycle))),
+							A3($author$project$PlantCalendar$getFrostOffset, sf, wf, cycle))),
 						$elm$svg$Svg$Attributes$y(
-						$elm$core$String$fromInt(y0 + 9)),
+						$elm$core$String$fromInt(y0 - 7)),
 						$elm$svg$Svg$Attributes$width(
-						$author$project$PlantCalendar$toPercent(hf - hs)),
+						$author$project$PlantCalendar$toPercent(hw)),
 						$elm$svg$Svg$Attributes$height('13'),
 						$elm$svg$Svg$Attributes$stroke('#7c6650'),
 						$elm$svg$Svg$Attributes$fill('rgba(211, 122, 41, .7)')
@@ -6732,7 +7140,9 @@ var $elm$svg$Svg$Attributes$x2 = _VirtualDom_attribute('x2');
 var $elm$svg$Svg$Attributes$y1 = _VirtualDom_attribute('y1');
 var $elm$svg$Svg$Attributes$y2 = _VirtualDom_attribute('y2');
 var $author$project$PlantCalendar$drawRow = F3(
-	function (zone, index, plant) {
+	function (_v0, index, plant) {
+		var sf = _v0.a;
+		var wf = _v0.b;
 		var y0 = (66 * (index + 1)) + 105;
 		return A2(
 			$elm$core$List$append,
@@ -6746,8 +7156,8 @@ var $author$project$PlantCalendar$drawRow = F3(
 							$elm$core$String$fromInt(y0 - 14)),
 							$elm$svg$Svg$Attributes$y2(
 							$elm$core$String$fromInt(y0 + 14)),
-							$elm$svg$Svg$Attributes$x1('28%'),
-							$elm$svg$Svg$Attributes$x2('28%')
+							$elm$svg$Svg$Attributes$x1('28.00%'),
+							$elm$svg$Svg$Attributes$x2('28.00%')
 						]),
 					_List_Nil),
 					A2(
@@ -6758,8 +7168,8 @@ var $author$project$PlantCalendar$drawRow = F3(
 							$elm$core$String$fromInt(y0 - 14)),
 							$elm$svg$Svg$Attributes$y2(
 							$elm$core$String$fromInt(y0 + 14)),
-							$elm$svg$Svg$Attributes$x1('34%'),
-							$elm$svg$Svg$Attributes$x2('34%')
+							$elm$svg$Svg$Attributes$x1('34.31%'),
+							$elm$svg$Svg$Attributes$x2('34.31%')
 						]),
 					_List_Nil),
 					A2(
@@ -6770,8 +7180,8 @@ var $author$project$PlantCalendar$drawRow = F3(
 							$elm$core$String$fromInt(y0 - 14)),
 							$elm$svg$Svg$Attributes$y2(
 							$elm$core$String$fromInt(y0 + 14)),
-							$elm$svg$Svg$Attributes$x1('40%'),
-							$elm$svg$Svg$Attributes$x2('40%')
+							$elm$svg$Svg$Attributes$x1('39.84%'),
+							$elm$svg$Svg$Attributes$x2('39.84%')
 						]),
 					_List_Nil),
 					A2(
@@ -6782,8 +7192,8 @@ var $author$project$PlantCalendar$drawRow = F3(
 							$elm$core$String$fromInt(y0 - 14)),
 							$elm$svg$Svg$Attributes$y2(
 							$elm$core$String$fromInt(y0 + 14)),
-							$elm$svg$Svg$Attributes$x1('46%'),
-							$elm$svg$Svg$Attributes$x2('46%')
+							$elm$svg$Svg$Attributes$x1('45.95%'),
+							$elm$svg$Svg$Attributes$x2('45.95%')
 						]),
 					_List_Nil),
 					A2(
@@ -6794,8 +7204,8 @@ var $author$project$PlantCalendar$drawRow = F3(
 							$elm$core$String$fromInt(y0 - 14)),
 							$elm$svg$Svg$Attributes$y2(
 							$elm$core$String$fromInt(y0 + 14)),
-							$elm$svg$Svg$Attributes$x1('52%'),
-							$elm$svg$Svg$Attributes$x2('52%')
+							$elm$svg$Svg$Attributes$x1('51.87%'),
+							$elm$svg$Svg$Attributes$x2('51.87%')
 						]),
 					_List_Nil),
 					A2(
@@ -6806,8 +7216,8 @@ var $author$project$PlantCalendar$drawRow = F3(
 							$elm$core$String$fromInt(y0 - 14)),
 							$elm$svg$Svg$Attributes$y2(
 							$elm$core$String$fromInt(y0 + 14)),
-							$elm$svg$Svg$Attributes$x1('58%'),
-							$elm$svg$Svg$Attributes$x2('58%')
+							$elm$svg$Svg$Attributes$x1('57.98%'),
+							$elm$svg$Svg$Attributes$x2('57.98%')
 						]),
 					_List_Nil),
 					A2(
@@ -6818,8 +7228,8 @@ var $author$project$PlantCalendar$drawRow = F3(
 							$elm$core$String$fromInt(y0 - 14)),
 							$elm$svg$Svg$Attributes$y2(
 							$elm$core$String$fromInt(y0 + 14)),
-							$elm$svg$Svg$Attributes$x1('64%'),
-							$elm$svg$Svg$Attributes$x2('64%')
+							$elm$svg$Svg$Attributes$x1('63.90%'),
+							$elm$svg$Svg$Attributes$x2('63.90%')
 						]),
 					_List_Nil),
 					A2(
@@ -6830,8 +7240,8 @@ var $author$project$PlantCalendar$drawRow = F3(
 							$elm$core$String$fromInt(y0 - 14)),
 							$elm$svg$Svg$Attributes$y2(
 							$elm$core$String$fromInt(y0 + 14)),
-							$elm$svg$Svg$Attributes$x1('70%'),
-							$elm$svg$Svg$Attributes$x2('70%')
+							$elm$svg$Svg$Attributes$x1('70.02%'),
+							$elm$svg$Svg$Attributes$x2('70.02%')
 						]),
 					_List_Nil),
 					A2(
@@ -6842,8 +7252,8 @@ var $author$project$PlantCalendar$drawRow = F3(
 							$elm$core$String$fromInt(y0 - 14)),
 							$elm$svg$Svg$Attributes$y2(
 							$elm$core$String$fromInt(y0 + 14)),
-							$elm$svg$Svg$Attributes$x1('76%'),
-							$elm$svg$Svg$Attributes$x2('76%')
+							$elm$svg$Svg$Attributes$x1('76.13%'),
+							$elm$svg$Svg$Attributes$x2('76.13%')
 						]),
 					_List_Nil),
 					A2(
@@ -6854,8 +7264,8 @@ var $author$project$PlantCalendar$drawRow = F3(
 							$elm$core$String$fromInt(y0 - 14)),
 							$elm$svg$Svg$Attributes$y2(
 							$elm$core$String$fromInt(y0 + 14)),
-							$elm$svg$Svg$Attributes$x1('82%'),
-							$elm$svg$Svg$Attributes$x2('82%')
+							$elm$svg$Svg$Attributes$x1('82.05%'),
+							$elm$svg$Svg$Attributes$x2('82.05%')
 						]),
 					_List_Nil),
 					A2(
@@ -6866,8 +7276,8 @@ var $author$project$PlantCalendar$drawRow = F3(
 							$elm$core$String$fromInt(y0 - 14)),
 							$elm$svg$Svg$Attributes$y2(
 							$elm$core$String$fromInt(y0 + 14)),
-							$elm$svg$Svg$Attributes$x1('88%'),
-							$elm$svg$Svg$Attributes$x2('88%')
+							$elm$svg$Svg$Attributes$x1('88.16%'),
+							$elm$svg$Svg$Attributes$x2('88.16%')
 						]),
 					_List_Nil),
 					A2(
@@ -6878,8 +7288,8 @@ var $author$project$PlantCalendar$drawRow = F3(
 							$elm$core$String$fromInt(y0 - 14)),
 							$elm$svg$Svg$Attributes$y2(
 							$elm$core$String$fromInt(y0 + 14)),
-							$elm$svg$Svg$Attributes$x1('94%'),
-							$elm$svg$Svg$Attributes$x2('94%')
+							$elm$svg$Svg$Attributes$x1('94.08%'),
+							$elm$svg$Svg$Attributes$x2('94.08%')
 						]),
 					_List_Nil),
 					A2(
@@ -6923,13 +7333,18 @@ var $author$project$PlantCalendar$drawRow = F3(
 			$elm$core$List$concat(
 				A2(
 					$elm$core$List$indexedMap,
-					A2($author$project$PlantCalendar$drawCycle, y0, zone),
+					A2(
+						$author$project$PlantCalendar$drawCycle,
+						y0,
+						_Utils_Tuple2(sf, wf)),
 					plant.defaultPeriods)));
 	});
 var $elm$svg$Svg$Attributes$shapeRendering = _VirtualDom_attribute('shape-rendering');
 var $elm$svg$Svg$svg = $elm$svg$Svg$trustedNode('svg');
 var $author$project$PlantCalendar$drawSVG = F2(
-	function (zone, plants) {
+	function (_v0, plants) {
+		var sf = _v0.a;
+		var wf = _v0.b;
 		return A2(
 			$elm$svg$Svg$svg,
 			_List_fromArray(
@@ -6947,8 +7362,34 @@ var $author$project$PlantCalendar$drawSVG = F2(
 						$elm$svg$Svg$rect,
 						_List_fromArray(
 							[
-								$elm$svg$Svg$Attributes$x('22.5%'),
-								$elm$svg$Svg$Attributes$y('0'),
+								$elm$svg$Svg$Attributes$x('28%'),
+								$elm$svg$Svg$Attributes$y('115'),
+								$elm$svg$Svg$Attributes$width(
+								$author$project$PlantCalendar$toPercent(sf / 365.0)),
+								$elm$svg$Svg$Attributes$height('100%'),
+								$elm$svg$Svg$Attributes$stroke('none'),
+								$elm$svg$Svg$Attributes$fill('rgba(30, 60, 150, .045)')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$rect,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$x(
+								A2($author$project$PlantCalendar$toPercentOffset, wf / 365.0, 0)),
+								$elm$svg$Svg$Attributes$y('115'),
+								$elm$svg$Svg$Attributes$width('100%'),
+								$elm$svg$Svg$Attributes$height('100%'),
+								$elm$svg$Svg$Attributes$stroke('none'),
+								$elm$svg$Svg$Attributes$fill('rgba(30, 60, 150, .045)')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$rect,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$x('17.5%'),
+								$elm$svg$Svg$Attributes$y('12'),
 								$elm$svg$Svg$Attributes$width('5%'),
 								$elm$svg$Svg$Attributes$height('14'),
 								$elm$svg$Svg$Attributes$stroke('#77734f'),
@@ -6959,8 +7400,8 @@ var $author$project$PlantCalendar$drawSVG = F2(
 						$elm$svg$Svg$text_,
 						_List_fromArray(
 							[
-								$elm$svg$Svg$Attributes$y('25'),
-								$elm$svg$Svg$Attributes$x('25%'),
+								$elm$svg$Svg$Attributes$y('28'),
+								$elm$svg$Svg$Attributes$x('20%'),
 								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0vw;')
 							]),
 						_List_fromArray(
@@ -6971,8 +7412,8 @@ var $author$project$PlantCalendar$drawSVG = F2(
 						$elm$svg$Svg$rect,
 						_List_fromArray(
 							[
-								$elm$svg$Svg$Attributes$x('47.5%'),
-								$elm$svg$Svg$Attributes$y('0'),
+								$elm$svg$Svg$Attributes$x('37.5%'),
+								$elm$svg$Svg$Attributes$y('12'),
 								$elm$svg$Svg$Attributes$width('5%'),
 								$elm$svg$Svg$Attributes$height('14'),
 								$elm$svg$Svg$Attributes$stroke('#517f6c'),
@@ -6983,20 +7424,20 @@ var $author$project$PlantCalendar$drawSVG = F2(
 						$elm$svg$Svg$text_,
 						_List_fromArray(
 							[
-								$elm$svg$Svg$Attributes$y('25'),
-								$elm$svg$Svg$Attributes$x('50%'),
+								$elm$svg$Svg$Attributes$y('28'),
+								$elm$svg$Svg$Attributes$x('40%'),
 								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0vw;')
 							]),
 						_List_fromArray(
 							[
-								$elm$svg$Svg$text('Transplant / plant outdoors')
+								$elm$svg$Svg$text('Transplant seedlings')
 							])),
 						A2(
 						$elm$svg$Svg$rect,
 						_List_fromArray(
 							[
-								$elm$svg$Svg$Attributes$x('72.5%'),
-								$elm$svg$Svg$Attributes$y('0'),
+								$elm$svg$Svg$Attributes$x('57.5%'),
+								$elm$svg$Svg$Attributes$y('12'),
 								$elm$svg$Svg$Attributes$width('5%'),
 								$elm$svg$Svg$Attributes$height('14'),
 								$elm$svg$Svg$Attributes$stroke('#7c6650'),
@@ -7007,20 +7448,44 @@ var $author$project$PlantCalendar$drawSVG = F2(
 						$elm$svg$Svg$text_,
 						_List_fromArray(
 							[
-								$elm$svg$Svg$Attributes$y('25'),
-								$elm$svg$Svg$Attributes$x('75%'),
+								$elm$svg$Svg$Attributes$y('28'),
+								$elm$svg$Svg$Attributes$x('60%'),
 								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0vw;')
 							]),
 						_List_fromArray(
 							[
-								$elm$svg$Svg$text('Harvest')
+								$elm$svg$Svg$text('Plant outdoors')
+							])),
+						A2(
+						$elm$svg$Svg$rect,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$x('77.5%'),
+								$elm$svg$Svg$Attributes$y('12'),
+								$elm$svg$Svg$Attributes$width('5%'),
+								$elm$svg$Svg$Attributes$height('14'),
+								$elm$svg$Svg$Attributes$stroke('none'),
+								$elm$svg$Svg$Attributes$fill('rgba(30, 60, 150, .045)')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$text_,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y('28'),
+								$elm$svg$Svg$Attributes$x('80%'),
+								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0vw;')
+							]),
+						_List_fromArray(
+							[
+								$elm$svg$Svg$text('Frost danger')
 							])),
 						A2(
 						$elm$svg$Svg$text_,
 						_List_fromArray(
 							[
 								$elm$svg$Svg$Attributes$y('105'),
-								$elm$svg$Svg$Attributes$x('28%'),
+								$elm$svg$Svg$Attributes$x('28.00%'),
 								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 							]),
 						_List_fromArray(
@@ -7032,7 +7497,7 @@ var $author$project$PlantCalendar$drawSVG = F2(
 						_List_fromArray(
 							[
 								$elm$svg$Svg$Attributes$y('105'),
-								$elm$svg$Svg$Attributes$x('34%'),
+								$elm$svg$Svg$Attributes$x('34.31%'),
 								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 							]),
 						_List_fromArray(
@@ -7044,7 +7509,7 @@ var $author$project$PlantCalendar$drawSVG = F2(
 						_List_fromArray(
 							[
 								$elm$svg$Svg$Attributes$y('105'),
-								$elm$svg$Svg$Attributes$x('40%'),
+								$elm$svg$Svg$Attributes$x('39.84%'),
 								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 							]),
 						_List_fromArray(
@@ -7056,7 +7521,7 @@ var $author$project$PlantCalendar$drawSVG = F2(
 						_List_fromArray(
 							[
 								$elm$svg$Svg$Attributes$y('105'),
-								$elm$svg$Svg$Attributes$x('46%'),
+								$elm$svg$Svg$Attributes$x('45.95%'),
 								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 							]),
 						_List_fromArray(
@@ -7068,7 +7533,7 @@ var $author$project$PlantCalendar$drawSVG = F2(
 						_List_fromArray(
 							[
 								$elm$svg$Svg$Attributes$y('105'),
-								$elm$svg$Svg$Attributes$x('52%'),
+								$elm$svg$Svg$Attributes$x('51.87%'),
 								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 							]),
 						_List_fromArray(
@@ -7080,7 +7545,7 @@ var $author$project$PlantCalendar$drawSVG = F2(
 						_List_fromArray(
 							[
 								$elm$svg$Svg$Attributes$y('105'),
-								$elm$svg$Svg$Attributes$x('58%'),
+								$elm$svg$Svg$Attributes$x('57.98%'),
 								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 							]),
 						_List_fromArray(
@@ -7092,7 +7557,7 @@ var $author$project$PlantCalendar$drawSVG = F2(
 						_List_fromArray(
 							[
 								$elm$svg$Svg$Attributes$y('105'),
-								$elm$svg$Svg$Attributes$x('64%'),
+								$elm$svg$Svg$Attributes$x('63.90%'),
 								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 							]),
 						_List_fromArray(
@@ -7104,7 +7569,7 @@ var $author$project$PlantCalendar$drawSVG = F2(
 						_List_fromArray(
 							[
 								$elm$svg$Svg$Attributes$y('105'),
-								$elm$svg$Svg$Attributes$x('70%'),
+								$elm$svg$Svg$Attributes$x('70.02%'),
 								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 							]),
 						_List_fromArray(
@@ -7116,7 +7581,7 @@ var $author$project$PlantCalendar$drawSVG = F2(
 						_List_fromArray(
 							[
 								$elm$svg$Svg$Attributes$y('105'),
-								$elm$svg$Svg$Attributes$x('76%'),
+								$elm$svg$Svg$Attributes$x('76.13%'),
 								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 							]),
 						_List_fromArray(
@@ -7128,7 +7593,7 @@ var $author$project$PlantCalendar$drawSVG = F2(
 						_List_fromArray(
 							[
 								$elm$svg$Svg$Attributes$y('105'),
-								$elm$svg$Svg$Attributes$x('82%'),
+								$elm$svg$Svg$Attributes$x('82.05%'),
 								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 							]),
 						_List_fromArray(
@@ -7140,7 +7605,7 @@ var $author$project$PlantCalendar$drawSVG = F2(
 						_List_fromArray(
 							[
 								$elm$svg$Svg$Attributes$y('105'),
-								$elm$svg$Svg$Attributes$x('88%'),
+								$elm$svg$Svg$Attributes$x('88.16%'),
 								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 							]),
 						_List_fromArray(
@@ -7152,7 +7617,7 @@ var $author$project$PlantCalendar$drawSVG = F2(
 						_List_fromArray(
 							[
 								$elm$svg$Svg$Attributes$y('105'),
-								$elm$svg$Svg$Attributes$x('94%'),
+								$elm$svg$Svg$Attributes$x('94.08%'),
 								$elm$svg$Svg$Attributes$style('fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;')
 							]),
 						_List_fromArray(
@@ -7165,140 +7630,140 @@ var $author$project$PlantCalendar$drawSVG = F2(
 							[
 								$elm$svg$Svg$Attributes$y2('100%'),
 								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('28.00%'),
+								$elm$svg$Svg$Attributes$x1('28.00%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('34.31%'),
+								$elm$svg$Svg$Attributes$x1('34.31%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('39.84%'),
+								$elm$svg$Svg$Attributes$x1('39.84%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('45.95%'),
+								$elm$svg$Svg$Attributes$x1('45.95%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('51.87%'),
+								$elm$svg$Svg$Attributes$x1('51.87%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('57.98%'),
+								$elm$svg$Svg$Attributes$x1('57.98%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('63.90%'),
+								$elm$svg$Svg$Attributes$x1('63.90%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('70.02%'),
+								$elm$svg$Svg$Attributes$x1('70.02%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('76.13%'),
+								$elm$svg$Svg$Attributes$x1('76.13%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('82.05%'),
+								$elm$svg$Svg$Attributes$x1('82.05%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('88.16%'),
+								$elm$svg$Svg$Attributes$x1('88.16%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
+								$elm$svg$Svg$Attributes$x2('94.08%'),
+								$elm$svg$Svg$Attributes$x1('94.08%'),
+								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$line,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$y2('100%'),
+								$elm$svg$Svg$Attributes$y1('115'),
 								$elm$svg$Svg$Attributes$x2('99.9%'),
 								$elm$svg$Svg$Attributes$x1('99.9%'),
-								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-							]),
-						_List_Nil),
-						A2(
-						$elm$svg$Svg$line,
-						_List_fromArray(
-							[
-								$elm$svg$Svg$Attributes$y2('100%'),
-								$elm$svg$Svg$Attributes$y1('115'),
-								$elm$svg$Svg$Attributes$x2('94%'),
-								$elm$svg$Svg$Attributes$x1('94%'),
-								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-							]),
-						_List_Nil),
-						A2(
-						$elm$svg$Svg$line,
-						_List_fromArray(
-							[
-								$elm$svg$Svg$Attributes$y2('100%'),
-								$elm$svg$Svg$Attributes$y1('115'),
-								$elm$svg$Svg$Attributes$x2('88%'),
-								$elm$svg$Svg$Attributes$x1('88%'),
-								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-							]),
-						_List_Nil),
-						A2(
-						$elm$svg$Svg$line,
-						_List_fromArray(
-							[
-								$elm$svg$Svg$Attributes$y2('100%'),
-								$elm$svg$Svg$Attributes$y1('115'),
-								$elm$svg$Svg$Attributes$x2('82%'),
-								$elm$svg$Svg$Attributes$x1('82%'),
-								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-							]),
-						_List_Nil),
-						A2(
-						$elm$svg$Svg$line,
-						_List_fromArray(
-							[
-								$elm$svg$Svg$Attributes$y2('100%'),
-								$elm$svg$Svg$Attributes$y1('115'),
-								$elm$svg$Svg$Attributes$x2('76%'),
-								$elm$svg$Svg$Attributes$x1('76%'),
-								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-							]),
-						_List_Nil),
-						A2(
-						$elm$svg$Svg$line,
-						_List_fromArray(
-							[
-								$elm$svg$Svg$Attributes$y2('100%'),
-								$elm$svg$Svg$Attributes$y1('115'),
-								$elm$svg$Svg$Attributes$x2('70%'),
-								$elm$svg$Svg$Attributes$x1('70%'),
-								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-							]),
-						_List_Nil),
-						A2(
-						$elm$svg$Svg$line,
-						_List_fromArray(
-							[
-								$elm$svg$Svg$Attributes$y2('100%'),
-								$elm$svg$Svg$Attributes$y1('115'),
-								$elm$svg$Svg$Attributes$x2('64%'),
-								$elm$svg$Svg$Attributes$x1('64%'),
-								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-							]),
-						_List_Nil),
-						A2(
-						$elm$svg$Svg$line,
-						_List_fromArray(
-							[
-								$elm$svg$Svg$Attributes$y2('100%'),
-								$elm$svg$Svg$Attributes$y1('115'),
-								$elm$svg$Svg$Attributes$x2('58%'),
-								$elm$svg$Svg$Attributes$x1('58%'),
-								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-							]),
-						_List_Nil),
-						A2(
-						$elm$svg$Svg$line,
-						_List_fromArray(
-							[
-								$elm$svg$Svg$Attributes$y2('100%'),
-								$elm$svg$Svg$Attributes$y1('115'),
-								$elm$svg$Svg$Attributes$x2('52%'),
-								$elm$svg$Svg$Attributes$x1('52%'),
-								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-							]),
-						_List_Nil),
-						A2(
-						$elm$svg$Svg$line,
-						_List_fromArray(
-							[
-								$elm$svg$Svg$Attributes$y2('100%'),
-								$elm$svg$Svg$Attributes$y1('115'),
-								$elm$svg$Svg$Attributes$x2('46%'),
-								$elm$svg$Svg$Attributes$x1('46%'),
-								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-							]),
-						_List_Nil),
-						A2(
-						$elm$svg$Svg$line,
-						_List_fromArray(
-							[
-								$elm$svg$Svg$Attributes$y2('100%'),
-								$elm$svg$Svg$Attributes$y1('115'),
-								$elm$svg$Svg$Attributes$x2('40%'),
-								$elm$svg$Svg$Attributes$x1('40%'),
-								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-							]),
-						_List_Nil),
-						A2(
-						$elm$svg$Svg$line,
-						_List_fromArray(
-							[
-								$elm$svg$Svg$Attributes$y2('100%'),
-								$elm$svg$Svg$Attributes$y1('115'),
-								$elm$svg$Svg$Attributes$x2('34%'),
-								$elm$svg$Svg$Attributes$x1('34%'),
-								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
-							]),
-						_List_Nil),
-						A2(
-						$elm$svg$Svg$line,
-						_List_fromArray(
-							[
-								$elm$svg$Svg$Attributes$y2('100%'),
-								$elm$svg$Svg$Attributes$y1('115'),
-								$elm$svg$Svg$Attributes$x2('28%'),
-								$elm$svg$Svg$Attributes$x1('28%'),
 								$elm$svg$Svg$Attributes$stroke('#d8d8d8')
 							]),
 						_List_Nil)
@@ -7306,15 +7771,26 @@ var $author$project$PlantCalendar$drawSVG = F2(
 				$elm$core$List$concat(
 					A2(
 						$elm$core$List$indexedMap,
-						$author$project$PlantCalendar$drawRow(zone),
+						$author$project$PlantCalendar$drawRow(
+							_Utils_Tuple2(sf, wf)),
 						plants))));
 	});
+var $author$project$PlantCalendar$getFrostInts = function (status) {
+	switch (status.$) {
+		case 'Success':
+			var good = status.a;
+			return _Utils_Tuple2(good.springFrost, good.winterFrost);
+		case 'Loading':
+			return _Utils_Tuple2(-1000, 1000);
+		default:
+			return _Utils_Tuple2(-1000, 1000);
+	}
+};
 var $author$project$PlantCalendar$drawBottomContent = F2(
 	function (selectedPlants, status) {
 		return A2(
 			$author$project$PlantCalendar$drawSVG,
-			$elm$core$Basics$floor(
-				$author$project$PlantCalendar$getZoneFloat(status)),
+			$author$project$PlantCalendar$getFrostInts(status),
 			selectedPlants);
 	});
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
@@ -7326,90 +7802,104 @@ var $author$project$PlantCalendar$drawBottomInstructions = A2(
 		]),
 	_List_fromArray(
 		[
-			$elm$html$Html$text('2. Select plants to see recommended planting & harvesting dates!')
+			$elm$html$Html$text('2. Select plants to see recommended planting dates!')
 		]));
-var $author$project$PlantCalendar$getCoordinates = function (status) {
-	if (status.$ === 'Success') {
-		var zip = status.a;
-		var _v1 = zip.coordinates;
-		var lat = _v1.a;
-		var lon = _v1.b;
-		return $elm$core$String$fromFloat(lat) + ('N, ' + ($elm$core$String$fromFloat(lon) + 'W'));
-	} else {
-		return '';
-	}
-};
-var $elm$core$String$toUpper = _String_toUpper;
-var $author$project$PlantCalendar$getPHZ = function (status) {
+var $author$project$PlantCalendar$dayToDateString = F2(
+	function (n, months) {
+		dayToDateString:
+		while (true) {
+			if (n < 0) {
+				return 'N/A';
+			} else {
+				if (months.b) {
+					var _v1 = months.a;
+					var str = _v1.a;
+					var month = _v1.b;
+					var ms = months.b;
+					if (_Utils_cmp(n, month) < 1) {
+						return str + (' ' + $elm$core$String$fromInt(n));
+					} else {
+						var $temp$n = n - month,
+							$temp$months = ms;
+						n = $temp$n;
+						months = $temp$months;
+						continue dayToDateString;
+					}
+				} else {
+					var $temp$n = n - 365,
+						$temp$months = _List_fromArray(
+						[
+							_Utils_Tuple2('Jan.', 31),
+							_Utils_Tuple2('Feb.', 28),
+							_Utils_Tuple2('Mar.', 31),
+							_Utils_Tuple2('Apr.', 30),
+							_Utils_Tuple2('May', 31),
+							_Utils_Tuple2('June', 30),
+							_Utils_Tuple2('July', 31),
+							_Utils_Tuple2('Aug.', 31),
+							_Utils_Tuple2('Sep.', 30),
+							_Utils_Tuple2('Oct.', 31),
+							_Utils_Tuple2('Nov.', 30),
+							_Utils_Tuple2('Dec.', 31)
+						]);
+					n = $temp$n;
+					months = $temp$months;
+					continue dayToDateString;
+				}
+			}
+		}
+	});
+var $author$project$PlantCalendar$getFrostString = F2(
+	function (which, status) {
+		switch (status.$) {
+			case 'Success':
+				var good = status.a;
+				return A2(
+					$author$project$PlantCalendar$dayToDateString,
+					(which === 'winter') ? good.winterFrost : good.springFrost,
+					_List_fromArray(
+						[
+							_Utils_Tuple2('Jan.', 31),
+							_Utils_Tuple2('Feb.', 28),
+							_Utils_Tuple2('Mar.', 31),
+							_Utils_Tuple2('Apr.', 30),
+							_Utils_Tuple2('May', 31),
+							_Utils_Tuple2('June', 30),
+							_Utils_Tuple2('July', 31),
+							_Utils_Tuple2('Aug.', 31),
+							_Utils_Tuple2('Sep.', 30),
+							_Utils_Tuple2('Oct.', 31),
+							_Utils_Tuple2('Nov.', 30),
+							_Utils_Tuple2('Dec.', 31)
+						]));
+			case 'Loading':
+				return 'Loading...';
+			default:
+				return '';
+		}
+	});
+var $author$project$PlantCalendar$getMinTemp = function (status) {
 	switch (status.$) {
 		case 'Success':
 			var good = status.a;
-			return $elm$core$String$toUpper(good.zone);
+			return $elm$core$String$fromFloat(good.min_winter_temp) + '° F';
 		case 'Loading':
 			return 'Loading...';
 		default:
-			return '6A (default)';
-	}
-};
-var $elm$regex$Regex$Match = F4(
-	function (match, index, number, submatches) {
-		return {index: index, match: match, number: number, submatches: submatches};
-	});
-var $elm$regex$Regex$find = _Regex_findAtMost(_Regex_infinity);
-var $elm$regex$Regex$fromStringWith = _Regex_fromStringWith;
-var $elm$regex$Regex$fromString = function (string) {
-	return A2(
-		$elm$regex$Regex$fromStringWith,
-		{caseInsensitive: false, multiline: false},
-		string);
-};
-var $elm$regex$Regex$never = _Regex_never;
-var $elm$core$Maybe$withDefault = F2(
-	function (_default, maybe) {
-		if (maybe.$ === 'Just') {
-			var value = maybe.a;
-			return value;
-		} else {
-			return _default;
-		}
-	});
-var $author$project$PlantCalendar$getTempString = function (status) {
-	if (status.$ === 'Success') {
-		var temp_range = status.a.temp_range;
-		var _v1 = A2(
-			$elm$core$List$map,
-			function ($) {
-				return $.submatches;
-			},
-			A2(
-				$elm$regex$Regex$find,
-				A2(
-					$elm$core$Maybe$withDefault,
-					$elm$regex$Regex$never,
-					$elm$regex$Regex$fromString('(.*) to (.*)')),
-				temp_range));
-		if ((((((_v1.b && _v1.a.b) && (_v1.a.a.$ === 'Just')) && _v1.a.b.b) && (_v1.a.b.a.$ === 'Just')) && (!_v1.a.b.b.b)) && (!_v1.b.b)) {
-			var _v2 = _v1.a;
-			var a = _v2.a.a;
-			var _v3 = _v2.b;
-			var b = _v3.a.a;
-			return a + ('° to ' + (b + '° F'));
-		} else {
 			return '';
-		}
-	} else {
-		return '';
 	}
 };
 var $author$project$PlantCalendar$getZIP = function (status) {
 	switch (status.$) {
 		case 'Success':
 			var zipcode = status.a;
-			return (zipcode.zipcode === '-1') ? 'Unset' : zipcode.zipcode;
+			return zipcode.zipcode;
 		case 'Loading':
 			return 'Loading';
+		case 'Unset':
+			return 'Unset';
 		default:
-			return 'Error';
+			return 'Error, please try again';
 	}
 };
 var $elm$html$Html$strong = _VirtualDom_node('strong');
@@ -15854,6 +16344,15 @@ var $author$project$USASVG$usaSVG = function (zipper) {
 					]))
 			]));
 };
+var $elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return value;
+		} else {
+			return _default;
+		}
+	});
 var $author$project$PlantCalendar$drawTopContent = function (status) {
 	return A2(
 		$elm$html$Html$div,
@@ -15896,10 +16395,10 @@ var $author$project$PlantCalendar$drawTopContent = function (status) {
 								_List_Nil,
 								_List_fromArray(
 									[
-										$elm$html$Html$text('Coordinates: ')
+										$elm$html$Html$text('Average winter min. temperature: ')
 									])),
 								$elm$html$Html$text(
-								$author$project$PlantCalendar$getCoordinates(status))
+								$author$project$PlantCalendar$getMinTemp(status))
 							])),
 						A2(
 						$elm$html$Html$div,
@@ -15911,10 +16410,10 @@ var $author$project$PlantCalendar$drawTopContent = function (status) {
 								_List_Nil,
 								_List_fromArray(
 									[
-										$elm$html$Html$text('Average low winter temperature: ')
+										$elm$html$Html$text('Average last spring frost: ')
 									])),
 								$elm$html$Html$text(
-								$author$project$PlantCalendar$getTempString(status))
+								A2($author$project$PlantCalendar$getFrostString, 'spring', status))
 							])),
 						A2(
 						$elm$html$Html$div,
@@ -15926,10 +16425,10 @@ var $author$project$PlantCalendar$drawTopContent = function (status) {
 								_List_Nil,
 								_List_fromArray(
 									[
-										$elm$html$Html$text('Plant hardiness zone: ')
+										$elm$html$Html$text('Average first winter frost: ')
 									])),
 								$elm$html$Html$text(
-								$author$project$PlantCalendar$getPHZ(status))
+								A2($author$project$PlantCalendar$getFrostString, 'winter', status))
 							]))
 					])),
 				A2(
@@ -15972,17 +16471,6 @@ var $author$project$PlantCalendar$drawTopInstructions = A2(
 					$elm$html$Html$text('1. Set your zip code')
 				]))
 		]));
-var $elm$core$List$filter = F2(
-	function (isGood, list) {
-		return A3(
-			$elm$core$List$foldr,
-			F2(
-				function (x, xs) {
-					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
-				}),
-			_List_Nil,
-			list);
-	});
 var $author$project$PlantCalendar$TogglePlant = function (a) {
 	return {$: 'TogglePlant', a: a};
 };
@@ -16113,6 +16601,47 @@ var $author$project$PlantCalendar$plantNameContains = F2(
 					return $.name;
 				}(plant)));
 	});
+var $author$project$PlantCalendar$sortByEarly = F2(
+	function (p1, p2) {
+		var _v0 = p1.defaultPeriods;
+		if (_v0.b) {
+			var _v1 = _v0.a;
+			var _v2 = _v1.a;
+			var s1 = _v2.a;
+			var _v3 = _v1.b;
+			var t1 = _v3.a;
+			var _v4 = _v1.c;
+			var u1 = _v4.a;
+			var _v5 = p2.defaultPeriods;
+			if (_v5.b) {
+				var _v6 = _v5.a;
+				var _v7 = _v6.a;
+				var s2 = _v7.a;
+				var _v8 = _v6.b;
+				var t2 = _v8.a;
+				var _v9 = _v6.c;
+				var u2 = _v9.a;
+				var _v10 = A2($elm$core$Basics$compare, s1, s2);
+				if (_v10.$ === 'EQ') {
+					var _v11 = A2($elm$core$Basics$compare, t1, t2);
+					if (_v11.$ === 'EQ') {
+						return A2($elm$core$Basics$compare, u1, u2);
+					} else {
+						var c = _v11;
+						return c;
+					}
+				} else {
+					var c = _v10;
+					return c;
+				}
+			} else {
+				return $elm$core$Basics$LT;
+			}
+		} else {
+			return $elm$core$Basics$GT;
+		}
+	});
+var $elm$core$List$sortWith = _List_sortWith;
 var $elm$html$Html$span = _VirtualDom_node('span');
 var $elm$html$Html$Attributes$target = $elm$html$Html$Attributes$stringProperty('target');
 var $elm$html$Html$ul = _VirtualDom_node('ul');
@@ -16124,12 +16653,20 @@ var $author$project$PlantCalendar$view = function (model) {
 		$author$project$PlantCalendar$plantNameContains(
 			$elm$core$String$toLower(model.filter)),
 		model.plants);
-	var selectedPlants = A2(
+	var selectedPlants = (model.sortMode === 'ABC') ? A2(
 		$elm$core$List$filter,
 		function ($) {
 			return $.selected;
 		},
-		model.plants);
+		model.plants) : A2(
+		$elm$core$List$sortWith,
+		$author$project$PlantCalendar$sortByEarly,
+		A2(
+			$elm$core$List$filter,
+			function ($) {
+				return $.selected;
+			},
+			model.plants));
 	var plantsAreSelected = $elm$core$List$length(selectedPlants) > 0;
 	var bottomContent = plantsAreSelected ? A2($author$project$PlantCalendar$drawBottomContent, selectedPlants, model.zipcode) : $author$project$PlantCalendar$drawBottomInstructions;
 	return A2(
@@ -16168,6 +16705,34 @@ var $author$project$PlantCalendar$view = function (model) {
 								_List_Nil,
 								_List_fromArray(
 									[
+										A2(
+										$elm$html$Html$li,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class(
+												plantsAreSelected ? 'sort show' : 'hide')
+											]),
+										_List_fromArray(
+											[
+												A2(
+												$elm$html$Html$a,
+												_List_fromArray(
+													[
+														$elm$html$Html$Events$onClick($author$project$PlantCalendar$ToggleSort)
+													]),
+												_List_fromArray(
+													[
+														A2(
+														$elm$html$Html$span,
+														_List_fromArray(
+															[
+																$elm$html$Html$Attributes$class('icon')
+															]),
+														_List_Nil),
+														$elm$html$Html$text(
+														(model.sortMode === 'ABC') ? 'Sort: Date' : 'Sort: Name')
+													]))
+											])),
 										A2(
 										$elm$html$Html$li,
 										_List_fromArray(
