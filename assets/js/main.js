@@ -5931,6 +5931,7 @@ var $author$project$PlantCalendar$Zipcode = F8(
 	function (zipcode, zone, coordinates, temp_range, avg_winter_temp, min_winter_temp, springFrost, winterFrost) {
 		return {avg_winter_temp: avg_winter_temp, coordinates: coordinates, min_winter_temp: min_winter_temp, springFrost: springFrost, temp_range: temp_range, winterFrost: winterFrost, zipcode: zipcode, zone: zone};
 	});
+var $author$project$Config$api_key_NOAA = 'API_TOKEN';
 var $elm$http$Http$BadStatus_ = F2(
 	function (a, b) {
 		return {$: 'BadStatus_', a: a, b: b};
@@ -6886,7 +6887,7 @@ var $author$project$PlantCalendar$update = F2(
 								$author$project$PlantCalendar$jsonDecoder),
 							headers: _List_fromArray(
 								[
-									A2($elm$http$Http$header, 'token', 'QfybOgccYhGagMFVZkpHaeIzeYIhyPvu')
+									A2($elm$http$Http$header, 'token', $author$project$Config$api_key_NOAA)
 								]),
 							method: 'GET',
 							timeout: $elm$core$Maybe$Just(5000),

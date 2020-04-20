@@ -10,6 +10,7 @@ import Svg.Attributes exposing (style, x, y, x1, x2, y1, y2, stroke, fill, width
 import Json.Decode
 import Regex
 
+import Config exposing (api_key_NOAA)
 import USASVG exposing (usaSVG)
 
 -- MAIN
@@ -131,7 +132,7 @@ update msg model =
             ( { model | zipcode = newZipcode, zipcodetext = "" }
             -- , Http.get { url = "https://phzmapi.org/"++ searchZip ++ ".json", expect = Http.expectJson GotZipcode (jsonDecoder searchZip) }
             , Http.request { method = "GET"
-                           , headers = [ Http.header "token" "QfybOgccYhGagMFVZkpHaeIzeYIhyPvu"]
+                           , headers = [ Http.header "token" api_key_NOAA]
                           -- , url = ("https://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=NORMAL_ANN&datatypeid=ANN-TMIN-PRBLST-T28FP30&startdate=2010-01-01&enddate=2010-01-01&locationid=ZIP:" ++ searchZip)
                            , url = ("https://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=NORMAL_ANN&datatypeid=ANN-TMIN-PRBLST-T28FP30&datatypeid=DJF-TMIN-NORMAL&datatypeid=ANN-TMIN-PRBFST-T28FP30&startdate=2010-01-01&enddate=2010-01-01&locationid=ZIP:" ++ searchZip)
                            , body = Http.emptyBody
