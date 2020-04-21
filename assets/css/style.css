@@ -135,8 +135,6 @@ ul li a:hover .icon {
     background: #fff
 }
 
-
-
 .sidebar {
     position: sticky;
     top: 4rem;
@@ -164,7 +162,6 @@ ul li a:hover .icon {
 .sidebar__bottom {
     height: 100%;
     display: block;
-    /* overflow: hidden; */
     margin: 0 -3rem 0 0rem;
     padding-top: 0.25rem;
 }
@@ -312,7 +309,7 @@ input:disabled + label {
 
 .top_info {
     display: flex;
-    min-height: 245px;
+    height: 245px;
 }
 
 .top_info__instructions {
@@ -328,12 +325,10 @@ input:disabled + label {
 }
 
 .top_info__left {
-    order: 2;
+    order: 1;
     flex: 1 1 auto;
     padding: 2.0rem;
     display: flex;
-    flex-direction: column;
-    justify-content: space-around;
     font-size: 1.2rem;
     border-bottom: 1px dashed #c0c0c0;
     flex-wrap: wrap;
@@ -349,11 +344,11 @@ input:disabled + label {
 }
 
 .top_info__left > div {
-    flex: 0 0 auto;
+    flex: 0 0 50%;
 }
 
 .top_info__right {
-    order: 1;
+    order: 2;
     flex: 0 0 auto;
-    padding-left: 2.0rem;
+    padding-right: 2.0rem;
 }

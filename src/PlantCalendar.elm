@@ -2,8 +2,8 @@ module PlantCalendar exposing (Model, Msg(..), init, main, update, subscriptions
 
 import Browser
 import Http
-import Html exposing (Html, div, span, text, h2, blockquote, ul, li, a, main_, textarea, button, strong, br, p, input, form, label, object)
-import Html.Attributes exposing (class, id, placeholder, value, href, target, type_, for, checked, disabled, attribute)
+import Html exposing (Html, div, span, text, h2, blockquote, ul, li, a, main_, textarea, button, strong, br, p, input, form, label, object, abbr)
+import Html.Attributes exposing (class, id, placeholder, value, href, target, type_, for, checked, disabled, attribute, title)
 import Html.Events exposing (onClick, onInput)
 import Svg exposing (svg)
 import Svg.Attributes exposing (style, x, y, x1, x2, y1, y2, stroke, fill, width, height)
@@ -12,6 +12,8 @@ import Regex
 
 import Config exposing (api_key_NOAA)
 import USASVG exposing (usaSVG)
+
+import WSData exposing (ZipRecord, initialRecord, findRecord, getStationName, getLocationName, getStationCoords, getStationDist, getStation1ID, getStation2ID, getStation3ID, getStationElev)
 
 -- MAIN
 main : Program () Model Msg
@@ -41,8 +43,8 @@ type alias JsonResult =
 
 type alias Zipcode =
   { zipcode : String
+  , closestStation : String
   , zone : String
-  , coordinates : (Float, Float)
   , temp_range: String
   , avg_winter_temp: Float
   , min_winter_temp: Float
@@ -60,13 +62,13 @@ type alias Plant =
   , defaultPeriods : List ((Float, Float), (Float, Float), (Float, Float))
   }
 
-
 type alias Model =
     { zipcode : HTTPStatus
     , zipcodetext : String
     , plants : List ( Plant )
     , filter : String
     , sortMode : String
+    , zipRecord : ZipRecord
     }
 
 
@@ -78,6 +80,7 @@ init _ =
       (plantData 120)
       ""
       "ABC"
+      initialRecord
     , Cmd.none)
 
 
@@ -89,7 +92,7 @@ type Msg
     | TogglePlant Plant
     | SetFilter String
     | GotZipcode (Result Http.Error Zipcode)
-    | GotResults String (Result Http.Error (List JsonResult))
+    | GotResults String String (Result Http.Error (List JsonResult))
     | ClearAll
     | ToggleSort
 
@@ -127,16 +130,20 @@ update msg model =
       SetZipcode ->
         let
             searchZip = model.zipcodetext
+            searchStation = "remove"
             newZipcode = Loading
+            newZipRecord = findRecord searchZip
+            stationString = "&stationid=" ++ (getStation1ID newZipRecord) ++ "&stationid=" ++ (getStation2ID newZipRecord) ++ "&stationid=" ++ (getStation3ID newZipRecord)
         in
-            ( { model | zipcode = newZipcode, zipcodetext = "" }
+            ( { model | zipcode = newZipcode
+                      , zipcodetext = ""
+                      , zipRecord = newZipRecord  }
             -- , Http.get { url = "https://phzmapi.org/"++ searchZip ++ ".json", expect = Http.expectJson GotZipcode (jsonDecoder searchZip) }
             , Http.request { method = "GET"
                            , headers = [ Http.header "token" api_key_NOAA]
-                          -- , url = ("https://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=NORMAL_ANN&datatypeid=ANN-TMIN-PRBLST-T28FP30&startdate=2010-01-01&enddate=2010-01-01&locationid=ZIP:" ++ searchZip)
-                           , url = ("https://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=NORMAL_ANN&datatypeid=ANN-TMIN-PRBLST-T28FP30&datatypeid=DJF-TMIN-NORMAL&datatypeid=ANN-TMIN-PRBFST-T28FP30&startdate=2010-01-01&enddate=2010-01-01&locationid=ZIP:" ++ searchZip)
+                           , url = ("https://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=NORMAL_ANN&datatypeid=ANN-TMIN-PRBLST-T28FP30&datatypeid=DJF-TMIN-NORMAL&datatypeid=ANN-TMIN-PRBFST-T28FP30&startdate=2010-01-01&enddate=2010-01-01&" ++ stationString)
                            , body = Http.emptyBody
-                           , expect = Http.expectJson (GotResults searchZip) jsonDecoder
+                           , expect = Http.expectJson (GotResults searchZip searchStation) jsonDecoder
                            , timeout = Just 5000
                            , tracker = Nothing }
             )
@@ -152,15 +159,15 @@ update msg model =
             Err _ ->
               ({ model | zipcode = Failure}, Cmd.none)
       
-      GotResults searchZip results ->
+      GotResults searchZip searchStation results ->
         case results of
             Ok rs ->
               let
                 springFrostDay = round (getAvg "ANN-TMIN-PRBLST-T28FP30" rs)
                 winterFrostDay = round (getAvg "ANN-TMIN-PRBFST-T28FP30" rs)
                 minWinterTemp = 0
-                avgWinterTemp = (getAvg "DJF-TMIN-NORMAL" rs) / 10.0
-                z = Zipcode searchZip (tempToZone minWinterTemp) (-4, 4) "" minWinterTemp avgWinterTemp springFrostDay winterFrostDay
+                avgWinterTemp = toFloat (round (getAvg "DJF-TMIN-NORMAL" rs)) / 10.0
+                z = Zipcode searchZip searchStation (tempToZone minWinterTemp) "" minWinterTemp avgWinterTemp springFrostDay winterFrostDay
               in
                 ({ model | zipcode = Success z
                          , plants = List.map (enablePlants (getZoneFloat (Success z))) model.plants
@@ -377,15 +384,6 @@ plantNameContains : String -> Plant -> Bool
 plantNameContains search plant =
     String.contains search (String.toLower (.name plant))
 
-getCoordinates : HTTPStatus -> String
-getCoordinates status = 
-    case status of
-        Success zip -> let
-                           (lat, lon) = zip.coordinates
-                       in
-                           (String.fromFloat lat) ++ "N, " ++ (String.fromFloat lon) ++ "W"
-        _ -> ""
-
 getTempString : HTTPStatus -> String
 getTempString status =
     case status of
@@ -413,6 +411,7 @@ getMinTemp status =
           "Loading..."
         _ ->
           ""
+
 getFrostInts : HTTPStatus -> (Int, Int)
 getFrostInts status =
     case status of
@@ -430,8 +429,10 @@ getFrostString which status =
           dayToDateString (if which == "winter" then good.winterFrost else good.springFrost)  [("Jan.", 31), ("Feb.", 28), ("Mar.", 31), ("Apr.", 30), ("May", 31), ("June", 30), ("July", 31), ("Aug.", 31), ("Sep.", 30), ("Oct.", 31), ("Nov.", 30), ("Dec.", 31)]
         Loading ->
           "Loading..."
-        _ ->
+        Unset ->
           ""
+        _ ->
+          "Data not found"
 
 getZIP : HTTPStatus -> String
 getZIP status =
@@ -456,17 +457,20 @@ drawTopInstructions =
   div [ class "top_info" ] [ div [ class "top_info__instructions" ] [ text "1. Set your zip code" ] ]
 
 
-drawTopContent : HTTPStatus -> Html Msg
-drawTopContent status = 
+drawTopContent : ZipRecord -> HTTPStatus -> Html Msg
+drawTopContent zr status = 
   div [ class "top_info" ]
     [ div [ class "top_info__left" ]
-      [ div [] [ strong [] [ text "ZIP Code: " ], text (getZIP status) ]
-      -- , div [] [ strong [] [ text "Coordinates: " ], text (getCoordinates status)]
-      -- , div [] [ strong [] [ text "Extreme low temperature: " ], text (getTempString status) ]
-      -- , div [] [ strong [] [ text "Plant hardiness zone: " ], text (getPHZ status)]
-      , div [] [ strong [] [ text "Average winter min. temperature: " ], text (getMinTemp status)]
+      [ div [] [ strong [] [ text "Location: " ], text (getLocationName zr) ]
+      , div [] [ strong [] [ text "Weather station: " ], abbr [ title ((getStation1ID zr) ++ ", " ++ (getStationDist zr)) ] [ text (getStationName zr) ] ]
+      , div [] [ strong [] [ text "ZIP Code: " ], text (getZIP status) ]
+      , div [] [ strong [] [ text "Coordinates: " ], text (getStationCoords zr) ]
+      , div [] [ strong [] [ text "Elevation: " ], text (getStationElev zr) ]
       , div [] [ strong [] [ text "Average last spring frost: " ], text (getFrostString "spring" status)]
+      , div [] [ strong [] [ text "Average winter min. temperature: " ], text (getMinTemp status)]
       , div [] [ strong [] [ text "Average first winter frost: " ], text (getFrostString "winter" status)]
+      -- , div [] [ strong [] [ text "Extreme low temperature: " ], text (getTempString status) ]
+      , div [] [ strong [] [ text "USDA plant hardiness zone: " ], text "To do..."]
       ]
     , div [ class "top_info__right" ] [ usaSVG (Maybe.withDefault 0 (String.toInt (String.slice 0 3 (getZIP status)))) ]
     ]
@@ -476,7 +480,7 @@ view model =
   let
     sidebarPlants = List.filter (plantNameContains (String.toLower model.filter)) model.plants
     selectedPlants = if model.sortMode == "ABC" then (List.filter .selected model.plants) else List.sortWith sortByEarly (List.filter .selected model.plants)
-    topContent = if model.zipcode /= Unset then drawTopContent model.zipcode else drawTopInstructions
+    topContent = if model.zipcode /= Unset then drawTopContent model.zipRecord model.zipcode else drawTopInstructions
     plantsAreSelected = List.length selectedPlants > 0
     bottomContent = if plantsAreSelected then drawBottomContent selectedPlants model.zipcode else drawBottomInstructions
   in
