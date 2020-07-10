@@ -2,8 +2,8 @@ port module PlantCalendar exposing (Model, Msg(..), init, main, update, subscrip
 
 import Browser
 import Http
-import Html exposing (Html, div, span, text, h2, blockquote, ul, li, a, main_, textarea, button, strong, br, p, input, form, label, object, abbr)
-import Html.Attributes exposing (class, id, placeholder, value, href, target, type_, for, checked, disabled, attribute, title)
+import Html exposing (Html, div, span, text, ul, li, a, main_, button, strong, br, input, form, label, object, abbr)
+import Html.Attributes exposing (class, id, placeholder, value, href, target, type_, for, checked, disabled, title)
 import Html.Events exposing (onClick, onInput, onSubmit)
 import Svg exposing (svg)
 import Svg.Attributes exposing (style, x, y, x1, x2, y1, y2, stroke, fill, width, height)
@@ -141,7 +141,7 @@ update msg model =
             searchStation = "remove"
             newZipcode = Loading
             newZipRecord = findRecord searchZip
-            stationString = "&stationid=" ++ (getStation1ID newZipRecord) ++ "&stationid=" ++ (getStation2ID newZipRecord) ++ "&stationid=" ++ (getStation3ID newZipRecord)
+            stationString = "&stationid=" ++ getStation1ID newZipRecord ++ "&stationid=" ++ getStation2ID newZipRecord ++ "&stationid=" ++ getStation3ID newZipRecord
         in
             ( { model | zipcode = newZipcode
                       , zipcodetext = ""
@@ -149,7 +149,7 @@ update msg model =
             -- , Http.get { url = "https://phzmapi.org/"++ searchZip ++ ".json", expect = Http.expectJson GotZipcode (jsonDecoder searchZip) }
             , Http.request { method = "GET"
                            , headers = [ Http.header "token" api_key_NOAA]
-                           , url = ("https://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=NORMAL_ANN&datatypeid=ANN-TMIN-PRBLST-T28FP30&datatypeid=DJF-TMIN-NORMAL&datatypeid=ANN-TMIN-PRBFST-T28FP30&startdate=2010-01-01&enddate=2010-01-01&" ++ stationString)
+                           , url = "https://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=NORMAL_ANN&datatypeid=ANN-TMIN-PRBLST-T28FP30&datatypeid=DJF-TMIN-NORMAL&datatypeid=ANN-TMIN-PRBFST-T28FP30&startdate=2010-01-01&enddate=2010-01-01&" ++ stationString
                            , body = Http.emptyBody
                            , expect = Http.expectJson (GotResults searchZip searchStation) jsonDecoder
                            , timeout = Just 5000
@@ -200,7 +200,7 @@ update msg model =
       SendPDF ->
         ( model
         , let
-            sortedPlants = if model.sortMode == "ABC" then (List.filter .selected model.plants) else List.sortWith sortByEarly (List.filter .selected model.plants)
+            sortedPlants = if model.sortMode == "ABC" then List.filter .selected model.plants else List.sortWith sortByEarly (List.filter .selected model.plants)
             (springFrost, winterFrost) = getFrostInts model.zipcode
           in
             outputPort
@@ -226,9 +226,9 @@ update msg model =
 packBoxes : Int -> ((Int, Int), (Int, Int), (Int, Int)) -> List ( (String, Int, Int) )
 packBoxes offset ((i1, i2), (t1, t2), (o1, o2)) =
   []
-    |> (if i2 > 0 then ((::) ("i", i1+offset, i2)) else identity)
-    |> (if t2 > 0 then ((::) ("t", t1+offset, t2)) else identity)
-    |> (if o2 > 0 then ((::) ("o", o1+offset, o2)) else identity)
+    |> (if i2 > 0 then (::) ("i", i1+offset, i2) else identity)
+    |> (if t2 > 0 then (::) ("t", t1+offset, t2) else identity)
+    |> (if o2 > 0 then (::) ("o", o1+offset, o2) else identity)
 
 
 packPlant : Int -> Plant -> PackedPlant
@@ -365,7 +365,7 @@ getPlants index plants =
                      , id ("p"++ String.fromInt index)
                      , checked p.selected
                      , onClick (TogglePlant p)
-                     , disabled p.disabled ] [], label [ class p.category, for ("p"++ (String.fromInt index)) ] [ text p.name ] ] :: getPlants (index + 1) ps
+                     , disabled p.disabled ] [], label [ class p.category, for ("p"++ String.fromInt index) ] [ text p.name ] ] :: getPlants (index + 1) ps
     _ -> []
 
 drawSVG : (Int, Int) -> List (Plant) -> Html Msg
@@ -454,15 +454,15 @@ getFrostOffset : Int -> Int -> Int -> Float
 getFrostOffset sfday wfday cycle =
   if sfday < 0
   then 0
-  else ((toFloat sfday) - 120.0)/3.65
+  else (toFloat sfday - 120.0)/3.65
 
 toPercentStr : Int -> String
 toPercentStr d =
-  String.fromFloat ((toFloat d)/365.0 * 72) ++ "%"
+  String.fromFloat (toFloat d / 365.0 * 72) ++ "%"
 
 toPercentOffset : Int -> Float -> String
 toPercentOffset d offset =
-  String.fromFloat ((toFloat d)/365.0 * 72 + 28 + offset) ++ "%"
+  String.fromFloat (toFloat d / 365.0 * 72 + 28 + offset) ++ "%"
 
 drawCycle : Int -> (Int, Int) -> Int -> ((Int, Int), (Int, Int), (Int, Int)) -> List (Svg.Svg Msg)
 drawCycle y0 (sf, wf) cycle ((ss, sw), (ps, pw), (hs, hw)) =
@@ -490,7 +490,7 @@ plantNameContains search plant =
 getTempString : HTTPStatus -> String
 getTempString status =
     case status of
-        Success {temp_range} -> case (List.map .submatches (Regex.find (Maybe.withDefault Regex.never <| Regex.fromString "(.*) to (.*)") temp_range)) of
+        Success {temp_range} -> case List.map .submatches (Regex.find (Maybe.withDefault Regex.never <| Regex.fromString "(.*) to (.*)") temp_range) of
                                         [[Just a, Just b]] -> a ++ "° to " ++ b ++ "° F"
                                         _ -> ""
         _ -> ""
@@ -509,7 +509,7 @@ getMinTemp : HTTPStatus -> String
 getMinTemp status =
     case status of
         Success good ->
-          (String.fromFloat good.min_winter_temp) ++ "° F"
+          String.fromFloat good.min_winter_temp ++ "° F"
         Loading ->
           "Loading..."
         _ ->
@@ -568,7 +568,7 @@ drawTopContent zr status =
   div [ class "top_info" ]
     [ div [ class "top_info__left" ]
       [ div [] [ strong [] [ text "Location: " ], text (getLocationName zr) ]
-      , div [] [ strong [] [ text "Weather station: " ], abbr [ title ((getStation1ID zr) ++ ", " ++ (getStationDist zr)) ] [ text (getStationName zr) ] ]
+      , div [] [ strong [] [ text "Weather station: " ], abbr [ title (getStation1ID zr ++ ", " ++ getStationDist zr) ] [ text (getStationName zr) ] ]
       , div [] [ strong [] [ text "ZIP Code: " ], text (getZIP status) ]
       , div [] [ strong [] [ text "Coordinates: " ], text (getStationCoords zr) ]
       , div [] [ strong [] [ text "Elevation: " ], text (getStationElev zr) ]
@@ -585,7 +585,7 @@ view : Model -> Html Msg
 view model =
   let
     sidebarPlants = List.filter (plantNameContains (String.toLower model.filter)) model.plants
-    selectedPlants = if model.sortMode == "ABC" then (List.filter .selected model.plants) else List.sortWith sortByEarly (List.filter .selected model.plants)
+    selectedPlants = if model.sortMode == "ABC" then List.filter .selected model.plants else List.sortWith sortByEarly (List.filter .selected model.plants)
     topContent = if model.zipcode /= Unset then drawTopContent model.zipRecord model.zipcode else drawTopInstructions
     plantsAreSelected = List.length selectedPlants > 0
     bottomContent = if plantsAreSelected then drawBottomContent selectedPlants model.zipcode else drawBottomInstructions
@@ -598,7 +598,7 @@ view model =
         [ li [ class (if plantsAreSelected then "sort show" else "hide") ] [ a [ onClick ToggleSort ] [ span [ class "icon" ] [], text (if model.sortMode == "ABC" then "Sort: Date" else "Sort: Name") ] ]
         , li [ class (if plantsAreSelected then "clear show" else "hide") ] [ a [ onClick ClearAll ] [ span [ class "icon" ] [], text "Clear All" ] ]
         , li [ class (if plantsAreSelected then "pdf show" else "hide") ] [ a [ onClick SendPDF ] [ span [ class "icon" ] [], text "Save PDF" ] ]
-        , li [ class "donate" ] [ a [ href "#", target "_blank" ] [ span [ class "icon" ] [], text "Donate" ] ]
+        , li [ class "donate" ] [ a [ href "https://www.splcenter.org/", target "_blank" ] [ span [ class "icon" ] [], text "Donate" ] ]
         , li [ class "github" ] [ a [ href "https://github.com/gg314/plant-calendar", target "_blank" ] [ span [ class "icon" ] [], text "Github" ] ]
         ]
       ]
@@ -662,45 +662,45 @@ plantData sfday =
   let
     t0 = 120
   in
-    [ {name = "Basil", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 57, 15), (t0, 22), (0, 0))]}
-    , {name = "Beets", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 14, 8))]}
-    , {name = "Bell Peppers", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 71, 14), (t0 + 14, 21), (0, 0))]}
-    , {name = "Broccoli", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42, 14), (t0 - 21, 21), (0, 0))]}
-    , {name = "Brussels Sprouts", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42, 14), (t0 - 28, 21), (0, 0))]}
-    , {name = "Cabbage", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 57, 14), (t0 - 37, 14), (0, 0))]}
-    , {name = "Cantaloupes", category = "Fruits", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28, 7), (t0 + 14, 21), (0, 0))]}
-    , {name = "Carrots", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 35, 14))]}
-    , {name = "Cauliflower", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42, 14), (t0 - 28, 14), (0, 0))]}
-    , {name = "Celery", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 71, 14), (t0 + 7, 14), (0, 0))]}
-    , {name = "Chives", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 28, 7))]}
-    , {name = "Cilantro", category = "Herbs", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0, 14))]}
-    , {name = "Corn", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0, 14))]}
-    , {name = "Cucumber", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28, 7), (t0 + 14, 21), (0, 0))]}
-    , {name = "Dill", category = "Herbs", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 35, 14))]}
-    , {name = "Eggplants", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 70, 14), (t0 + 14, 21), (0, 0))]}
-    , {name = "Green Beans", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 + 7, 21))]}
-    , {name = "Kale", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42, 14), (t0 - 28, 14), (0, 0))]}
-    , {name = "Lettuce", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42, 14), (t0 - 14, 28), (0, 0))]}
-    , {name = "Okra", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 + 14, 14))]}
-    , {name = "Onions", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 28, 21))]}
-    , {name = "Oregano", category = "Herbs", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 70, 28), (t0, 21), (0, 0))]}
-    , {name = "Parsley", category = "Herbs", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 28, 14))]}
-    , {name = "Parsnips", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 21, 21))]}
-    , {name = "Peas", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 42, 21))]}
-    , {name = "Potatoes", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 7, 21))]}
-    , {name = "Pumpkins", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28, 14), (t0 + 14, 21), (0, 0))]}
-    , {name = "Radishes", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 56, 22))]}
-    , {name = "Rosemary", category = "Herbs", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 70, 14), (t0 + 7, 21), (0, 0))]}
-    , {name = "Sage", category = "Herbs", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 56, 15), (t0, 14), (0, 0))]}
-    , {name = "Spinach", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 42, 21))]}
-    , {name = "Squash", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28, 14), (t0 + 14, 21), (0, 0))]}
-    , {name = "Sweet Potatoes", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28, 7), (t0 + 14, 21), (0, 0))]}
-    , {name = "Swiss Chard", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42, 14), (t0 - 21, 14), (0, 0))]}
-    , {name = "Thyme", category = "Herbs", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 70, 28), (t0, 21), (0, 0))]}
-    , {name = "Tomatoes", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 57, 15), (t0 + 7, 21), (0, 0))]}
-    , {name = "Turnips", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 28, 21))]}
-    , {name = "Watermelon", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28, 7), (t0 + 14, 21), (0, 0))]}
-    , {name = "Zucchini", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28, 14), (t0 + 14, 21), (0, 0))]}
+    [ {name = "Basil", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 57, 15), (t0, 22), (0, 0))]}
+    , {name = "Beets", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 14, 8))]}
+    , {name = "Bell Peppers", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 71, 14), (t0 + 14, 21), (0, 0))]}
+    , {name = "Broccoli", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42, 14), (t0 - 21, 21), (0, 0))]}
+    , {name = "Brussels Sprouts", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42, 14), (t0 - 28, 21), (0, 0))]}
+    , {name = "Cabbage", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 57, 14), (t0 - 37, 14), (0, 0))]}
+    , {name = "Cantaloupes", category = "Fruits", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28, 7), (t0 + 14, 21), (0, 0))]}
+    , {name = "Carrots", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 35, 14))]}
+    , {name = "Cauliflower", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42, 14), (t0 - 28, 14), (0, 0))]}
+    , {name = "Celery", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 71, 14), (t0 + 7, 14), (0, 0))]}
+    , {name = "Chives", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 28, 7))]}
+    , {name = "Cilantro", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0, 14))]}
+    , {name = "Corn", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0, 14))]}
+    , {name = "Cucumber", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28, 7), (t0 + 14, 21), (0, 0))]}
+    , {name = "Dill", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 35, 14))]}
+    , {name = "Eggplants", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 70, 14), (t0 + 14, 21), (0, 0))]}
+    , {name = "Green Beans", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 + 7, 21))]}
+    , {name = "Kale", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42, 14), (t0 - 28, 14), (0, 0))]}
+    , {name = "Lettuce", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42, 14), (t0 - 14, 28), (0, 0))]}
+    , {name = "Okra", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 + 14, 14))]}
+    , {name = "Onions", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 28, 21))]}
+    , {name = "Oregano", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 70, 28), (t0, 21), (0, 0))]}
+    , {name = "Parsley", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 28, 14))]}
+    , {name = "Parsnips", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 21, 21))]}
+    , {name = "Peas", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 42, 21))]}
+    , {name = "Potatoes", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 7, 21))]}
+    , {name = "Pumpkins", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28, 14), (t0 + 14, 21), (0, 0))]}
+    , {name = "Radishes", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 56, 22))]}
+    , {name = "Rosemary", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 70, 14), (t0 + 7, 21), (0, 0))]}
+    , {name = "Sage", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 56, 15), (t0, 14), (0, 0))]}
+    , {name = "Spinach", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 42, 21))]}
+    , {name = "Squash", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28, 14), (t0 + 14, 21), (0, 0))]}
+    , {name = "Sweet Potatoes", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28, 7), (t0 + 14, 21), (0, 0))]}
+    , {name = "Swiss Chard", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42, 14), (t0 - 21, 14), (0, 0))]}
+    , {name = "Thyme", category = "Herbs", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 70, 28), (t0, 21), (0, 0))]}
+    , {name = "Tomatoes", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 57, 15), (t0 + 7, 21), (0, 0))]}
+    , {name = "Turnips", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 28, 21))]}
+    , {name = "Watermelon", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28, 7), (t0 + 14, 21), (0, 0))]}
+    , {name = "Zucchini", category = "Vegetables", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28, 14), (t0 + 14, 21), (0, 0))]}
     ]
 
 

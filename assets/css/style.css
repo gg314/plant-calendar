@@ -342,15 +342,11 @@ input:disabled + label {
 }
 
 .top_info__instructions {
-    background: url('../img/arrow-1.png') no-repeat left 15px;
-    background-size: 319px 88px;
     padding-top: 88px;
 }
 
 .bottom_info__instructions {
-    background: url('../img/arrow-2.png') no-repeat left bottom;
     padding-bottom: 300px;
-    background-size: 300px 300px;
 }
 
 .top_info__left {
