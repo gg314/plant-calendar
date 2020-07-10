@@ -218,7 +218,7 @@ update msg model =
         )
           
       ClearAll ->
-        ( { model | zipcode = Unset, plants = List.map unselect model.plants }, Cmd.none)
+        ( { model | zipcode = Unset, zipRecord = initialRecord, plants = List.map unselect model.plants }, Cmd.none)
         
       ToggleSort ->
         ( { model | sortMode = if model.sortMode == "ABC" then "Date" else "ABC" }, Cmd.none)
@@ -523,7 +523,7 @@ getFrostInts status =
         Loading ->
           (-1000, 1000)
         _ ->
-          (-1000, 1000)
+          (120, 1000)
 
 getFrostString : String -> HTTPStatus -> String
 getFrostString which status =
@@ -533,7 +533,7 @@ getFrostString which status =
         Loading ->
           "Loading..."
         Unset ->
-          "—"
+          "Default"
         _ ->
           "Data not found"
 
@@ -592,7 +592,7 @@ view model =
   in
     div []
     [ div [ class "header" ]
-      [ div [ class "header_left" ] [ text "plant-calendar" ]
+      [ div [ class "header_left" ] [ strong [] [ text "plant" ], text "-calendar" ]
       , div [ class "header_right" ] [
         ul []
         [ li [ class (if plantsAreSelected then "sort show" else "hide") ] [ a [ onClick ToggleSort ] [ span [ class "icon" ] [], text (if model.sortMode == "ABC" then "Sort: Date" else "Sort: Name") ] ]

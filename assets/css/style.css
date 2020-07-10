@@ -43,11 +43,11 @@ body {
 }
 
 .header_left {
-    flex: 0 0 14rem;
+    flex: 0 0 auto;
     height: 3.5rem;
-    background: url('../img/logo.png') no-repeat center center;
+    background: url('../img/logo.png') no-repeat left center;
     background-size: contain;
-    font-size: 0;
+    padding-left: 3.8rem;
 }
 
 .header_right {
