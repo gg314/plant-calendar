@@ -431,4 +431,30 @@ input:disabled + label {
         flex: 0 0 100%;
     }
 
+    .top_info {
+        flex-wrap: wrap;
+        height: unset;
+    }
+    
+    .top_info--third {
+        flex: 1 1 100%;
+        padding: 2.0rem 0.5rem;
+        text-align: center;
+    }
+    
+    .top_info__left {
+        padding: 2.0rem 0;
+        flex: 1 1 100%;
+    }
+    
+    .top_info__right {
+        flex: 1 1 100%;
+        text-align: center;
+        padding: 2.0rem 0;
+        margin: 0 0 2.0rem 0;
+    }
+    
+    svg {
+        margin: 0;
+    }
 }
