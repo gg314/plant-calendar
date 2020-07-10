@@ -1,14 +1,16 @@
-module PlantCalendar exposing (Model, Msg(..), init, main, update, subscriptions, view)
+port module PlantCalendar exposing (Model, Msg(..), init, main, update, subscriptions, view)
 
 import Browser
 import Http
 import Html exposing (Html, div, span, text, h2, blockquote, ul, li, a, main_, textarea, button, strong, br, p, input, form, label, object, abbr)
 import Html.Attributes exposing (class, id, placeholder, value, href, target, type_, for, checked, disabled, attribute, title)
-import Html.Events exposing (onClick, onInput)
+import Html.Events exposing (onClick, onInput, onSubmit)
 import Svg exposing (svg)
 import Svg.Attributes exposing (style, x, y, x1, x2, y1, y2, stroke, fill, width, height)
 import Json.Decode
+import Json.Encode
 import Regex
+import Basics exposing (identity)
 
 import Config exposing (api_key_NOAA)
 import USASVG exposing (usaSVG)
@@ -59,7 +61,12 @@ type alias Plant =
   , disabled : Bool
   , minzone : Float
   , maxzone : Float
-  , defaultPeriods : List ((Float, Float), (Float, Float), (Float, Float))
+  , defaultPeriods : List ((Int, Int), (Int, Int), (Int, Int))
+  }
+
+type alias PackedPlant = 
+  { name : String 
+  , boxes : List ( (String, Int, Int) )
   }
 
 type alias Model =
@@ -93,6 +100,7 @@ type Msg
     | SetFilter String
     | GotZipcode (Result Http.Error Zipcode)
     | GotResults String String (Result Http.Error (List JsonResult))
+    | SendPDF
     | ClearAll
     | ToggleSort
 
@@ -129,7 +137,7 @@ update msg model =
     case msg of
       SetZipcode ->
         let
-            searchZip = model.zipcodetext
+            searchZip = Debug.log "zip " model.zipcodetext
             searchStation = "remove"
             newZipcode = Loading
             newZipRecord = findRecord searchZip
@@ -189,24 +197,100 @@ update msg model =
       SetFilter string ->
         ( { model | filter = String.trim string }, Cmd.none)
           
+      SendPDF ->
+        ( model
+        , let
+            sortedPlants = if model.sortMode == "ABC" then (List.filter .selected model.plants) else List.sortWith sortByEarly (List.filter .selected model.plants)
+            (springFrost, winterFrost) = getFrostInts model.zipcode
+          in
+            outputPort
+              ( Json.Encode.encode
+                2
+                (Json.Encode.object
+                [ ("location", Json.Encode.string (getLocationName model.zipRecord))
+                , ("sf", Json.Encode.int springFrost)
+                , ("wf", Json.Encode.int winterFrost)
+                , ("sfstr", Json.Encode.string (getFrostString "spring" model.zipcode))
+                , ("wfstr", Json.Encode.string (getFrostString "winter" model.zipcode))
+                , ("plants", Json.Encode.list encodePlant (List.map (packPlant springFrost) sortedPlants) )
+                ]
+              ))
+        )
+          
       ClearAll ->
         ( { model | zipcode = Unset, plants = List.map unselect model.plants }, Cmd.none)
         
       ToggleSort ->
         ( { model | sortMode = if model.sortMode == "ABC" then "Date" else "ABC" }, Cmd.none)
 
+packBoxes : Int -> ((Int, Int), (Int, Int), (Int, Int)) -> List ( (String, Int, Int) )
+packBoxes offset ((i1, i2), (t1, t2), (o1, o2)) =
+  []
+    |> (if i2 > 0 then ((::) ("i", i1+offset, i2)) else identity)
+    |> (if t2 > 0 then ((::) ("t", t1+offset, t2)) else identity)
+    |> (if o2 > 0 then ((::) ("o", o1+offset, o2)) else identity)
+
+
+packPlant : Int -> Plant -> PackedPlant
+packPlant springFrost plant =
+  PackedPlant (.name plant)
+              ( List.concatMap (packBoxes (springFrost-120)) (.defaultPeriods plant)
+              )
+
+{-
+  List.map (.defaultPeriods plant)
+    sfOffset = sf - 120
+    sx1 = ss + sfOffset
+    sx2 = sx1 + sw
+    px1 = ps + sfOffset
+    px2 = px1 + pw
+    hx1 = hs + sfOffset
+    hx2 = hx1 + hw
+  in
+    [ Svg.rect [ x (toPercentOffset ss (getFrostOffset sf wf cycle)), y (String.fromInt (y0-9)), width (toPercentStr sw), height "17", stroke "#77734f", fill "rgba(209, 193, 42, .7)"]
+      (if sf > 0 then [ Svg.title [] [ text (dayToDateString sx1 daysInAYearFull ++ " through " ++ dayToDateString sx2 daysInAYearFull) ] ] else []) {- -23 -}
+    , Svg.rect [ x (toPercentOffset ps (getFrostOffset sf wf cycle)), y (String.fromInt (y0-9)), width (toPercentStr pw), height "17", stroke "#517f6c", fill "rgba(56, 165, 116, .7)"] 
+      (if sf > 0 then [ Svg.title [] [ text (dayToDateString px1 daysInAYearFull ++ " through " ++ dayToDateString px2 daysInAYearFull) ] ] else [])
+    , Svg.rect [ x (toPercentOffset hs (getFrostOffset sf wf cycle)), y (String.fromInt (y0-9)), width (toPercentStr hw), height "17", stroke "#7c6650", fill "rgba(211, 122, 41, .7)"]
+      (if sf > 0 then [ Svg.title [] [ text (dayToDateString hx1 daysInAYearFull ++ " through " ++ dayToDateString hx2 daysInAYearFull) ] ] else []) {- +9 -}
+    ]
+  :: 
+  
+  --}
+
+
+encodePlant : PackedPlant -> Json.Encode.Value
+encodePlant plant =
+  Json.Encode.object [ ("name", Json.Encode.string (.name plant)),
+                       ("boxes", Json.Encode.list encodeBox (.boxes plant) )
+                     ]
+
+encodeBox : (String, Int, Int) -> Json.Encode.Value
+encodeBox (boxtype, start, duration) =
+  Json.Encode.object [ ("type", Json.Encode.string boxtype)
+                     , ("start", Json.Encode.int start)
+                     , ("duration", Json.Encode.int duration)
+                     ]
+
+
+daysInAYear : List ((String, Int))
+daysInAYear = [("Jan.", 31), ("Feb.", 28), ("Mar.", 31), ("Apr.", 30), ("May", 31), ("June", 30), ("July", 31), ("Aug.", 31), ("Sep.", 30), ("Oct.", 31), ("Nov.", 30), ("Dec.", 31)]
+
+daysInAYearFull : List ((String, Int))
+daysInAYearFull = [("January", 31), ("February", 28), ("March", 31), ("April", 30), ("May", 31), ("June", 30), ("July", 31), ("August", 31), ("September", 30), ("October", 31), ("November", 30), ("December", 31)]
+
 dayToDateString : Int -> List ((String, Int)) -> String
 dayToDateString n months =
   if n < 0 then "N/A" else
     case months of
-      (str, month)::ms -> if n <= month then (str ++ " " ++ String.fromInt n) else dayToDateString (n-month) ms
-      _ -> dayToDateString (n-365) [("Jan.", 31), ("Feb.", 28), ("Mar.", 31), ("Apr.", 30), ("May", 31), ("June", 30), ("July", 31), ("Aug.", 31), ("Sep.", 30), ("Oct.", 31), ("Nov.", 30), ("Dec.", 31)]
+      (str, month)::ms -> if n <= month then str ++ " " ++ String.fromInt n else dayToDateString (n-month) ms
+      _ -> dayToDateString (n-365) daysInAYear
 
 
 getAvg : String -> List (JsonResult) -> Float
 getAvg key list =
   let
-    flist = (List.filter (.datatype >> (==) key) list) {- (\{datatype} -> datatype == key)   or   (\x -> x.datatype == key -}
+    flist = List.filter (.datatype >> (==) key) list {- (\{datatype} -> datatype == key)   or   (\x -> x.datatype == key -}
   in
     toFloat (List.sum (List.map .value flist)) / toFloat (List.length flist)
 
@@ -263,6 +347,7 @@ togglePlant target test =
     if test == target then { test | selected = not test.selected } else test
 
 -- SUBSCRIPTIONS
+port outputPort : (String) -> Cmd msg
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
@@ -285,30 +370,36 @@ getPlants index plants =
 
 drawSVG : (Int, Int) -> List (Plant) -> Html Msg
 drawSVG (sf, wf) plants =
-    svg [ style ("width:100%; height: "++ String.fromInt (List.length plants*66+145) ++"px; stroke: #888; fill; stroke-width: 1"), Svg.Attributes.shapeRendering "crispEdges" ]
+    svg [ style ("width:100%; height: "++ String.fromInt (List.length plants*62+130) ++"px; stroke: #888; fill; stroke-width: 1"), Svg.Attributes.shapeRendering "crispEdges" ]
     (List.append
-        [ Svg.rect [ x "28%", y "115", width (toPercent ((toFloat sf)/365.0)), height "100%", stroke "none", fill "rgba(30, 60, 150, .045)"] []
-        , Svg.rect [ x (toPercentOffset ((toFloat wf)/365.0) 0), y "115", width "100%", height "100%", stroke "none", fill "rgba(30, 60, 150, .045)"] []
-        , Svg.rect [ x "17.5%", y "12", width "5%", height "14", stroke "#77734f", fill "rgba(209, 193, 42, .7)"] []
-        , Svg.text_ [y "28", x "20%", style "fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0vw;"] [ Svg.text "Plant indoors" ]
-        , Svg.rect [ x "37.5%", y "12", width "5%", height "14", stroke "#517f6c", fill "rgba(56, 165, 116, .7)"] []
-        , Svg.text_ [y "28", x "40%", style "fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0vw;"] [ Svg.text "Transplant seedlings" ]
-        , Svg.rect [ x "57.5%", y "12", width "5%", height "14", stroke "#7c6650", fill "rgba(211, 122, 41, .7)"] []
-        , Svg.text_ [y "28", x "60%", style "fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0vw;"] [ Svg.text "Plant outdoors" ]
-        , Svg.rect [ x "77.5%", y "12", width "5%", height "14", stroke "none", fill "rgba(30, 60, 150, .045)"] []
-        , Svg.text_ [y "28", x "80%", style "fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0vw;"] [ Svg.text "Frost danger" ]
-        , Svg.text_ [y "105", x "28.00%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "JAN" ]
-        , Svg.text_ [y "105", x "34.31%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "FEB" ]
-        , Svg.text_ [y "105", x "39.84%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "MAR" ]
-        , Svg.text_ [y "105", x "45.95%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "APR" ]
-        , Svg.text_ [y "105", x "51.87%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "MAY" ]
-        , Svg.text_ [y "105", x "57.98%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "JUN" ]
-        , Svg.text_ [y "105", x "63.90%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "JUL" ]
-        , Svg.text_ [y "105", x "70.02%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "AUG" ]
-        , Svg.text_ [y "105", x "76.13%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "SEP" ]
-        , Svg.text_ [y "105", x "82.05%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "OCT" ]
-        , Svg.text_ [y "105", x "88.16%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "NOV" ]
-        , Svg.text_ [y "105", x "94.08%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.8vw;"] [ Svg.text "DEC" ]
+        [ Svg.linearGradient [ x1 "0", y1 "0", x2 "100%", y2 "0", Svg.Attributes.id "g1" ]
+          [ Svg.stop [ Svg.Attributes.stopColor "#e1e2e7", Svg.Attributes.stopOpacity "1.0", Svg.Attributes.offset "97%" ] []
+          , Svg.stop [ Svg.Attributes.stopColor "#e1e2e7", Svg.Attributes.stopOpacity "0.0", Svg.Attributes.offset "100%" ] [] ]
+        , Svg.linearGradient [ x1 "100%", y1 "0", x2 "0", y2 "0", Svg.Attributes.id "g2" ]
+          [ Svg.stop [ Svg.Attributes.stopColor "#e1e2e7", Svg.Attributes.stopOpacity "1.0", Svg.Attributes.offset "97%" ] []
+          , Svg.stop [ Svg.Attributes.stopColor "#e1e2e7", Svg.Attributes.stopOpacity "0.0", Svg.Attributes.offset "100%" ] [] ]
+        , Svg.rect [ Svg.Attributes.class "spring-frost", x "28%", y "115", width (toPercentStr sf), height "100%", stroke "none", fill "url(#g1)"] []
+        , Svg.rect [ Svg.Attributes.class "winter-frost", x (toPercentOffset wf 0), y "115", width (toPercentStr (365-sf)), height "100%", stroke "none", fill "url(#g2)"] []
+        , Svg.rect [ x "10%", y "12", width "5%", height "17", stroke "#77734f", fill "rgba(209, 193, 42, .7)"] []
+        , Svg.text_ [y "34", x "12.5%", style "fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0rem;"] [ Svg.text "Plant indoors" ]
+        , Svg.rect [ x "35%", y "12", width "5%", height "17", stroke "#517f6c", fill "rgba(56, 165, 116, .7)"] []
+        , Svg.text_ [y "34", x "37.5%", style "fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0rem;"] [ Svg.text "Transplant seedlings" ]
+        , Svg.rect [ x "60%", y "12", width "5%", height "17", stroke "#7c6650", fill "rgba(211, 122, 41, .7)"] []
+        , Svg.text_ [y "34", x "62.5%", style "fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0rem;"] [ Svg.text "Plant outdoors" ]
+        , Svg.rect [ x "85%", y "12", width "5%", height "17", stroke "none", fill "#e1e2e7"] []
+        , Svg.text_ [y "34", x "87.5%", style "fill: #444; stroke: none; text-anchor: middle; dominant-baseline: hanging; font-size: 1.0rem;"] [ Svg.text "Frost danger" ]
+        , Svg.text_ [y "105", x "28.00%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.85rem;"] [ Svg.text "JAN" ]
+        , Svg.text_ [y "105", x "34.31%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.85rem;"] [ Svg.text "FEB" ]
+        , Svg.text_ [y "105", x "39.84%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.85rem;"] [ Svg.text "MAR" ]
+        , Svg.text_ [y "105", x "45.95%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.85rem;"] [ Svg.text "APR" ]
+        , Svg.text_ [y "105", x "51.87%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.85rem;"] [ Svg.text "MAY" ]
+        , Svg.text_ [y "105", x "57.98%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.85rem;"] [ Svg.text "JUN" ]
+        , Svg.text_ [y "105", x "63.90%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.85rem;"] [ Svg.text "JUL" ]
+        , Svg.text_ [y "105", x "70.02%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.85rem;"] [ Svg.text "AUG" ]
+        , Svg.text_ [y "105", x "76.13%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.85rem;"] [ Svg.text "SEP" ]
+        , Svg.text_ [y "105", x "82.05%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.85rem;"] [ Svg.text "OCT" ]
+        , Svg.text_ [y "105", x "88.16%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.85rem;"] [ Svg.text "NOV" ]
+        , Svg.text_ [y "105", x "94.08%", style "fill: #444; stroke: none; text-anchor: middle; font-size: 0.85rem;"] [ Svg.text "DEC" ]
         , Svg.line [y2 "100%", y1 "115", x2 "28.00%", x1 "28.00%", stroke "#d8d8d8"] []
         , Svg.line [y2 "100%", y1 "115", x2 "34.31%", x1 "34.31%", stroke "#d8d8d8"] []
         , Svg.line [y2 "100%", y1 "115", x2 "39.84%", x1 "39.84%", stroke "#d8d8d8"] []
@@ -328,7 +419,7 @@ drawSVG (sf, wf) plants =
 drawRow : (Int, Int) -> Int -> Plant -> List (Svg.Svg Msg)
 drawRow (sf, wf) index plant =
     let
-      y0 = 66 * (index+1) + 105
+      y0 = 62 * (index+1) + 105
     in
       List.append
         [ Svg.line [ y1 (String.fromInt (y0-14)), y2 (String.fromInt (y0+14)), x1 "28.00%", x2 "28.00%" ] []
@@ -344,14 +435,10 @@ drawRow (sf, wf) index plant =
         , Svg.line [ y1 (String.fromInt (y0-14)), y2 (String.fromInt (y0+14)), x1 "88.16%", x2 "88.16%" ] []
         , Svg.line [ y1 (String.fromInt (y0-14)), y2 (String.fromInt (y0+14)), x1 "94.08%", x2 "94.08%" ] []
         , Svg.line [ y1 (String.fromInt (y0-14)), y2 (String.fromInt (y0+14)), x1 "99.9%", x2 "99.9%" ] []
-        , Svg.text_ [ y (String.fromInt (y0-2)), x "23%", style "fill: #444; stroke: none; text-anchor: end; font-weight: 400; font-family: 'Gloria Hallelujah'; font-size: 1.3vw;" ] [ Svg.text plant.name]
         , Svg.line [ y1 (String.fromInt y0), y2 (String.fromInt y0), x1 "99.9%", x2 "0%" ] []
+        , Svg.text_ [ y (String.fromInt (y0-2)), x "26.5%", width "25%", style "fill: #444; stroke: none; text-anchor: end; font-weight: 400; font-family: 'Gloria Hallelujah'; font-size: 1.5rem;" ] [ Svg.text plant.name]
         ] 
         (List.concat (List.indexedMap (drawCycle y0 (sf, wf)) plant.defaultPeriods))
-
-toPercent : Float -> String
-toPercent f =
-  String.fromFloat (f * 72) ++ "%"
 
 getZoneOffset : Int -> Int -> Float
 getZoneOffset zone cycle =
@@ -369,16 +456,32 @@ getFrostOffset sfday wfday cycle =
   then 0
   else ((toFloat sfday) - 120.0)/3.65
 
-toPercentOffset : Float -> Float -> String
-toPercentOffset f offset =
-  String.fromFloat (f * 72 + 28 + offset) ++ "%"
+toPercentStr : Int -> String
+toPercentStr d =
+  String.fromFloat ((toFloat d)/365.0 * 72) ++ "%"
 
-drawCycle : Int -> (Int, Int) -> Int -> ((Float, Float), (Float, Float), (Float, Float)) -> List (Svg.Svg Msg)
+toPercentOffset : Int -> Float -> String
+toPercentOffset d offset =
+  String.fromFloat ((toFloat d)/365.0 * 72 + 28 + offset) ++ "%"
+
+drawCycle : Int -> (Int, Int) -> Int -> ((Int, Int), (Int, Int), (Int, Int)) -> List (Svg.Svg Msg)
 drawCycle y0 (sf, wf) cycle ((ss, sw), (ps, pw), (hs, hw)) =
-  [ Svg.rect [ x (toPercentOffset ss (getFrostOffset sf wf cycle)), y (String.fromInt (y0-7)), width (toPercent sw), height "13", stroke "#77734f", fill "rgba(209, 193, 42, .7)"] [] {- -23 -}
-  , Svg.rect [ x (toPercentOffset ps (getFrostOffset sf wf cycle)), y (String.fromInt (y0-7)), width (toPercent pw), height "13", stroke "#517f6c", fill "rgba(56, 165, 116, .7)"] []
-  , Svg.rect [ x (toPercentOffset hs (getFrostOffset sf wf cycle)), y (String.fromInt (y0-7)), width (toPercent hw), height "13", stroke "#7c6650", fill "rgba(211, 122, 41, .7)"] [] {- +9 -}
-  ]
+  let 
+    sfOffset = sf - 120
+    sx1 = ss + sfOffset
+    sx2 = sx1 + sw
+    px1 = ps + sfOffset
+    px2 = px1 + pw
+    hx1 = hs + sfOffset
+    hx2 = hx1 + hw
+  in
+    [ Svg.rect [ x (toPercentOffset ss (getFrostOffset sf wf cycle)), y (String.fromInt (y0-9)), width (toPercentStr sw), height "17", stroke "#77734f", fill "rgba(209, 193, 42, .7)"]
+      (if sf > 0 then [ Svg.title [] [ text (dayToDateString sx1 daysInAYearFull ++ " through " ++ dayToDateString sx2 daysInAYearFull) ] ] else []) {- -23 -}
+    , Svg.rect [ x (toPercentOffset ps (getFrostOffset sf wf cycle)), y (String.fromInt (y0-9)), width (toPercentStr pw), height "17", stroke "#517f6c", fill "rgba(56, 165, 116, .7)"] 
+      (if sf > 0 then [ Svg.title [] [ text (dayToDateString px1 daysInAYearFull ++ " through " ++ dayToDateString px2 daysInAYearFull) ] ] else [])
+    , Svg.rect [ x (toPercentOffset hs (getFrostOffset sf wf cycle)), y (String.fromInt (y0-9)), width (toPercentStr hw), height "17", stroke "#7c6650", fill "rgba(211, 122, 41, .7)"]
+      (if sf > 0 then [ Svg.title [] [ text (dayToDateString hx1 daysInAYearFull ++ " through " ++ dayToDateString hx2 daysInAYearFull) ] ] else []) {- +9 -}
+    ]
 
 plantNameContains : String -> Plant -> Bool
 plantNameContains search plant =
@@ -426,11 +529,11 @@ getFrostString : String -> HTTPStatus -> String
 getFrostString which status =
     case status of
         Success good ->
-          dayToDateString (if which == "winter" then good.winterFrost else good.springFrost)  [("Jan.", 31), ("Feb.", 28), ("Mar.", 31), ("Apr.", 30), ("May", 31), ("June", 30), ("July", 31), ("Aug.", 31), ("Sep.", 30), ("Oct.", 31), ("Nov.", 30), ("Dec.", 31)]
+          dayToDateString (if which == "winter" then good.winterFrost else good.springFrost) daysInAYear
         Loading ->
           "Loading..."
         Unset ->
-          ""
+          "—"
         _ ->
           "Data not found"
 
@@ -445,7 +548,7 @@ getZIP status =
 
 drawBottomInstructions : Html Msg
 drawBottomInstructions =
-    div [ class "bottom_info__instructions" ] [ text "2. Select plants to see recommended planting dates!"]
+    div [ class "bottom_info__instructions" ] []
 
 drawBottomContent : List (Plant) -> HTTPStatus -> Html Msg
 drawBottomContent selectedPlants status =
@@ -454,7 +557,10 @@ drawBottomContent selectedPlants status =
 
 drawTopInstructions : Html Msg
 drawTopInstructions =
-  div [ class "top_info" ] [ div [ class "top_info__instructions" ] [ text "1. Set your zip code" ] ]
+  div [ class "top_info" ]
+  [ div [ class "top_info--third" ] [ text "1. Set your zip code" ]
+  , div [ class "top_info--third" ] [ text "2. Select some plants" ]
+  , div [ class "top_info--third" ] [ text "3. See the calendar", br [] [], text "(and save a PDF!)" ] ]
 
 
 drawTopContent : ZipRecord -> HTTPStatus -> Html Msg
@@ -470,7 +576,7 @@ drawTopContent zr status =
       , div [] [ strong [] [ text "Average winter min. temperature: " ], text (getMinTemp status)]
       , div [] [ strong [] [ text "Average first winter frost: " ], text (getFrostString "winter" status)]
       -- , div [] [ strong [] [ text "Extreme low temperature: " ], text (getTempString status) ]
-      , div [] [ strong [] [ text "USDA plant hardiness zone: " ], text "To do..."]
+      , div [] [ strong [] [ text "USDA plant hardiness zone: " ], text "N/A"]
       ]
     , div [ class "top_info__right" ] [ usaSVG (Maybe.withDefault 0 (String.toInt (String.slice 0 3 (getZIP status)))) ]
     ]
@@ -491,9 +597,9 @@ view model =
         ul []
         [ li [ class (if plantsAreSelected then "sort show" else "hide") ] [ a [ onClick ToggleSort ] [ span [ class "icon" ] [], text (if model.sortMode == "ABC" then "Sort: Date" else "Sort: Name") ] ]
         , li [ class (if plantsAreSelected then "clear show" else "hide") ] [ a [ onClick ClearAll ] [ span [ class "icon" ] [], text "Clear All" ] ]
-        , li [ class (if plantsAreSelected then "pdf show" else "hide") ] [ a [ ] [ span [ class "icon" ] [], text "Save PDF" ] ]
+        , li [ class (if plantsAreSelected then "pdf show" else "hide") ] [ a [ onClick SendPDF ] [ span [ class "icon" ] [], text "Save PDF" ] ]
         , li [ class "donate" ] [ a [ href "#", target "_blank" ] [ span [ class "icon" ] [], text "Donate" ] ]
-        , li [ class "github" ] [ a [ href "#", target "_blank" ] [ span [ class "icon" ] [], text "Github" ] ]
+        , li [ class "github" ] [ a [ href "https://github.com/gg314/plant-calendar", target "_blank" ] [ span [ class "icon" ] [], text "Github" ] ]
         ]
       ]
     ]
@@ -501,8 +607,10 @@ view model =
       [ div [ class "sidebar" ]
         [ div [ class "sidebar__top" ]
           [ div [ class "location" ]
-            [ input [ type_ "text", id "location", placeholder "ZIP Code", onInput SetZipcodeText, value model.zipcodetext ] []
-            , button [ onClick SetZipcode ] [ text "Set" ]
+            [ form [ onSubmit SetZipcode ]
+              [ input [ type_ "text", id "location", placeholder "ZIP Code", onInput SetZipcodeText, value model.zipcodetext ] []
+              , button [ ] [ text "Set" ]
+              ]
             ]
           , div [ class "search" ]
             [ input [ type_ "search", id "filter", placeholder "Filter", onInput SetFilter, value model.filter ] []
@@ -531,9 +639,6 @@ w3 = 80/285.0
 m : Float
 m = 1/12.0
 
-d : Float
-d = 1/365.0
-
 
 sortByEarly : Plant -> Plant -> Order
 sortByEarly p1 p2 =
@@ -555,50 +660,52 @@ sortByEarly p1 p2 =
 plantData : Int -> List (Plant)
 plantData sfday =
   let
-    t0 = 120.0/365.0
+    t0 = 120
   in
-    [ {name = "Basil", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 57*d, 15*d), (t0, 22*d), (0, 0))]}
-    , {name = "Beets", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((99, 99), (99, 99), (t0 - 14*d, 8*d))]}
-    , {name = "Bell Peppers", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 71*d, 14*d), (t0 + 14*d, 21*d), (0, 0))]}
-    , {name = "Broccoli", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42*d, 14*d), (t0 - 21*d, 21*d), (0, 0))]}
-    , {name = "Brussels Sprouts", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42*d, 14*d), (t0 - 28*d, 21*d), (0, 0))]}
-    , {name = "Cabbage", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 57*d, 14*d), (t0 - 37*d, 14*d), (0, 0))]}
-    , {name = "Cantaloupes", category = "Fruits", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28*d, 7*d), (t0 + 14*d, 21*d), (0, 0))]}
-    , {name = "Carrots", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((99, 99), (99, 99), (t0 - 35*d, 14*d))]}
-    , {name = "Cauliflower", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42*d, 14*d), (t0 - 28*d, 14*d), (0, 0))]}
-    , {name = "Celery", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 71*d, 14*d), (t0 + 7*d, 14*d), (0, 0))]}
-    , {name = "Chives", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((99, 99), (99, 99), (t0 - 28*d, 7*d))]}
-    , {name = "Cilantro (Coriander)", category = "Herbs", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((99, 99), (99, 99), (t0, 14*d))]}
-    , {name = "Corn", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((99, 99), (99, 99), (t0, 14*d))]}
-    , {name = "Cucumber", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28*d, 7*d), (t0 + 14*d, 21*d), (0, 0))]}
-    , {name = "Dill", category = "Herbs", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((99, 99), (99, 99), (t0 - 35*d, 14*d))]}
-    , {name = "Eggplants", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 70*d, 14*d), (t0 + 14*d, 21*d), (0, 0))]}
-    , {name = "Green Beans", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((99, 99), (99, 99), (t0 + 7*d, 21*d))]}
-    , {name = "Kale", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42*d, 14*d), (t0 - 28*d, 14*d), (0, 0))]}
-    , {name = "Lettuce", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42*d, 14*d), (t0 - 14*d, 28*d), (0, 0))]}
-    , {name = "Okra", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((99, 99), (99, 99), (t0 + 14*d, 14*d))]}
-    , {name = "Onions", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((99, 99), (99, 99), (t0 - 28*d, 21*d))]}
-    , {name = "Oregano", category = "Herbs", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 70*d, 28*d), (t0, 21*d), (0, 0))]}
-    , {name = "Parsley", category = "Herbs", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((99, 99), (99, 99), (t0 - 28*d, 14*d))]}
-    , {name = "Parsnips", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((99, 99), (99, 99), (t0 - 21*d, 21*d))]}
-    , {name = "Peas", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((99, 99), (99, 99), (t0 - 42*d, 21*d))]}
-    , {name = "Potatoes", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((99, 99), (99, 99), (t0 - 7*d, 21*d))]}
-    , {name = "Pumpkins", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28*d, 14*d), (t0 + 14*d, 21*d), (0, 0))]}
-    , {name = "Radishes", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((99, 99), (99, 99), (t0 - 56*d, 22*d))]}
-    , {name = "Rosemary", category = "Herbs", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 70*d, 14*d), (t0 + 7*d, 21*d), (0, 0))]}
-    , {name = "Sage", category = "Herbs", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 56*d, 15*d), (t0, 14*d), (0, 0))]}
-    , {name = "Spinach", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((99, 99), (99, 99), (t0 - 42*d, 21*d))]}
-    , {name = "Squash & Zucchini", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28*d, 14*d), (t0 + 14*d, 21*d), (0, 0))]}
-    , {name = "Sweet Potatoes", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28*d, 7*d), (t0 + 14*d, 21*d), (0, 0))]}
-    , {name = "Swiss Chard", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42*d, 14*d), (t0 - 21*d, 14*d), (0, 0))]}
-    , {name = "Thyme", category = "Herbs", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 70*d, 28*d), (t0, 21*d), (0, 0))]}
-    , {name = "Tomatoes", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 57*d, 15*d), (t0 + 7*d, 21*d), (0, 0))]}
-    , {name = "Turnips", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((99, 99), (99, 99), (t0 - 28*d, 21*d))]}
-    , {name = "Watermelon", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28*d, 7*d), (t0 + 14*d, 21*d), (0, 0))]}
+    [ {name = "Basil", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 57, 15), (t0, 22), (0, 0))]}
+    , {name = "Beets", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 14, 8))]}
+    , {name = "Bell Peppers", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 71, 14), (t0 + 14, 21), (0, 0))]}
+    , {name = "Broccoli", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42, 14), (t0 - 21, 21), (0, 0))]}
+    , {name = "Brussels Sprouts", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42, 14), (t0 - 28, 21), (0, 0))]}
+    , {name = "Cabbage", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 57, 14), (t0 - 37, 14), (0, 0))]}
+    , {name = "Cantaloupes", category = "Fruits", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28, 7), (t0 + 14, 21), (0, 0))]}
+    , {name = "Carrots", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 35, 14))]}
+    , {name = "Cauliflower", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42, 14), (t0 - 28, 14), (0, 0))]}
+    , {name = "Celery", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 71, 14), (t0 + 7, 14), (0, 0))]}
+    , {name = "Chives", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 28, 7))]}
+    , {name = "Cilantro", category = "Herbs", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0, 14))]}
+    , {name = "Corn", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0, 14))]}
+    , {name = "Cucumber", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28, 7), (t0 + 14, 21), (0, 0))]}
+    , {name = "Dill", category = "Herbs", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 35, 14))]}
+    , {name = "Eggplants", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 70, 14), (t0 + 14, 21), (0, 0))]}
+    , {name = "Green Beans", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 + 7, 21))]}
+    , {name = "Kale", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42, 14), (t0 - 28, 14), (0, 0))]}
+    , {name = "Lettuce", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42, 14), (t0 - 14, 28), (0, 0))]}
+    , {name = "Okra", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 + 14, 14))]}
+    , {name = "Onions", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 28, 21))]}
+    , {name = "Oregano", category = "Herbs", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 70, 28), (t0, 21), (0, 0))]}
+    , {name = "Parsley", category = "Herbs", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 28, 14))]}
+    , {name = "Parsnips", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 21, 21))]}
+    , {name = "Peas", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 42, 21))]}
+    , {name = "Potatoes", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 7, 21))]}
+    , {name = "Pumpkins", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28, 14), (t0 + 14, 21), (0, 0))]}
+    , {name = "Radishes", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 56, 22))]}
+    , {name = "Rosemary", category = "Herbs", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 70, 14), (t0 + 7, 21), (0, 0))]}
+    , {name = "Sage", category = "Herbs", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 56, 15), (t0, 14), (0, 0))]}
+    , {name = "Spinach", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 42, 21))]}
+    , {name = "Squash", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28, 14), (t0 + 14, 21), (0, 0))]}
+    , {name = "Sweet Potatoes", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28, 7), (t0 + 14, 21), (0, 0))]}
+    , {name = "Swiss Chard", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 42, 14), (t0 - 21, 14), (0, 0))]}
+    , {name = "Thyme", category = "Herbs", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 70, 28), (t0, 21), (0, 0))]}
+    , {name = "Tomatoes", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 57, 15), (t0 + 7, 21), (0, 0))]}
+    , {name = "Turnips", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((-1000, -1000), (-1000, -1000), (t0 - 28, 21))]}
+    , {name = "Watermelon", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28, 7), (t0 + 14, 21), (0, 0))]}
+    , {name = "Zucchini", category = "Vegetables", selected = True, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((t0 - 28, 14), (t0 + 14, 21), (0, 0))]}
     ]
 
 
-    
+-- Early data
+{-   
 plantData2 : List (Plant)
 plantData2 = 
     [ {name = "Anemone", category = "Flowers", selected = False, disabled = False, minzone = 2.0, maxzone = 13.5, defaultPeriods = [((0.10137, 0.246), (0.217414, 0.2456), (0 ,0)), ((0.605479, 0.2456), (0.721523, 0.2456), (0, 0))]}
@@ -742,3 +849,4 @@ plantData2 =
     , {name = "Strawberries", category = "Fruits", selected = False, disabled = False, minzone = 5.0, maxzone = 8.5, defaultPeriods = [((1.0*m, w2), (1.0*m, w2), (1.0*m, w3)), ((1.0*m, w2), (1.0*m, w2), (1.0*m, w3))]}
     , {name = "Watermelon", category = "Fruits", selected = False, disabled = False, minzone = 1.0, maxzone = 11.5, defaultPeriods = [((1.0*m, w2), (1.0*m, w2), (1.0*m, w3)), ((1.0*m, w2), (1.0*m, w2), (1.0*m, w3))]}
     ]
+    -}

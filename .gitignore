@@ -4,3 +4,7 @@ elm-stuff
 repl-temp-*
 # api-keys
 src/Config.elm
+# garbage
+node-modules/*
+node-modules
+test/*

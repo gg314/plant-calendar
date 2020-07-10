@@ -38,10 +38,16 @@ body {
     font-size: 2.0rem;
     text-shadow: -1px -1px 2px rgba(0, 0, 0, .4);
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 .header_left {
-    flex: 1 1 auto;
+    flex: 0 0 14rem;
+    height: 3.5rem;
+    background: url('../img/logo.png') no-repeat center center;
+    background-size: contain;
+    font-size: 0;
 }
 
 .header_right {
@@ -145,8 +151,9 @@ ul li a:hover .icon {
     flex-direction: column;
     flex: 0 0 20%;
     max-width: 20%;
+    min-width: 250px;
     width: 100%;
-    padding: 0 0.5rem 1.0rem;
+    padding: 0 0.5rem 0.0rem;
     overflow: hidden;
 }
 
@@ -164,32 +171,47 @@ ul li a:hover .icon {
     display: block;
     margin: 0 -3rem 0 0rem;
     padding-top: 0.25rem;
+    overflow: auto;
 }
 
 .crop__list {
     height: 100%;
     overflow: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+.crop__list div {
+    flex: 0 0 100%;
 }
 
 main {
     flex: 0 0 80%;
     width: 100%;
-    padding: 1rem 1rem .5rem 1rem;
+    padding: 1rem 1rem 0 1rem;
     background: #eaeaea;
 }
 
 svg {
-    margin: 2rem 0;
+    margin: 2rem 0 0;
 }
 
 .location {
     flex: 1 1 auto;
     margin-bottom: 0.75rem;
     display: flex;
+    width: 100%;
 }
 
 .search {
     flex: 1 1 auto;
+    display: flex;;
+    width: 100%;
+}
+
+.location form {
+    width: 100%;
     display: flex;
 }
 
@@ -197,13 +219,14 @@ input[type="search"], input[type="text"] {
     border: 1px solid #ccc;
     border-radius: 5px 0 0 5px;
     border-right: 0;
-    padding: 0.5rem 0.75rem;
+    padding: 0.5rem 0.25rem;
     font-size: 1.0rem;
-    width: 100%;
+    max-width: 100%;
+    min-width: 4.0rem;
     padding-left: 2.125rem;
     color: #555;
     font-family: "Segoe UI";
-    flex: 0 0 60%;
+    flex: 1 1 80%;
 }
 
 button {
@@ -219,7 +242,7 @@ button {
     cursor: pointer;
     font-family: "Segoe UI";
     font-size: 1.0rem;
-    width: 100%;
+    flex: 1 1 20%;
 }
 
 button.inactive {
@@ -300,16 +323,22 @@ input:disabled + label {
     cursor: default;
 }
 
-.top_info__instructions, .bottom_info__instructions {
+.top_info__instructions, .bottom_info__instructions, .top_info--third {
     font-family: "Gloria Hallelujah";
     font-size: 2.0rem;
     padding: 3.0rem;
     color: #aaa;
 }
 
+.top_info--third {
+    flex: 0 0 33.3%;
+    align-items: center;
+}
+
 .top_info {
     display: flex;
     height: 245px;
+    align-items: center;
 }
 
 .top_info__instructions {
@@ -351,4 +380,55 @@ input:disabled + label {
     order: 2;
     flex: 0 0 auto;
     padding-right: 2.0rem;
+}
+
+@media only screen and (max-width: 780px) {
+    .header {
+        height: unset;
+        position: unset;
+        justify-content: space-between;
+    }
+
+    .header_right {
+        flex: 1 1 auto;
+    }
+
+    .header_left {
+        display: none;
+    }
+
+    .sidebar {
+        position: unset;
+        max-width: unset;
+        flex: 0 0 100%;
+        border: 0;
+        height: unset;
+    }
+
+    .sidebar__bottom {
+        margin: 0;
+        height: unset;
+    }
+
+    .container {
+        flex-wrap: wrap;
+    }
+
+    .github {
+        display: none !important;
+    }
+
+    label {
+        margin: 0;
+    }
+
+    .crop__list div {
+        flex: 1 1 50%;
+        min-width: 225px;
+    }
+
+    main {
+        flex: 0 0 100%;
+    }
+
 }
