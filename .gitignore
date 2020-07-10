@@ -5,6 +5,7 @@ repl-temp-*
 # api-keys
 src/Config.elm
 # garbage
-node-modules/*
-node-modules
+node_modules/*
+node_modules
 test/*
+package-lock.json
