@@ -1,3 +1,5 @@
+[Demo](https://gg314.github.io/plant-calendar)
+
 # plant-calendar
 A seed planting calendar based on ~~USDA's Plant Hardiness Zones~~ average frost dates, written in Elm.
 
